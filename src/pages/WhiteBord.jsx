@@ -17,7 +17,7 @@ const AllNodeTypes={
 
 const BasicBord=()=>{
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-    const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+    const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
     const [showMenu,setShowMenu]=useState(false);
     const [menuPosition,setMenuPosition]=useState({x:0,y:0});
@@ -75,7 +75,7 @@ const BasicBord=()=>{
                 event.preventDefault();
                 // 这里会在 node 被右键点击的时候触发
             }}
-            // onContextMenu={handleContextMenu}
+            onPaneContextMenu={handleContextMenu}
         >
             {/*{*/}
             {/*    showMenu*/}
