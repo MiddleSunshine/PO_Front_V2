@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import ReactFlow, { useNodesState, useEdgesState } from 'reactflow';
+import ReactFlow, {useNodesState, useEdgesState, ReactFlowProvider} from 'reactflow';
 import 'reactflow/dist/style.css';
 import {PointNodeView} from '../Components/Nodes/PointNode'
 
@@ -15,10 +15,9 @@ const AllNodeTypes={
     PointNodeView
 }
 
-const WhiteBord = () => {
+const BasicBord=()=>{
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-
     return (
         <ReactFlow
             nodeTypes={AllNodeTypes}
@@ -32,6 +31,14 @@ const WhiteBord = () => {
             attributionPosition="bottom-left"
         >
         </ReactFlow>
+    )
+}
+
+const WhiteBord = () => {
+    return (
+        <ReactFlowProvider>
+            <BasicBord />
+        </ReactFlowProvider>
     );
 };
 
