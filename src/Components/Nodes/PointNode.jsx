@@ -44,6 +44,7 @@ const PointNodeEditor=(node)=>{
             onClick={handleDataChange}
         >
             <h1>Change Data</h1>
+            <h2>{node?.data?.label}</h2>
         </div>
     )
 }

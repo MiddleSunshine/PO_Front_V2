@@ -1,9 +1,10 @@
-import React, {useEffect, useState,useRef} from 'react';
+import React, {useEffect, useState,useRef, useCallback} from 'react';
 import ReactFlow, {useNodesState, useEdgesState, ReactFlowProvider} from 'reactflow';
 import 'reactflow/dist/style.css';
-import {PointNodeView, PointNodeCreator} from '../Components/Nodes/PointNode'
+import {PointNodeView, PointNodeCreator, PointNodeEditor} from '../Components/Nodes/PointNode'
 import {getId} from "../config/WhiteBord";
 import '../Css/WhiteBord.css';
+import { Drawer } from 'antd';
 
 const initialNodes = [
     {id: '1', type: "PointNodeView", data: {label: '-'}, position: {x: 100, y: 100}},
@@ -26,8 +27,22 @@ const BasicBord = () => {
 
     const [menuPosition, setMenuPosition] = useState({x: 0, y: 0});
     const [selectedNode,setSelectedNode]=useState({});
+    const [editMode,setEditMode]=useState(false);
 
     const reactFlowWrapper=useRef(null);
+
+    const renderEditComponent=useCallback(()=>{
+        let renderComponent='';
+        switch(selectedNode.type){
+            case 'PointNodeView':
+                renderComponent=<PointNodeEditor node={selectedNode} />
+                break;
+            default:
+                renderComponent='';
+                break;
+        }
+        return renderComponent;
+    },[editMode]);
 
     const renderMenu = () => {
         const menuStyle = {
@@ -104,8 +119,17 @@ const BasicBord = () => {
         setMenuPosition({x: 0, y: 0});
     }
 
+    const handleSelectionChange=({nodes,edges})=>{
+        if(nodes.length==1){
+            setSelectedNode(nodes[0]);
+        }
+    }
+
     return (
         <div ref={reactFlowWrapper} className="reactflow-wrapper">
+            <button
+                onClick={()=>{ setEditMode(true); }}
+            >Edit Node</button>
             <ReactFlow
                 nodeTypes={AllNodeTypes}
                 nodes={nodes}
@@ -122,6 +146,7 @@ const BasicBord = () => {
                 }}
                 onPaneContextMenu={handleContextMenu}
                 onInit={setReactFlowInstance}
+                onSelectionChange={handleSelectionChange}
             >
                 {
                     menuPosition.x > 0 && menuPosition.y > 0
@@ -129,6 +154,16 @@ const BasicBord = () => {
                         : ''
                 }
             </ReactFlow>
+            <Drawer
+                open={editMode}
+                onClose={()=>{
+                    setEditMode(false);
+                }}
+            >
+                {
+                    renderEditComponent()
+                }
+            </Drawer>
         </div>
     )
 }
