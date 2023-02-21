@@ -1,3 +1,5 @@
+import { useReactFlow } from 'reactflow';
+import {memo} from "react";
 
 const PointNodeView=(node)=>{
     return (
@@ -14,9 +16,22 @@ const PointNodeEditor=(node)=>{
 }
 
 const PointNodeCreator=(node)=>{
+    const instance=useReactFlow();
+    const handleTypeChange=()=>{
+        instance.setNodes((nodes)=>nodes.map((n)=>{
+            if (n.id==node.id){
+                n.type='PointNodeView';
+            }
+            return n;
+        }));
+    }
     return (
-        <div>
-            <input value={"hello world"} />
+        <div
+            onClick={()=>handleTypeChange()}
+        >
+            <input
+                value={"hello world"}
+            />
         </div>
     )
 }
