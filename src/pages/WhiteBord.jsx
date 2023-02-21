@@ -1,8 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState,useRef} from 'react';
 import ReactFlow, {useNodesState, useEdgesState, ReactFlowProvider} from 'reactflow';
 import 'reactflow/dist/style.css';
 import {PointNodeView, PointNodeCreator} from '../Components/Nodes/PointNode'
 import {getId} from "../config/WhiteBord";
+import '../Css/WhiteBord.css';
 
 const initialNodes = [
     {id: '1', type: "PointNodeView", data: {label: '-'}, position: {x: 100, y: 100}},
@@ -20,9 +21,12 @@ const AllNodeTypes = {
 const BasicBord = () => {
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+    const [reactFlowInstance, setReactFlowInstance] = useState(null);
 
     const [showMenu, setShowMenu] = useState(false);
     const [menuPosition, setMenuPosition] = useState({x: 0, y: 0});
+
+    const reactFlowWrapper=useRef(null);
 
     const renderMenu = () => {
         const menuStyle = {
@@ -36,18 +40,37 @@ const BasicBord = () => {
             zIndex:10
         }
 
+        const menus=[
+            {
+                label:"Point",
+                type:"'PointNodeCreator'"
+            },
+            {
+                label: "Default",
+                type: "output"
+            }
+        ];
+
         return (
             <div style={menuStyle}>
-                <div>
-                    <button
-                        onClick={(event) => {
-                        createNode(event, 'PointNodeCreator')
-                    }
-                    }
-                    >Point
-                    </button>
-                    <hr/>
-                </div>
+                {
+                    menus.map((menu)=>{
+                        return (
+                            <div
+                                key={menu.type}
+                            >
+                                <button
+                                    onClick={(event)=>{ createNode(event,menu.type) }}
+                                >
+                                    {
+                                        menu.label
+                                    }
+                                </button>
+                                <hr/>
+                            </div>
+                        )
+                    })
+                }
             </div>
         )
     }
@@ -65,11 +88,16 @@ const BasicBord = () => {
 
     const createNode = (event, type) => {
         event.preventDefault();
+        const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
+        const position = reactFlowInstance.project({
+            x: event.clientX - reactFlowBounds.left,
+            y: event.clientY - reactFlowBounds.top,
+        });
         let new_node={
             id:getId(type),
             type:type,
             data:{},
-            position: {x:menuPosition.x,y:menuPosition.y}
+            position: position
         }
         setNodes((n) =>n.concat(new_node) );
         setMenuPosition({x: 0, y: 0});
@@ -77,36 +105,41 @@ const BasicBord = () => {
     }
 
     return (
-        <ReactFlow
-            nodeTypes={AllNodeTypes}
-            nodes={nodes}
-            edges={edges}
-            onNodesChange={onNodesChange}
-            onEdgesChange={onEdgesChange}
-            defaultViewport={defaultViewport}
-            minZoom={0.2}
-            maxZoom={4}
-            attributionPosition="bottom-left"
-            onNodeContextMenu={(event, node) => {
-                event.preventDefault();
-                // 这里会在 node 被右键点击的时候触发
-            }}
-            onPaneContextMenu={handleContextMenu}
-        >
-            {
-                menuPosition.x > 0 && menuPosition.y > 0
-                    ? renderMenu()
-                    : ''
-            }
-        </ReactFlow>
+        <div ref={reactFlowWrapper} className="reactflow-wrapper">
+            <ReactFlow
+                nodeTypes={AllNodeTypes}
+                nodes={nodes}
+                edges={edges}
+                onNodesChange={onNodesChange}
+                onEdgesChange={onEdgesChange}
+                defaultViewport={defaultViewport}
+                minZoom={0.2}
+                maxZoom={4}
+                attributionPosition="bottom-left"
+                onNodeContextMenu={(event, node) => {
+                    event.preventDefault();
+                    // 这里会在 node 被右键点击的时候触发
+                }}
+                onPaneContextMenu={handleContextMenu}
+                onInit={setReactFlowInstance}
+            >
+                {
+                    menuPosition.x > 0 && menuPosition.y > 0
+                        ? renderMenu()
+                        : ''
+                }
+            </ReactFlow>
+        </div>
     )
 }
 
 const WhiteBord = () => {
     return (
-        <ReactFlowProvider>
-            <BasicBord/>
-        </ReactFlowProvider>
+        <div className="dndflow">
+            <ReactFlowProvider>
+                <BasicBord/>
+            </ReactFlowProvider>
+        </div>
     );
 };
 

@@ -16,7 +16,7 @@ const PointNodeEditor=(node)=>{
 const PointNodeCreator=(node)=>{
     return (
         <div>
-            <input />
+            <input value={"hello world"} />
         </div>
     )
 }
