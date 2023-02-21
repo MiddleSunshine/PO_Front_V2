@@ -8,6 +8,7 @@ import '../Css/WhiteBord.css';
 const initialNodes = [
     {id: '1', type: "PointNodeView", data: {label: '-'}, position: {x: 100, y: 100}},
     {id: '2', data: {label: 'Node 2'}, position: {x: 100, y: 200}},
+    {id: '3', type:"PointNodeCreator",data: {label: 'Node 3'}, position: {x: 100, y: 240}},
 ];
 
 const initialEdges = [{id: 'e1-2', source: '1', target: '2'}];
@@ -43,7 +44,7 @@ const BasicBord = () => {
         const menus=[
             {
                 label:"Point",
-                type:"'PointNodeCreator'"
+                type:"PointNodeCreator"
             },
             {
                 label: "Default",
@@ -99,7 +100,8 @@ const BasicBord = () => {
             data:{},
             position: position
         }
-        setNodes((n) =>n.concat(new_node) );
+        console.log(new_node)
+        setNodes((n) =>n.concat([new_node]) );
         setMenuPosition({x: 0, y: 0});
         console.log(nodes);
     }
