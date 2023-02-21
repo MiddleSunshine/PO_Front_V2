@@ -33,15 +33,18 @@ const BasicBord = () => {
 
     const renderEditComponent=useCallback(()=>{
         let renderComponent='';
-        switch(selectedNode.type){
-            case 'PointNodeView':
-                renderComponent=<PointNodeEditor node={selectedNode} />
-                break;
-            default:
-                renderComponent='';
-                break;
+        if(editMode){
+            switch(selectedNode.type){
+                case 'PointNodeView':
+                    renderComponent=<PointNodeEditor node={selectedNode} />
+                    break;
+                default:
+                    renderComponent='';
+                    break;
+            }
         }
         return renderComponent;
+        
     },[editMode]);
 
     const renderMenu = () => {

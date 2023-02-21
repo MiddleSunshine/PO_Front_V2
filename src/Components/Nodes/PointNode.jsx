@@ -26,13 +26,13 @@ const PointSettingEditor=(node)=>{
     )
 }
 
-const PointNodeEditor=(node)=>{
+const PointNodeEditor=({node})=>{
     const instance=useReactFlow();
     const handleDataChange=()=>{
         instance.setNodes((nodes)=>nodes.map((n)=>{
             if (n.id==node.id){
                 n.data={
-                    label:"label"
+                    label:"label2"
                 };
             }
             return n;
