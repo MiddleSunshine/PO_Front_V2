@@ -1,5 +1,4 @@
 import { useReactFlow } from 'reactflow';
-import {memo} from "react";
 
 const PointNodeView=(node)=>{
     return (

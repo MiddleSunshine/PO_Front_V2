@@ -100,10 +100,8 @@ const BasicBord = () => {
             data:{},
             position: position
         }
-        console.log(new_node)
         setNodes((n) =>n.concat([new_node]) );
         setMenuPosition({x: 0, y: 0});
-        console.log(nodes);
     }
 
     return (
