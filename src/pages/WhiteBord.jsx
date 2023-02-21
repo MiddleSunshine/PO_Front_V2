@@ -24,8 +24,8 @@ const BasicBord = () => {
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
     const [reactFlowInstance, setReactFlowInstance] = useState(null);
 
-    const [showMenu, setShowMenu] = useState(false);
     const [menuPosition, setMenuPosition] = useState({x: 0, y: 0});
+    const [selectedNode,setSelectedNode]=useState({});
 
     const reactFlowWrapper=useRef(null);
 

@@ -1,17 +1,50 @@
-import { useReactFlow } from 'reactflow';
+import { NodeToolbar, useReactFlow,position } from 'reactflow';
 import React from 'react';
 
 const PointNodeView=React.memo((node)=>{
     return (
-        <h1>
-            PointNodeView
+        <div>
+            <NodeToolbar
+                isVisible={node.selected}
+                position={'bottom'}
+            >
+                <button>Edit</button>
+                <button>Delete</button>
+            </NodeToolbar>
+            <h1
+            style={{color:node.selected?'red':'black'}}
+        >
+            PointNodeView:{node?.data?.label}
         </h1>
+        </div>
     )
 })
 
-const PointNodeEditor=(node)=>{
+const PointSettingEditor=(node)=>{
     return (
-        <div></div>
+        <div>Setting</div>
+    )
+}
+
+const PointNodeEditor=(node)=>{
+    const instance=useReactFlow();
+    const handleDataChange=()=>{
+        instance.setNodes((nodes)=>nodes.map((n)=>{
+            if (n.id==node.id){
+                n.data={
+                    label:"label"
+                };
+            }
+            return n;
+        }));
+    }
+
+    return (
+        <div
+            onClick={handleDataChange}
+        >
+            <h1>Change Data</h1>
+        </div>
     )
 }
 
@@ -21,6 +54,9 @@ const PointNodeCreator=React.memo((node)=>{
         instance.setNodes((nodes)=>nodes.map((n)=>{
             if (n.id==node.id){
                 n.type='PointNodeView';
+                n.data={
+                    label:"label"
+                }
             }
             return n;
         }));
@@ -39,5 +75,6 @@ const PointNodeCreator=React.memo((node)=>{
 export {
     PointNodeView,
     PointNodeEditor,
-    PointNodeCreator
+    PointNodeCreator,
+    PointSettingEditor
 }
