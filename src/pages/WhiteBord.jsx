@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import ReactFlow, {useNodesState, useEdgesState, ReactFlowProvider} from 'reactflow';
 import 'reactflow/dist/style.css';
-import {PointNodeView} from '../Components/Nodes/PointNode'
+import {PointNodeView, PointNodeCreator} from '../Components/Nodes/PointNode'
+import {getId} from "../config/WhiteBord";
 
 const initialNodes = [
     {id: '1', type: "PointNodeView", data: {label: '-'}, position: {x: 100, y: 100}},
@@ -12,7 +13,8 @@ const initialEdges = [{id: 'e1-2', source: '1', target: '2'}];
 const defaultViewport = {x: 0, y: 0, zoom: 1.5};
 
 const AllNodeTypes = {
-    PointNodeView
+    PointNodeView,
+    PointNodeCreator
 }
 
 const BasicBord = () => {
@@ -31,15 +33,21 @@ const BasicBord = () => {
             padding: '10px',
             borderRadius: '5px',
             boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.1)',
+            zIndex:10
         }
 
         return (
             <div style={menuStyle}>
-                <ul>
-                    <li>菜单1</li>
-                    <li>菜单2</li>
-                    <li>菜单3</li>
-                </ul>
+                <div>
+                    <button
+                        onClick={(event) => {
+                        createNode(event, 'PointNodeCreator')
+                    }
+                    }
+                    >Point
+                    </button>
+                    <hr/>
+                </div>
             </div>
         )
     }
@@ -53,6 +61,19 @@ const BasicBord = () => {
             x: event.clientX,
             y: event.clientY
         })
+    }
+
+    const createNode = (event, type) => {
+        event.preventDefault();
+        let new_node={
+            id:getId(type),
+            type:type,
+            data:{},
+            position: {x:menuPosition.x,y:menuPosition.y}
+        }
+        setNodes((n) =>n.concat(new_node) );
+        setMenuPosition({x: 0, y: 0});
+        console.log(nodes);
     }
 
     return (

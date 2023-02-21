@@ -13,7 +13,16 @@ const PointNodeEditor=(node)=>{
     )
 }
 
+const PointNodeCreator=(node)=>{
+    return (
+        <div>
+            <input />
+        </div>
+    )
+}
+
 export {
     PointNodeView,
-    PointNodeEditor
+    PointNodeEditor,
+    PointNodeCreator
 }
