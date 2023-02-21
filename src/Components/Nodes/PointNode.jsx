@@ -1,12 +1,13 @@
 import { useReactFlow } from 'reactflow';
+import React from 'react';
 
-const PointNodeView=(node)=>{
+const PointNodeView=React.memo((node)=>{
     return (
         <h1>
             PointNodeView
         </h1>
     )
-}
+})
 
 const PointNodeEditor=(node)=>{
     return (
@@ -14,7 +15,7 @@ const PointNodeEditor=(node)=>{
     )
 }
 
-const PointNodeCreator=(node)=>{
+const PointNodeCreator=React.memo((node)=>{
     const instance=useReactFlow();
     const handleTypeChange=()=>{
         instance.setNodes((nodes)=>nodes.map((n)=>{
@@ -33,7 +34,7 @@ const PointNodeCreator=(node)=>{
             />
         </div>
     )
-}
+})
 
 export {
     PointNodeView,
