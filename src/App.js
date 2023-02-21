@@ -1,27 +1,29 @@
 import {
-  BrowserRouter,
-  Routes,
-  Route
+    BrowserRouter,
+    Routes,
+    Route
 } from "react-router-dom";
-import WhiteBord from "./pages/WhiteBord.jsx";
-import Index from "./pages/index.jsx";
+import routes from "./config/routes.ts";
 
 function App() {
 
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route
-          path={"/"}
-          element={<Index />}
-        />
-        <Route
-          path={"/whitebord/:id"}
-          element={<WhiteBord />}
-        />
-      </Routes>
-    </BrowserRouter>
-  );
+    return (
+        <BrowserRouter>
+            <Routes>
+                {
+                    routes.map((route) => {
+                        return (
+                            <Route
+                                key={route.path}
+                                path={route.path}
+                                element={<route.component/>}
+                            />
+                        )
+                    })
+                }
+            </Routes>
+        </BrowserRouter>
+    );
 }
 
 export default App;
