@@ -1,5 +1,6 @@
 import Index from '../pages/index'
 import WhiteBord from '../pages/WhiteBord'
+import Login from '../pages/Login'
 
 type route={
     path:string,
@@ -12,8 +13,12 @@ const routes:route[]=[
         component:Index
     },
     {
-        path:"/whitebord/:id",
+        path:"/whiteboard/:id",
         component:WhiteBord
+    },
+    {
+        path:"/login",
+        component:Login
     }
 ]
 

@@ -5,6 +5,7 @@ import {PointNodeView, PointNodeCreator, PointNodeEditor} from '../Components/No
 import {getId} from "../config/WhiteBord";
 import '../Css/WhiteBord.css';
 import { Drawer } from 'antd';
+import {requestAPI} from "../config/function";
 
 const initialNodes = [
     {id: '1', type: "PointNodeView", data: {label: '-'}, position: {x: 100, y: 100}},
@@ -126,6 +127,13 @@ const BasicBord = () => {
         if(nodes.length==1){
             setSelectedNode(nodes[0]);
         }
+    }
+
+    const saveWhiteBord=()=>{
+        requestAPI("/index.php?action=WhiteBordController&method=StoreWhiteBord")
+            .then((data)=>{
+
+            })
     }
 
     return (
