@@ -1,36 +1,70 @@
-import {Button, Col, Form, Input, Row} from "antd";
+import {Button, Col, Form, Input, message, Row} from "antd";
+import {useEffect, useState} from "react";
+import {Login} from "../config/function";
 
-const Login =()=>{
+const LoginPage =()=>{
+
+    const [userName,setUserName]=useState('');
+    const [password,setPassword]=useState('');
+
+    useEffect(()=>{
+        document.title="Login";
+    },[])
+
+    const tryLogin=()=>{
+        if (!userName){
+            message.warning("Please Input UserName");
+            return false;
+        }
+        if (!password){
+            message.warning("Please Input Password");
+            return false;
+        }
+        if (Login(userName,password)){
+
+        }
+    }
+
     return (
-        <div>
-            <Row
-                align={"stretch"}
-                justify={"center"}
-            >
-                <Col span={8}>
-                    <Form>
-                        <Form.Item
-                            label={"UserName"}
+        <Row
+            style={{height:"inherit"}}
+            align={"middle"}
+            justify={"center"}
+        >
+            <Col span={8}>
+                <Form>
+                    <Form.Item
+                        label={"UserName"}
+                        required={true}
+                    >
+                        <Input
+                            value={userName}
+                            onChange={(e)=>setUserName(e.target.value)}
+                        />
+                    </Form.Item>
+                    <Form.Item
+                        required={true}
+                        label={"Password"}
+                    >
+                        <Input.Password
+                            value={password}
+                            onChange={(e)=>setPassword(e.target.value)}
+                        />
+                    </Form.Item>
+                    <Form.Item>
+                        <Button
+                            type={"primary"}
+                            onClick={()=>{
+                                tryLogin();
+                            }}
                         >
-                            <Input />
-                        </Form.Item>
-                        <Form.Item
-                            label={"Password"}
-                        >
-                            <Input />
-                        </Form.Item>
-                        <Form.Item>
-                            <Button
-                                type={"primary"}
-                            >
-                                Submit
-                            </Button>
-                        </Form.Item>
-                    </Form>
-                </Col>
-            </Row>
-        </div>
+                            Submit
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </Col>
+        </Row>
     )
 }
 
-export default Login
+export default LoginPage
