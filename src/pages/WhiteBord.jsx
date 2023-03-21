@@ -4,7 +4,7 @@ import 'reactflow/dist/style.css';
 import {PointNodeView, PointNodeCreator, PointNodeEditor} from '../Components/Nodes/PointNode'
 import {getId} from "../config/WhiteBord";
 import '../Css/WhiteBord.css';
-import { Drawer } from 'antd';
+import {Button, Drawer} from 'antd';
 import {requestAPI} from "../config/function";
 import {useParams} from "react-router-dom";
 
@@ -23,7 +23,7 @@ const AllNodeTypes = {
 }
 
 const BasicBord = () => {
-    const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+    const [nodes, setNodes, onNodesChange] = useNodesState([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
     const [reactFlowInstance, setReactFlowInstance] = useState(null);
 
@@ -136,8 +136,20 @@ const BasicBord = () => {
         }
     }
 
-    const saveWhiteBord=()=>{
-        requestAPI("/index.php?action=WhiteBordController&method=StoreWhiteBord")
+    const saveWhiteBord=(IsDraft=true)=>{
+        requestAPI("index.php?action=WhiteBordController&method=StoreWhiteBord&ID="+id,{
+            method:"post",
+            body:JSON.stringify({
+                IsDraft:IsDraft,
+                Data:{
+                    settings:{},
+                    data:{
+                        nodes:nodes,
+                        edges:edges
+                    }
+                }
+            })
+        })
             .then((data)=>{
 
             })
@@ -146,7 +158,8 @@ const BasicBord = () => {
     const getWhiteBord=(whiteBordId)=>{
         requestAPI(`index.php?action=WhiteBordController&method=GetWhiteBord&ID=${whiteBordId}`)
             .then((json)=>{
-                
+                setNodes(json.Data.WhiteBordContent.data?.nodes);
+                setEdges(json.Data.WhiteBordContent.data?.edges);
             })
     }
 
@@ -155,6 +168,20 @@ const BasicBord = () => {
             <button
                 onClick={()=>{ setEditMode(true); }}
             >Edit Node</button>
+            <Button
+                onClick={()=>{
+                    saveWhiteBord(false)
+                }}
+            >
+                Save WhiteBord
+            </Button>
+            <Button
+                onClick={()=>{
+                    saveWhiteBord(true)
+                }}
+            >
+                Save Draft
+            </Button>
             <ReactFlow
                 nodeTypes={AllNodeTypes}
                 nodes={nodes}
