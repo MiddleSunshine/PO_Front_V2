@@ -6,6 +6,7 @@ import {getId} from "../config/WhiteBord";
 import '../Css/WhiteBord.css';
 import { Drawer } from 'antd';
 import {requestAPI} from "../config/function";
+import {useParams} from "react-router-dom";
 
 const initialNodes = [
     {id: '1', type: "PointNodeView", data: {label: '-'}, position: {x: 100, y: 100}},
@@ -32,6 +33,8 @@ const BasicBord = () => {
 
     const reactFlowWrapper=useRef(null);
 
+    const {id}=useParams();
+
     const renderEditComponent=useCallback(()=>{
         let renderComponent='';
         if(editMode){
@@ -47,6 +50,10 @@ const BasicBord = () => {
         return renderComponent;
         
     },[editMode]);
+
+    useEffect(()=>{
+        getWhiteBord(id);
+    },[])
 
     const renderMenu = () => {
         const menuStyle = {
@@ -133,6 +140,13 @@ const BasicBord = () => {
         requestAPI("/index.php?action=WhiteBordController&method=StoreWhiteBord")
             .then((data)=>{
 
+            })
+    }
+
+    const getWhiteBord=(whiteBordId)=>{
+        requestAPI(`index.php?action=WhiteBordController&method=GetWhiteBord&ID=${whiteBordId}`)
+            .then((json)=>{
+                
             })
     }
 

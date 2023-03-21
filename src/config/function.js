@@ -9,7 +9,10 @@ const requestAPI=(api,init={},checkToken=true)=>{
         return false;
     }
     api+="&sign="+sign;
-    return  fetch("http://127.0.0.1:8080"+api,init).then((res)=>{
+    return  fetch("http://127.0.0.1:8080/"+api,{
+        ...init,
+        mode:"cors"
+    }).then((res)=>{
         return res.json().then((json)=>{
             if (json.NeedLogin==1){
                 window.location='/login';
@@ -35,8 +38,9 @@ const Login=(userName,password)=>{
                     let token=json?.Data?.Token;
                     if (!token){
                         message.error("Login Error");
-                        return true;
+                        return false;
                     }
+                    message.success("Login Success");
                     localStorage.setItem(LOGIN_TOKEN_KEY,token);
                     return true
                 }else{
