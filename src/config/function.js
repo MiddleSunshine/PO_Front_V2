@@ -3,7 +3,7 @@ import {message} from "antd";
 const LOGIN_TOKEN_KEY='auth_token';
 
 const requestAPI=(api,init={},checkToken=true)=>{
-    let sign=sessionStorage.getItem(LOGIN_TOKEN_KEY);
+    let sign=localStorage.getItem(LOGIN_TOKEN_KEY);
     if (!sign && checkToken){
         window.location="/login";
         return false;
@@ -15,6 +15,7 @@ const requestAPI=(api,init={},checkToken=true)=>{
                 window.location='/login';
                 return false;
             }
+            return json;
         })
     })
 }
@@ -36,7 +37,7 @@ const Login=(userName,password)=>{
                         message.error("Login Error");
                         return true;
                     }
-                    sessionStorage.setItem(LOGIN_TOKEN_KEY,token);
+                    localStorage.setItem(LOGIN_TOKEN_KEY,token);
                     return true
                 }else{
                     message.warning(json.Message);

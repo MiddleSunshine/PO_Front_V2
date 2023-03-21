@@ -21,7 +21,12 @@ const LoginPage =()=>{
             return false;
         }
         if (Login(userName,password)){
-
+            const urlParams = new URLSearchParams(window.location.search);
+            let redirectUrl = urlParams.get('redirect');
+            if (!redirectUrl){
+                redirectUrl='/';
+            }
+            window.location=redirectUrl;
         }
     }
 
