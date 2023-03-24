@@ -1,5 +1,6 @@
 import { NodeToolbar, useReactFlow,position } from 'reactflow';
 import React from 'react';
+import {BASIC_NODE_DATA} from "./BasicNode";
 
 const PointNodeView=React.memo((node)=>{
     return (
@@ -20,20 +21,13 @@ const PointNodeView=React.memo((node)=>{
     )
 })
 
-const PointSettingEditor=(node)=>{
-    return (
-        <div>Setting</div>
-    )
-}
 
 const PointNodeEditor=({node})=>{
     const instance=useReactFlow();
     const handleDataChange=()=>{
         instance.setNodes((nodes)=>nodes.map((n)=>{
             if (n.id==node.id){
-                n.data={
-                    label:"label2"
-                };
+                // update node
             }
             return n;
         }));
@@ -56,7 +50,7 @@ const PointNodeCreator=React.memo((node)=>{
             if (n.id==node.id){
                 n.type='PointNodeView';
                 n.data={
-                    label:"label"
+                    ...BASIC_NODE_DATA
                 }
             }
             return n;
@@ -76,6 +70,5 @@ const PointNodeCreator=React.memo((node)=>{
 export {
     PointNodeView,
     PointNodeEditor,
-    PointNodeCreator,
-    PointSettingEditor
+    PointNodeCreator
 }

@@ -7,12 +7,14 @@ import '../Css/WhiteBord.css';
 import {Button, Drawer} from 'antd';
 import {requestAPI} from "../config/function";
 import {useParams} from "react-router-dom";
+import {HistoryNode} from '../Components/Nodes/HistoryNode'
 
 const defaultViewport = {x: 0, y: 0, zoom: 1.5};
 
 const AllNodeTypes = {
     PointNodeView,
-    PointNodeCreator
+    PointNodeCreator,
+    HistoryNode
 }
 
 const BasicBord = () => {
@@ -61,6 +63,10 @@ const BasicBord = () => {
         }
 
         const menus=[
+            {
+                label:"History Node",
+                type: "HistoryNode"
+            },
             {
                 label:"Point",
                 type:"PointNodeCreator"
