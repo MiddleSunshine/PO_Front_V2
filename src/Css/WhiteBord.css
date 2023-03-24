@@ -9,3 +9,16 @@
     flex-grow: 1;
     height: 100%;
 }
+
+.WhiteBoard{
+
+}
+
+.WhiteBoard .BasicNodeOutside{
+    background-color: aqua;
+    padding: 10px;
+}
+
+.WhiteBoard .BasicNodeOutside .LabelNode{
+
+}

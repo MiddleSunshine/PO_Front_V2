@@ -9,12 +9,16 @@ import {requestAPI} from "../config/function";
 import {useParams} from "react-router-dom";
 import {HistoryNode} from '../Components/Nodes/HistoryNode'
 import Hotkeys from 'react-hot-keys'
+import {LabelNode} from "../Components/Nodes/LabelNode";
+import {BASIC_NODE_DATA} from "../Components/Nodes/BasicNode";
+
 const defaultViewport = {x: 0, y: 0, zoom: 1.5};
 
 const AllNodeTypes = {
     PointNodeView,
     PointNodeCreator,
-    HistoryNode
+    HistoryNode,
+    LabelNode
 }
 
 const BasicBord = () => {
@@ -74,6 +78,10 @@ const BasicBord = () => {
             {
                 label: "Default",
                 type: "output"
+            },
+            {
+                label: "Label",
+                type: "LabelNode"
             }
         ];
 
@@ -122,7 +130,9 @@ const BasicBord = () => {
         let new_node={
             id:getId(type),
             type:type,
-            data:{},
+            data:{
+                ...BASIC_NODE_DATA
+            },
             position: position
         }
         setNodes((n) =>n.concat([new_node]) );
@@ -170,7 +180,7 @@ const BasicBord = () => {
 
 
     return (
-        <div ref={reactFlowWrapper} className="reactflow-wrapper">
+        <div ref={reactFlowWrapper} className="reactflow-wrapper WhiteBoard">
             <Hotkeys
                 keyName={Object.keys(hotkeysHandler).join(',')}
                 onKeyDown={(keyname,e,handle)=>{
