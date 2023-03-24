@@ -165,7 +165,7 @@ const BasicBord = () => {
     let hotkeysHandler=[];
 
     hotkeysHandler['shift+s']=()=>{
-        
+
     };
 
 
