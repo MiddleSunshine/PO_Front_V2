@@ -4,11 +4,11 @@ import 'reactflow/dist/style.css';
 import {PointNodeView, PointNodeCreator, PointNodeEditor} from '../Components/Nodes/PointNode'
 import {getId} from "../config/WhiteBord";
 import '../Css/WhiteBord.css';
-import {Button, Drawer} from 'antd';
+import {Button, Drawer, message} from 'antd';
 import {requestAPI} from "../config/function";
 import {useParams} from "react-router-dom";
 import {HistoryNode} from '../Components/Nodes/HistoryNode'
-
+import Hotkeys from 'react-hot-keys'
 const defaultViewport = {x: 0, y: 0, zoom: 1.5};
 
 const AllNodeTypes = {
@@ -162,59 +162,73 @@ const BasicBord = () => {
             })
     }
 
+    let hotkeysHandler=[];
+
+    hotkeysHandler['shift+s']=()=>{
+        
+    };
+
+
     return (
         <div ref={reactFlowWrapper} className="reactflow-wrapper">
-            <button
-                onClick={()=>{ setEditMode(true); }}
-            >Edit Node</button>
-            <Button
-                onClick={()=>{
-                    saveWhiteBord(false)
+            <Hotkeys
+                keyName={Object.keys(hotkeysHandler).join(',')}
+                onKeyDown={(keyname,e,handle)=>{
+                    hotkeysHandler[keyname]();
                 }}
             >
-                Save WhiteBord
-            </Button>
-            <Button
-                onClick={()=>{
-                    saveWhiteBord(true)
-                }}
-            >
-                Save Draft
-            </Button>
-            <ReactFlow
-                nodeTypes={AllNodeTypes}
-                nodes={nodes}
-                edges={edges}
-                onNodesChange={onNodesChange}
-                onEdgesChange={onEdgesChange}
-                defaultViewport={defaultViewport}
-                minZoom={0.2}
-                maxZoom={4}
-                attributionPosition="bottom-left"
-                onNodeContextMenu={(event, node) => {
-                    event.preventDefault();
-                    // 这里会在 node 被右键点击的时候触发
-                }}
-                onPaneContextMenu={handleContextMenu}
-                onInit={setReactFlowInstance}
-                onSelectionChange={handleSelectionChange}
-            >
-                {
-                    menuPosition.x > 0 && menuPosition.y > 0
-                        ? renderMenu()
-                        : ''
-                }
-            </ReactFlow>
-            <Drawer
-                open={editMode}
-                onClose={()=>{
-                    setEditMode(false);
-                }}
-            >
-                {
-                    renderEditComponent()
-                }
-            </Drawer>
+                <button
+                    onClick={()=>{ setEditMode(true); }}
+                >Edit Node</button>
+                <Button
+                    onClick={()=>{
+                        saveWhiteBord(false)
+                    }}
+                >
+                    Save WhiteBord
+                </Button>
+                <Button
+                    onClick={()=>{
+                        saveWhiteBord(true)
+                    }}
+                >
+                    Save Draft
+                </Button>
+                <ReactFlow
+                    nodeTypes={AllNodeTypes}
+                    nodes={nodes}
+                    edges={edges}
+                    onNodesChange={onNodesChange}
+                    onEdgesChange={onEdgesChange}
+                    defaultViewport={defaultViewport}
+                    minZoom={0.2}
+                    maxZoom={4}
+                    attributionPosition="bottom-left"
+                    onNodeContextMenu={(event, node) => {
+                        event.preventDefault();
+                        // 这里会在 node 被右键点击的时候触发
+                    }}
+                    onPaneContextMenu={handleContextMenu}
+                    onInit={setReactFlowInstance}
+                    onSelectionChange={handleSelectionChange}
+                >
+                    {
+                        menuPosition.x > 0 && menuPosition.y > 0
+                            ? renderMenu()
+                            : ''
+                    }
+                </ReactFlow>
+                <Drawer
+                    open={editMode}
+                    onClose={()=>{
+                        setEditMode(false);
+                    }}
+                >
+                    {
+                        renderEditComponent()
+                    }
+                </Drawer>
+            </Hotkeys>
         </div>
     )
 }
