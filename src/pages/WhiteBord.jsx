@@ -8,13 +8,6 @@ import {Button, Drawer} from 'antd';
 import {requestAPI} from "../config/function";
 import {useParams} from "react-router-dom";
 
-const initialNodes = [
-    {id: '1', type: "PointNodeView", data: {label: '-'}, position: {x: 100, y: 100}},
-    {id: '2', data: {label: 'Node 2'}, position: {x: 100, y: 200}},
-    {id: '3', type:"PointNodeCreator",data: {label: 'Node 3'}, position: {x: 100, y: 240}},
-];
-
-const initialEdges = [{id: 'e1-2', source: '1', target: '2'}];
 const defaultViewport = {x: 0, y: 0, zoom: 1.5};
 
 const AllNodeTypes = {
