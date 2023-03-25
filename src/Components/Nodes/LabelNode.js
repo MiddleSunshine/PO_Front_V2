@@ -23,17 +23,12 @@ const LabelNode=React.memo((node)=>{
                         setLabel(e.target.value)
                     }}
                     onPressEnter={()=>{
-                        let newNodes=instance.getNodes();
-                        newNodes.map((n)=>{
-                            if (n.id==node.id){
-                                n.data.save_into_database=false;
-                                n.data.node_data={
-                                    label:label
-                                }
-                            }
-                            return n;
-                        });
-                        instance.setNodes(newNodes)
+                        let newNode=node;
+                        newNode.data.save_into_database=false;
+                        newNode.data.node_data={
+                            label:label
+                        };
+                        UpdateNode(instance,node);
                     }}
                 />
             </div>

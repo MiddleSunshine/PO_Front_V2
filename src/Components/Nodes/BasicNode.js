@@ -7,8 +7,7 @@ const BASIC_NODE_DATA={
     save_into_database:true
 }
 
-const UpdateNode=(node)=>{
-    const instance=useReactFlow();
+const UpdateNode=(instance,node)=>{
     let newNodes=instance.getNodes();
     newNodes.map((n)=>{
         if (n.id==node.id){
