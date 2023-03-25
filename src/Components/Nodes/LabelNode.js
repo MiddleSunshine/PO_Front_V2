@@ -1,8 +1,8 @@
 import {Input} from "antd";
 import {useState} from "react";
 import {UpdateNode} from "./BasicNode";
-
-const LabelNode=(node)=>{
+import React from "react";
+const LabelNode=React.memo((node)=>{
 
     const [label,setLabel]=useState(node.data.node_data?.label);
 
@@ -16,6 +16,7 @@ const LabelNode=(node)=>{
                     }}
                     onPressEnter={()=>{
                         let newNodes=node;
+                        newNodes.data.save_into_database=false;
                         newNodes.data.node_data={
                             label:label
                         };
@@ -25,7 +26,7 @@ const LabelNode=(node)=>{
             </div>
         </div>
     )
-}
+})
 
 export {
     LabelNode

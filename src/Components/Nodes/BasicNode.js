@@ -3,7 +3,8 @@ import { useReactFlow } from 'reactflow';
 const BASIC_NODE_DATA={
     data:{},
     node_data:{},
-    settings:{}
+    settings:{},
+    save_into_database:true
 }
 
 const UpdateNode=(node)=>{
