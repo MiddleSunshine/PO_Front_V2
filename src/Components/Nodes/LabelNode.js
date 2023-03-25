@@ -24,7 +24,6 @@ const LabelNode=React.memo((node)=>{
                     }}
                     onPressEnter={()=>{
                         let newNode=node;
-                        newNode.data.save_into_database=false;
                         newNode.data.node_data={
                             label:label
                         };

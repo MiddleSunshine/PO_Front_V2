@@ -1,16 +1,20 @@
 import {Button, Checkbox, Col, Input, message, Modal, Row} from "antd";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {requestAPI} from "../../config/function";
 import { JSONTree } from 'react-json-tree';
+import {UpdateNode} from "./BasicNode";
+import { useReactFlow } from 'reactflow';
 
-const HistoryNode=()=>{
+const HistoryNode=(nodeProps)=>{
     const [keyword,setkeyword]=useState('');
     const [nodes,setNodes]=useState([]);
+    const [selectedNode,changeSelectedNode]=useState({});
     /**
      * 1 初始状态
      * 2 展示搜索结果
      */
     const [searchState,setSearchState]=useState(1);
+    const instance=useReactFlow();
     const searchNode=(searchKeyword)=>{
         if (!searchKeyword){
             message.warning("Please input the keyword");
@@ -30,6 +34,10 @@ const HistoryNode=()=>{
             })
     }
 
+    useEffect(()=>{
+        console.table(instance.getNodes())
+    },[])
+
     return <div>
         <Input
             value={keyword}
@@ -47,6 +55,15 @@ const HistoryNode=()=>{
             onCancel={()=>{
                 setSearchState(1);
             }}
+            onOk={()=>{
+                if (selectedNode.data.ID){
+                    let newNode={...nodeProps};
+                    newNode.type=selectedNode.data.Type;
+                    newNode.data=selectedNode;
+                    UpdateNode(instance,newNode);
+                    setSearchState(1);
+                }
+            }}
         >
             {
                 nodes.map((n,index)=>{
@@ -54,7 +71,16 @@ const HistoryNode=()=>{
                         key={index}
                     >
                         <Col span={2}>
-                            <Checkbox />
+                            <Checkbox
+                                checked={n.node.data.data.ID==selectedNode?.data?.ID}
+                                onChange={(e)=>{
+                                    if (e.target.checked){
+                                        changeSelectedNode(n.node.data);
+                                    }else{
+                                        changeSelectedNode({})
+                                    }
+                                }}
+                            />
                         </Col>
                         <Col span={5}>
                             {
