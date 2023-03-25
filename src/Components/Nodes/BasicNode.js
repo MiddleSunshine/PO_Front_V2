@@ -9,12 +9,14 @@ const BASIC_NODE_DATA={
 
 const UpdateNode=(node)=>{
     const instance=useReactFlow();
-    instance.setNodes((nodes)=>nodes.map((n)=>{
+    let newNodes=instance.getNodes();
+    newNodes.map((n)=>{
         if (n.id==node.id){
             return node;
         }
         return n;
-    }));
+    });
+    instance.setNodes(newNodes)
 }
 
 export {

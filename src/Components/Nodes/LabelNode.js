@@ -1,13 +1,21 @@
 import {Input} from "antd";
 import {useState} from "react";
-import {UpdateNode} from "./BasicNode";
 import React from "react";
+import { NodeResizer } from '@reactflow/node-resizer';
+import { useReactFlow } from 'reactflow';
+import {UpdateNode} from "./BasicNode";
+
 const LabelNode=React.memo((node)=>{
 
     const [label,setLabel]=useState(node.data.node_data?.label);
+    const instance=useReactFlow();
 
     return (
         <div className={"BasicNodeOutside"}>
+            <NodeResizer
+                isVisible={node.selected}
+                color="#ff0071"
+            />
             <div className={"LabelNode"}>
                 <Input
                     value={label}
@@ -15,12 +23,17 @@ const LabelNode=React.memo((node)=>{
                         setLabel(e.target.value)
                     }}
                     onPressEnter={()=>{
-                        let newNodes=node;
-                        newNodes.data.save_into_database=false;
-                        newNodes.data.node_data={
-                            label:label
-                        };
-                        UpdateNode(newNodes)
+                        let newNodes=instance.getNodes();
+                        newNodes.map((n)=>{
+                            if (n.id==node.id){
+                                n.data.save_into_database=false;
+                                n.data.node_data={
+                                    label:label
+                                }
+                            }
+                            return n;
+                        });
+                        instance.setNodes(newNodes)
                     }}
                 />
             </div>

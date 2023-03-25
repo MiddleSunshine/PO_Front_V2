@@ -19,6 +19,7 @@ const HistoryNode=()=>{
             .then((res)=>{
                 res.json().then((json)=>{
                     // todo 这里开始接着写
+                    debugger
                 })
             })
     }
@@ -28,6 +29,9 @@ const HistoryNode=()=>{
             value={keyword}
             onChange={(e)=>{
                 setkeyword(e.target.value);
+            }}
+            onPressEnter={()=>{
+                searchNode(keyword)
             }}
         />
     </div>

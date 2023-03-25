@@ -4,6 +4,7 @@ import 'reactflow/dist/style.css';
 import {PointNodeView, PointNodeCreator, PointNodeEditor} from '../Components/Nodes/PointNode'
 import {getId} from "../config/WhiteBord";
 import '../Css/WhiteBord.css';
+import '@reactflow/node-resizer/dist/style.css';
 import {Button, Drawer, message} from 'antd';
 import {requestAPI} from "../config/function";
 import {useParams} from "react-router-dom";
