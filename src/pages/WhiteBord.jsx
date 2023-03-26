@@ -17,8 +17,6 @@ import {NewWhiteBoardNode,WhiteBoardNode} from "../Components/Nodes/WhiteBoardNo
 const defaultViewport = {x: 0, y: 0, zoom: 1.5};
 
 const AllNodeTypes = {
-    PointNodeView,
-    PointNodeCreator,
     HistoryNode,
     LabelNode,
     NewWhiteBoardNode,
@@ -74,14 +72,6 @@ const BasicBord = () => {
             {
                 label:"History Node",
                 type: "HistoryNode"
-            },
-            {
-                label:"Point",
-                type:"PointNodeCreator"
-            },
-            {
-                label: "Default",
-                type: "output"
             },
             {
                 label: "Label",

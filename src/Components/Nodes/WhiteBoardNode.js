@@ -1,14 +1,15 @@
 import {requestAPI} from "../../config/function";
-import {Input, message} from "antd";
+import {Button, Input, message} from "antd";
 import {useState} from "react";
 import {UpdateNode} from "./BasicNode";
 import { useReactFlow } from 'reactflow';
-
+import {ExportOutlined,SaveOutlined} from '@ant-design/icons'
 const NewWhiteBoardNode=(nodeProps)=>{
 
     const [title,setTitle]=useState('');
     const instance=useReactFlow();
-    const createNewWhiteBoard=(Title,Type)=>{
+
+    const createNewWhiteBoard=(Title)=>{
         if (!Title){
             message.warning("请输入标题");
             return false;
@@ -16,16 +17,15 @@ const NewWhiteBoardNode=(nodeProps)=>{
         requestAPI("index.php?action=WhiteBordController&method=CreateWhiteBord&",{
             method:"post",
             body:JSON.stringify({
-                Title,
-                Type
+                Title
             })
         })
             .then((res)=>{
                 if (res.Data.ID){
                     let newNode={...nodeProps};
                     newNode.type='WhiteBoardNode';
-                    newNode.save_into_database=true;
-                    newNode.node_data={
+                    newNode.data.save_into_database=true;
+                    newNode.data.node_data={
                         ID:res.Data.ID,
                         Title:Title
                     };
@@ -44,8 +44,19 @@ const NewWhiteBoardNode=(nodeProps)=>{
                     setTitle(e.target.value)
                 }}
                 onPressEnter={()=>{
-                    createNewWhiteBoard(title,'Draft');
+                    createNewWhiteBoard(title);
                 }}
+                addonAfter={
+                    <Button
+                        size={"small"}
+                        type={"link"}
+                        icon={<SaveOutlined />}
+                        onClick={()=>{
+                            createNewWhiteBoard(title);
+                        }}
+                    >
+                    </Button>
+                }
             />
         </div>
     )
@@ -54,6 +65,7 @@ const NewWhiteBoardNode=(nodeProps)=>{
 const WhiteBoardNode=(nodeProps)=>{
 
     const [nodeData,setNodeData]=useState(nodeProps.data.node_data);
+    const instance=useReactFlow();
 
     return (
         <div>
@@ -66,8 +78,16 @@ const WhiteBoardNode=(nodeProps)=>{
                     })
                 }}
                 onPressEnter={()=>{
-
+                    let newNode=nodeProps;
+                    newNode.data.node_data=nodeData;
+                    UpdateNode(instance,newNode);
                 }}
+                addonAfter={<a
+                    href={`/whiteboard/${nodeData?.ID}`}
+                    target={"_blank"}
+                >
+                    <ExportOutlined />
+                </a>}
             />
         </div>
     )
