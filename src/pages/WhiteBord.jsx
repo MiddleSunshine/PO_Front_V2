@@ -5,7 +5,7 @@ import {PointNodeView, PointNodeCreator, PointNodeEditor} from '../Components/No
 import {getId} from "../config/WhiteBord";
 import '../Css/WhiteBord.css';
 import '@reactflow/node-resizer/dist/style.css';
-import {Button, Drawer, message} from 'antd';
+import {Button, Drawer, message, Row} from 'antd';
 import {requestAPI} from "../config/function";
 import {useParams} from "react-router-dom";
 import {HistoryNode} from '../Components/Nodes/HistoryNode'
@@ -26,6 +26,7 @@ const AllNodeTypes = {
 const BasicBord = () => {
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+    const [whiteboard,setWhiteBoard]=useState({});
     const [reactFlowInstance, setReactFlowInstance] = useState(null);
 
     const [menuPosition, setMenuPosition] = useState({x: 0, y: 0});
@@ -70,16 +71,16 @@ const BasicBord = () => {
 
         const menus=[
             {
+                label: "New WhiteBord",
+                type: "NewWhiteBoardNode"
+            },
+            {
                 label:"History Node",
                 type: "HistoryNode"
             },
             {
                 label: "Label",
                 type: "LabelNode"
-            },
-            {
-                label: "New WhiteBord",
-                type: "NewWhiteBoardNode"
             }
         ];
 
@@ -91,14 +92,14 @@ const BasicBord = () => {
                             <div
                                 key={menu.type}
                             >
-                                <button
+                                <Button
+                                    type={"link"}
                                     onClick={(event)=>{ createNode(event,menu.type) }}
                                 >
                                     {
                                         menu.label
                                     }
-                                </button>
-                                <hr/>
+                                </Button>
                             </div>
                         )
                     })
@@ -167,6 +168,11 @@ const BasicBord = () => {
             .then((json)=>{
                 setNodes(json.Data.WhiteBordContent.data?.nodes);
                 setEdges(json.Data.WhiteBordContent.data?.edges);
+                setWhiteBoard(json.Data.WhiteBoard);
+                return json.Data.WhiteBoard;
+            })
+            .then((whiteboard)=>{
+                document.title=whiteboard.Title ?? 'WhiteBoard';
             })
     }
 
@@ -185,23 +191,22 @@ const BasicBord = () => {
                     hotkeysHandler[keyname]();
                 }}
             >
-                <button
-                    onClick={()=>{ setEditMode(true); }}
-                >Edit Node</button>
-                <Button
-                    onClick={()=>{
-                        saveWhiteBord(false)
-                    }}
-                >
-                    Save WhiteBord
-                </Button>
-                <Button
-                    onClick={()=>{
-                        saveWhiteBord(true)
-                    }}
-                >
-                    Save Draft
-                </Button>
+                <Row>
+                    <Button
+                        onClick={()=>{
+                            saveWhiteBord(false)
+                        }}
+                    >
+                        Save WhiteBord
+                    </Button>
+                    <Button
+                        onClick={()=>{
+                            saveWhiteBord(true)
+                        }}
+                    >
+                        Save Draft
+                    </Button>
+                </Row>
                 <ReactFlow
                     nodeTypes={AllNodeTypes}
                     nodes={nodes}
