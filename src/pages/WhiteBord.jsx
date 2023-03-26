@@ -12,6 +12,7 @@ import {HistoryNode} from '../Components/Nodes/HistoryNode'
 import Hotkeys from 'react-hot-keys'
 import {LabelNode} from "../Components/Nodes/LabelNode";
 import {BASIC_NODE_DATA} from "../Components/Nodes/BasicNode";
+import {NewWhiteBoardNode,WhiteBoardNode} from "../Components/Nodes/WhiteBoardNode";
 
 const defaultViewport = {x: 0, y: 0, zoom: 1.5};
 
@@ -19,7 +20,9 @@ const AllNodeTypes = {
     PointNodeView,
     PointNodeCreator,
     HistoryNode,
-    LabelNode
+    LabelNode,
+    NewWhiteBoardNode,
+    WhiteBoardNode
 }
 
 const BasicBord = () => {
@@ -83,6 +86,10 @@ const BasicBord = () => {
             {
                 label: "Label",
                 type: "LabelNode"
+            },
+            {
+                label: "New WhiteBord",
+                type: "NewWhiteBoardNode"
             }
         ];
 
