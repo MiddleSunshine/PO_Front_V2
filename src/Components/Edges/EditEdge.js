@@ -1,4 +1,4 @@
-import {Button, Col, Form, InputNumber, Radio, Row} from "antd";
+import {Button, Col, Form, Input, InputNumber, Radio, Row} from "antd";
 import {CirclePicker} from '@hello-pangea/color-picker'
 import { useReactFlow } from 'reactflow';
 import {useEffect, useState} from "react";
@@ -53,6 +53,18 @@ const EditEdge=({edgeProps})=>{
                 >
                     Reset
                 </Button>
+            </Form.Item>
+            <Form.Item
+                label={"Label"}
+            >
+                <Input
+                    value={edge.label}
+                    onChange={(e)=>{
+                        let newEdge=edge;
+                        newEdge.label=e.target.value;
+                        setEdge(newEdge)
+                    }}
+                />
             </Form.Item>
             <Form.Item
                 label={"Type"}

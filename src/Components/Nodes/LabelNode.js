@@ -2,7 +2,7 @@ import {Input} from "antd";
 import {useState} from "react";
 import React from "react";
 import { NodeResizer } from '@reactflow/node-resizer';
-import { useReactFlow } from 'reactflow';
+import { useReactFlow,Handle } from 'reactflow';
 import {UpdateNode} from "./BasicNode";
 
 const LabelNode=React.memo((node)=>{
@@ -12,6 +12,26 @@ const LabelNode=React.memo((node)=>{
 
     return (
         <div className={"BasicNodeOutside"}>
+            <Handle
+                id={`${node.id}_top`}
+                position={"top"}
+                type={"target"}
+            />
+            <Handle
+                id={`${node.id}_bottom`}
+                position={"bottom"}
+                type={"source"}
+            />
+            <Handle
+                id={`${node.id}_left`}
+                position={"left"}
+                type={"target"}
+            />
+            <Handle
+                id={`${node.id}_right`}
+                position={"right"}
+                type={"source"}
+            />
             <NodeResizer
                 isVisible={node.selected}
                 color="#ff0071"
