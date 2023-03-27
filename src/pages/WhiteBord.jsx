@@ -35,6 +35,7 @@ const BasicBord = () => {
 
     const [menuPosition, setMenuPosition] = useState({x: 0, y: 0});
     const [selectedNode,setSelectedNode]=useState({});
+    const [selectedEdge,setSelectedEdge]=useState({});
     const [editMode,setEditMode]=useState(false);
 
     const { getIntersectingNodes } = useReactFlow();
@@ -46,13 +47,18 @@ const BasicBord = () => {
     const renderEditComponent=useCallback(()=>{
         let renderComponent='';
         if(editMode){
-            switch(selectedNode.type){
-                case 'PointNodeView':
-                    renderComponent=<PointNodeEditor node={selectedNode} />
-                    break;
-                default:
-                    renderComponent='';
-                    break;
+            if (selectedNode.id){
+                switch(selectedNode.type){
+                    case 'PointNodeView':
+                        renderComponent=<PointNodeEditor node={selectedNode} />
+                        break;
+                    default:
+                        renderComponent='';
+                        break;
+                }
+            }
+            if (selectedEdge.id){
+                renderComponent=<EditEdge edgeProps={selectedEdge} />
             }
         }
         return renderComponent;
@@ -157,7 +163,18 @@ const BasicBord = () => {
     const handleSelectionChange=({nodes,edges})=>{
         if(nodes.length==1){
             setSelectedNode(nodes[0]);
+        }else{
+            setSelectedNode({});
         }
+        if (edges.length==1){
+            setSelectedEdge(edges[0]);
+        }else{
+            setSelectedEdge({});
+        }
+    }
+
+    const handleEdgeSelectionChange=({nodes,edges})=>{
+        debugger
     }
 
     const saveWhiteBord=(IsDraft=true)=>{
@@ -238,6 +255,13 @@ const BasicBord = () => {
                     >
                         Save Draft
                     </Button>
+                    <Button
+                        onClick={()=>{
+                            setEditMode(true)
+                        }}
+                    >
+                        Edit
+                    </Button>
                 </Row>
                 <ReactFlow
                     nodeTypes={AllNodeTypes}
@@ -267,6 +291,7 @@ const BasicBord = () => {
                 </ReactFlow>
                 <Drawer
                     open={editMode}
+                    width={500}
                     onClose={()=>{
                         setEditMode(false);
                     }}
@@ -274,12 +299,6 @@ const BasicBord = () => {
                     {
                         renderEditComponent()
                     }
-                </Drawer>
-                <Drawer
-                    open={true}
-                    width={500}
-                >
-                    <EditEdge />
                 </Drawer>
             </Hotkeys>
         </div>

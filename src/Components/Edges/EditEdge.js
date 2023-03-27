@@ -1,15 +1,36 @@
-import {Button, Col, Form, InputNumber, Row} from "antd";
+import {Button, Col, Form, InputNumber, Radio, Row} from "antd";
 import {CirclePicker} from '@hello-pangea/color-picker'
 import { useReactFlow } from 'reactflow';
 import {useEffect, useState} from "react";
-const EditEdge=(edgeProps)=>{
-    const [edge,setEdge]=useState({});
+const EditEdge=({edgeProps})=>{
+    const [edge,setEdge]=useState(edgeProps);
 
     const instance=useReactFlow();
 
     useEffect(()=>{
-        debugger
+        setEdge(edgeProps)
     },[edgeProps])
+
+    const changeEdgeStyleProps=(key,value)=>{
+        let newEdge=edge;
+        if (!newEdge.hasOwnProperty('style')){
+            newEdge.style={};
+        }
+        newEdge.style[key]=value;
+        setEdge(newEdge);
+    }
+
+    const saveEdge=()=>{
+        let edges=instance.getEdges();
+        edges.map((e)=>{
+            if (e.id==edgeProps.id){
+                let newEdge=Object.assign(e,edge);
+                return newEdge;
+            }
+            return e;
+        });
+        instance.setEdges(edges);
+    }
 
     return (
         <Form
@@ -18,38 +39,65 @@ const EditEdge=(edgeProps)=>{
             <Form.Item
                 label={"Option"}
             >
-                <Button>
+                <Button
+                    onClick={()=>{
+                        saveEdge();
+                    }}
+                >
                     Save
                 </Button>
-                <Button>
+                <Button
+                    onClick={()=>{
+                        setEdge(edgeProps);
+                    }}
+                >
                     Reset
                 </Button>
             </Form.Item>
             <Form.Item
                 label={"Type"}
             >
-                <Button>
-                    Default
-                </Button>
-                <Button>
-                    Straight
-                </Button>
-                <Button>
-                    Step
-                </Button>
-                <Button>
-                    SmoothStep
-                </Button>
+                <Radio.Group
+                    value={edge.type}
+                    onChange={(e)=>{
+                        let newEdge=edge;
+                        newEdge.type=e.target.value;
+                        setEdge(newEdge);
+                    }}
+                >
+                    <Radio value={'default'}>
+                        Default
+                    </Radio>
+                    <Radio value={'straight'}>
+                        Straight
+                    </Radio>
+                    <Radio value={"step"}>
+                        Step
+                    </Radio>
+                    <Radio value={"smoothstep"}>
+                        SmoothStep
+                    </Radio>
+                </Radio.Group>
             </Form.Item>
             <Form.Item
                 label={"Width"}
             >
-                <InputNumber />
+                <InputNumber
+                    value={edge?.style?.width}
+                    onChange={(newValue)=>{
+                        changeEdgeStyleProps('width',newValue)
+                    }}
+                />
             </Form.Item>
             <Form.Item
                 label={"Color"}
             >
-                <CirclePicker />
+                <CirclePicker
+                    defaultColor={edge?.style?.color}
+                    onChange={(newValue)=>{
+                        changeEdgeStyleProps('color',newValue);
+                    }}
+                />
             </Form.Item>
         </Form>
     )
