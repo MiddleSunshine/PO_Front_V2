@@ -1,5 +1,5 @@
 import React, {useEffect, useState,useRef, useCallback} from 'react';
-import ReactFlow, {useNodesState, useEdgesState, ReactFlowProvider,addEdge} from 'reactflow';
+import ReactFlow, {useNodesState, useEdgesState, ReactFlowProvider,addEdge,useReactFlow} from 'reactflow';
 import 'reactflow/dist/style.css';
 import {PointNodeView, PointNodeCreator, PointNodeEditor} from '../Components/Nodes/PointNode'
 import {getId} from "../config/WhiteBord";
@@ -35,6 +35,8 @@ const BasicBord = () => {
     const [menuPosition, setMenuPosition] = useState({x: 0, y: 0});
     const [selectedNode,setSelectedNode]=useState({});
     const [editMode,setEditMode]=useState(false);
+
+    const { getIntersectingNodes } = useReactFlow();
 
     const reactFlowWrapper=useRef(null);
 
@@ -176,6 +178,22 @@ const BasicBord = () => {
             })
     }
 
+    const handleOnNodeDrop=(event,node)=>{
+        if (node.type=='InputConnectionNode' || node.type=='OutputConnectionNode'){
+            // 相互交叉的 node
+            const intersections = getIntersectingNodes(node).map((n) => n.id);
+            if (intersections.length==1){
+                let newNodes=nodes.map((n)=>{
+                    if (n.id==node.id){
+                        n.parentNode=intersections[0];
+                    }
+                    return n;
+                })
+                setNodes(newNodes);
+            }
+        }
+    }
+
     const getWhiteBord=(whiteBordId)=>{
         requestAPI(`index.php?action=WhiteBordController&method=GetWhiteBord&ID=${whiteBordId}`)
             .then((json)=>{
@@ -226,6 +244,7 @@ const BasicBord = () => {
                     edges={edges}
                     onNodesChange={onNodesChange}
                     onEdgesChange={onEdgesChange}
+                    onNodeDragStop={handleOnNodeDrop}
                     onConnect={onConnect}
                     defaultViewport={defaultViewport}
                     minZoom={0.2}
