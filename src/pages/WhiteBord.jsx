@@ -1,11 +1,11 @@
 import React, {useEffect, useState,useRef, useCallback} from 'react';
 import ReactFlow, {useNodesState, useEdgesState, ReactFlowProvider,addEdge,useReactFlow} from 'reactflow';
 import 'reactflow/dist/style.css';
-import {PointNodeView, PointNodeCreator, PointNodeEditor} from '../Components/Nodes/PointNode'
+import {PointNodeView, PointNodeEditor} from '../Components/Nodes/PointNode'
 import {getId} from "../config/WhiteBord";
 import '../Css/WhiteBord.css';
 import '@reactflow/node-resizer/dist/style.css';
-import {Button, Drawer, message, Row} from 'antd';
+import {Button, Col, Drawer, Form, message, Row} from 'antd';
 import {requestAPI} from "../config/function";
 import {useParams} from "react-router-dom";
 import {HistoryNode} from '../Components/Nodes/HistoryNode'
@@ -15,6 +15,7 @@ import {BASIC_NODE_DATA} from "../Components/Nodes/BasicNode";
 import {NewWhiteBoardNode,WhiteBoardNode} from "../Components/Nodes/WhiteBoardNode";
 import {InputConnectionNode} from '../Components/Nodes/InputConnectionNode'
 import {OutputConnectionNode} from '../Components/Nodes/OutputConnectionNode'
+import {EditEdge} from "../Components/Edges/EditEdge";
 const defaultViewport = {x: 0, y: 0, zoom: 1.5};
 
 const AllNodeTypes = {
@@ -273,6 +274,12 @@ const BasicBord = () => {
                     {
                         renderEditComponent()
                     }
+                </Drawer>
+                <Drawer
+                    open={true}
+                    width={500}
+                >
+                    <EditEdge />
                 </Drawer>
             </Hotkeys>
         </div>
