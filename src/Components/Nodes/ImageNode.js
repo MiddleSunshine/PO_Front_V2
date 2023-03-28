@@ -1,13 +1,21 @@
 import {Form, Image, Input} from "antd";
 import { NodeResizer } from '@reactflow/node-resizer';
 import React, {useEffect, useState} from "react";
+import {UpdateNode} from "./BasicNode";
+import { useReactFlow,Handle } from 'reactflow';
 const ImageNode=React.memo((nodeProps)=>{
 
     const [nodeData,setNodeData]=useState(nodeProps.data.node_data)
-
+    const instance=useReactFlow();
     useEffect(()=>{
         setNodeData(nodeProps?.data?.node_data);
     },[nodeProps])
+
+    const handleSaveNodeData=()=>{
+        let newNode={...nodeProps};
+        newNode.data.node_data=nodeData;
+        UpdateNode(instance,newNode);
+    }
 
     return (
         <div>
@@ -26,8 +34,13 @@ const ImageNode=React.memo((nodeProps)=>{
                         onChange={(e)=>{
                             let n={...nodeData};
                             n.Title=e.target.value
-                            debugger
                             setNodeData(n);
+                        }}
+                        onBlur={()=>{
+                            handleSaveNodeData();
+                        }}
+                        onPressEnter={()=>{
+                            handleSaveNodeData();
                         }}
                     />
                 </Form.Item>
@@ -40,6 +53,12 @@ const ImageNode=React.memo((nodeProps)=>{
                             let n={...nodeData};
                             n.ImageSrc=e.target.value
                             setNodeData(n);
+                        }}
+                        onBlur={()=>{
+                            handleSaveNodeData();
+                        }}
+                        onPressEnter={()=>{
+                            handleSaveNodeData();
                         }}
                     />
                 </Form.Item>

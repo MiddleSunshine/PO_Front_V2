@@ -13,6 +13,7 @@ import {BASIC_NODE_DATA} from "../Components/Nodes/BasicNode";
 import {NewWhiteBoardNode,WhiteBoardNode} from "../Components/Nodes/WhiteBoardNode";
 import {InputConnectionNode} from '../Components/Nodes/InputConnectionNode'
 import {OutputConnectionNode} from '../Components/Nodes/OutputConnectionNode'
+import {ImageNode} from "../Components/Nodes/ImageNode";
 import {EditEdge} from "../Components/Edges/EditEdge";
 const defaultViewport = {x: 0, y: 0, zoom: 1.5};
 
@@ -22,7 +23,8 @@ const AllNodeTypes = {
     NewWhiteBoardNode,
     WhiteBoardNode,
     InputConnectionNode,
-    OutputConnectionNode
+    OutputConnectionNode,
+    ImageNode
 }
 
 const BasicBord = () => {
@@ -87,6 +89,10 @@ const BasicBord = () => {
             {
                 label:"History Node",
                 type: "HistoryNode"
+            },
+            {
+                label: "Image Node",
+                type: "ImageNode"
             },
             {
                 label: "Label",
