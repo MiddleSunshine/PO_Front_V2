@@ -5,6 +5,8 @@ import {
 } from "react-router-dom";
 import routes from "./config/routes.ts";
 import "./App.css";
+import '@reactflow/node-resizer/dist/style.css';
+import 'reactflow/dist/style.css';
 function App() {
 
     return (

@@ -1,10 +1,8 @@
 import React, {useEffect, useState,useRef, useCallback} from 'react';
 import ReactFlow, {useNodesState, useEdgesState, ReactFlowProvider,addEdge,useReactFlow} from 'reactflow';
-import 'reactflow/dist/style.css';
 import {PointNodeView, PointNodeEditor} from '../Components/Nodes/PointNode'
 import {getId} from "../config/WhiteBord";
 import '../Css/WhiteBord.css';
-import '@reactflow/node-resizer/dist/style.css';
 import {Button, Col, Drawer, Form, message, Row} from 'antd';
 import {requestAPI} from "../config/function";
 import {useParams} from "react-router-dom";

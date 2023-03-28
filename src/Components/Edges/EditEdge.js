@@ -12,11 +12,13 @@ const EditEdge=({edgeProps})=>{
     },[edgeProps])
 
     const changeEdgeStyleProps=(key,value)=>{
-        let newEdge=edge;
+        let newEdge={...edge};
         if (!newEdge.hasOwnProperty('style')){
             newEdge.style={};
         }
-        newEdge.style[key]=value;
+        let newStyle={...newEdge.style};
+        newStyle[key]=value;
+        newEdge.style=newStyle;
         setEdge(newEdge);
     }
 
@@ -95,9 +97,9 @@ const EditEdge=({edgeProps})=>{
                 label={"Width"}
             >
                 <InputNumber
-                    value={edge?.style?.width}
+                    value={edge?.style?.strokeWidth}
                     onChange={(newValue)=>{
-                        changeEdgeStyleProps('width',newValue)
+                        changeEdgeStyleProps('strokeWidth',newValue)
                     }}
                 />
             </Form.Item>
@@ -105,9 +107,9 @@ const EditEdge=({edgeProps})=>{
                 label={"Color"}
             >
                 <CirclePicker
-                    defaultColor={edge?.style?.color}
+                    defaultColor={edge?.style?.stroke}
                     onChange={(newValue)=>{
-                        changeEdgeStyleProps('color',newValue);
+                        changeEdgeStyleProps('stroke',newValue.hex);
                     }}
                 />
             </Form.Item>
