@@ -81,7 +81,7 @@ const BasicBord = () => {
 
         const menus=[
             {
-                label: "New WhiteBord",
+                label: "New Page",
                 type: "NewWhiteBoardNode"
             },
             {
