@@ -171,10 +171,6 @@ const BasicBord = () => {
         }
     }
 
-    const handleEdgeSelectionChange=({nodes,edges})=>{
-        debugger
-    }
-
     const saveWhiteBord=(IsDraft=true)=>{
         requestAPI("index.php?action=WhiteBordController&method=StoreWhiteBord&ID="+id,{
             method:"post",

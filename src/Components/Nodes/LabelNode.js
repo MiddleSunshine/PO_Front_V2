@@ -10,6 +10,14 @@ const LabelNode=React.memo((node)=>{
     const [label,setLabel]=useState(node.data.node_data?.label);
     const instance=useReactFlow();
 
+    const handleSaveNodeData=()=>{
+        let newNode=node;
+        newNode.data.node_data={
+            label:label
+        };
+        UpdateNode(instance,node);
+    }
+
     return (
         <div className={"BasicNodeOutside"}>
             <Handle
@@ -42,12 +50,11 @@ const LabelNode=React.memo((node)=>{
                     onChange={(e)=>{
                         setLabel(e.target.value)
                     }}
+                    onBlur={()=>{
+                        handleSaveNodeData();
+                    }}
                     onPressEnter={()=>{
-                        let newNode=node;
-                        newNode.data.node_data={
-                            label:label
-                        };
-                        UpdateNode(instance,node);
+                        handleSaveNodeData();
                     }}
                 />
             </div>
