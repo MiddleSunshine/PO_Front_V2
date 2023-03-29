@@ -12,57 +12,57 @@ import {
 } from '@ant-design/icons'
 import {NodeResizer} from "@reactflow/node-resizer";
 
-const ICON_LENGTH=2;
-const LENGTH_AMOUNT=24;
-const TYPE_FILE='File';
-const TYPE_FOLDER='Folder';
+const ICON_LENGTH = 2;
+const LENGTH_AMOUNT = 24;
+const TYPE_FILE = 'File';
+const TYPE_FOLDER = 'Folder';
 
-const DirectoryNode=React.memo((nodeProps)=>{
+const DirectoryNode = React.memo((nodeProps) => {
 
-    const [nodeData,setNodeData]=useState([
+    const [nodeData, setNodeData] = useState([
         {
-            node_data:{
-                type:"Folder",
-                offset:0
+            node_data: {
+                type: "Folder",
+                offset: 0
             },
-            data:{
-                Title:"2"
+            data: {
+                Title: "2"
             }
         },
         {
-            node_data:{
-                type:"File",
-                offset:2
+            node_data: {
+                type: "File",
+                offset: 2
             },
-            data:{
-                Title:"3"
+            data: {
+                Title: "3"
             }
         },
         {
-            node_data:{
-                type:"File",
-                offset:4
+            node_data: {
+                type: "File",
+                offset: 4
             },
-            data:{
-                Title:"3"
+            data: {
+                Title: "3"
             }
         },
         {
-            node_data:{
-                type:"Folder",
-                offset:0
+            node_data: {
+                type: "Folder",
+                offset: 0
             },
-            data:{
-                Title:"2"
+            data: {
+                Title: "2"
             }
         },
         {
-            node_data:{
-                type:"File",
-                offset:2
+            node_data: {
+                type: "File",
+                offset: 2
             },
-            data:{
-                Title:"3"
+            data: {
+                Title: "3"
             }
         },
     ]);
@@ -84,29 +84,29 @@ const DirectoryNode=React.memo((nodeProps)=>{
                         <Button
                             size={"small"}
                             type={"link"}
-                            icon={<CaretUpOutlined />}
+                            icon={<CaretUpOutlined/>}
                         ></Button>
                         <Button
                             size={"small"}
                             type={"link"}
-                            icon={<CaretDownOutlined />}
+                            icon={<CaretDownOutlined/>}
                         ></Button>
                         <Button
                             size={"small"}
                             type={"link"}
-                            icon={<CaretLeftOutlined />}
+                            icon={<CaretLeftOutlined/>}
                         ></Button>
                         <Button
                             size={"small"}
                             type={"link"}
-                            icon={<CaretRightOutlined />}
+                            icon={<CaretRightOutlined/>}
                         ></Button>
                     </div>
                 </Col>
             </Row>
             <List
                 dataSource={nodeData}
-                renderItem={(n)=>{
+                renderItem={(n) => {
                     return (
                         <Row
                             className={"EachRow"}
@@ -118,13 +118,22 @@ const DirectoryNode=React.memo((nodeProps)=>{
                                 span={ICON_LENGTH}
                             >
                                 {
-                                    n.node_data.type==TYPE_FOLDER
-                                        ?<FolderOutlined />
-                                        :<FileOutlined />
+                                    n.node_data.type == TYPE_FOLDER
+                                        ? <Button
+                                            size={"small"}
+                                            type={"link"}
+                                            icon={<FolderOutlined/>}
+                                        >
+                                        </Button>
+                                        : <Button
+                                            size={"small"}
+                                            type={"link"}
+                                            icon={<FileOutlined/>}
+                                        ></Button>
                                 }
                             </Col>
                             <Col
-                                span={LENGTH_AMOUNT-ICON_LENGTH-n.node_data.offset}
+                                span={LENGTH_AMOUNT - ICON_LENGTH - n.node_data.offset}
                             >
                                 <Input
                                     value={n.data.Title}
@@ -132,7 +141,7 @@ const DirectoryNode=React.memo((nodeProps)=>{
                                         <Button
                                             size={"small"}
                                             type={"link"}
-                                            icon={<CloseCircleOutlined />}
+                                            icon={<CloseCircleOutlined/>}
                                         >
                                         </Button>
                                     }
@@ -141,19 +150,11 @@ const DirectoryNode=React.memo((nodeProps)=>{
                         </Row>
                     )
                 }}
-            />
-            <Row>
-                <Col span={ICON_LENGTH}>
-                    
-                </Col>
-                <Col span={24-ICON_LENGTH}>
-                    <Input />
-                </Col>
-            </Row>
+                />
         </div>
     )
 })
 
-export {
-    DirectoryNode
-}
+    export {
+        DirectoryNode
+    }
