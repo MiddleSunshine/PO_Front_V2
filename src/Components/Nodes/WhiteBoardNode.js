@@ -1,7 +1,7 @@
 import {requestAPI} from "../../config/function";
 import {Button, Input, message} from "antd";
 import {useState} from "react";
-import {UpdateNode} from "./BasicNode";
+import {CreateNodeAsync, UpdateNode} from "./BasicNode";
 import { useReactFlow } from 'reactflow';
 import {ExportOutlined,SaveOutlined} from '@ant-design/icons'
 const NewWhiteBoardNode=(nodeProps)=>{
@@ -14,12 +14,7 @@ const NewWhiteBoardNode=(nodeProps)=>{
             message.warning("请输入标题");
             return false;
         }
-        requestAPI("index.php?action=WhiteBordController&method=CreateWhiteBord&",{
-            method:"post",
-            body:JSON.stringify({
-                Title
-            })
-        })
+        CreateNodeAsync('WhiteBoardNode',title)
             .then((res)=>{
                 if (res.Data.ID){
                     let newNode={...nodeProps};
@@ -84,7 +79,7 @@ const WhiteBoardNode=(nodeProps)=>{
                 }}
                 addonAfter={<a
                     href={`/whiteboard/${nodeData?.ID}`}
-                    target={"_blank"}
+                    target={"_blank"} rel="noreferrer"
                 >
                     <ExportOutlined />
                 </a>}
