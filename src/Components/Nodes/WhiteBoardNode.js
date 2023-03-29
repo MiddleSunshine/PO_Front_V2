@@ -1,4 +1,3 @@
-import {requestAPI} from "../../config/function";
 import {Button, Input, message} from "antd";
 import {useState} from "react";
 import {CreateNodeAsync, UpdateNode} from "./BasicNode";
