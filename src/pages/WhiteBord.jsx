@@ -15,6 +15,7 @@ import {InputConnectionNode} from '../Components/Nodes/InputConnectionNode'
 import {OutputConnectionNode} from '../Components/Nodes/OutputConnectionNode'
 import {ImageNode} from "../Components/Nodes/ImageNode";
 import {EditEdge} from "../Components/Edges/EditEdge";
+import {DirectoryNode} from '../Components/Nodes/DirectoryNode'
 const defaultViewport = {x: 0, y: 0, zoom: 1.5};
 
 const AllNodeTypes = {
@@ -24,7 +25,8 @@ const AllNodeTypes = {
     WhiteBoardNode,
     InputConnectionNode,
     OutputConnectionNode,
-    ImageNode
+    ImageNode,
+    DirectoryNode
 }
 
 const BasicBord = () => {
@@ -82,6 +84,10 @@ const BasicBord = () => {
         }
 
         const menus=[
+            {
+                label: "Directory",
+                type: "DirectoryNode"
+            },
             {
                 label: "New Page",
                 type: "NewWhiteBoardNode"
