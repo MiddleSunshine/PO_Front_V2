@@ -8,12 +8,13 @@ import {
     CaretDownOutlined,
     CaretLeftOutlined,
     CaretRightOutlined,
-    CloseCircleOutlined
+    CloseOutlined,
+    ExportOutlined
 } from '@ant-design/icons'
 import {NodeResizer} from "@reactflow/node-resizer";
 
 const ICON_LENGTH = 2;
-const LENGTH_AMOUNT = 24;
+const LENGTH_AMOUNT = 23;
 const TYPE_FILE = 'File';
 const TYPE_FOLDER = 'Folder';
 
@@ -26,6 +27,7 @@ const DirectoryNode = React.memo((nodeProps) => {
                 offset: 0
             },
             data: {
+                ID:1,
                 Title: "2"
             }
         },
@@ -35,6 +37,7 @@ const DirectoryNode = React.memo((nodeProps) => {
                 offset: 2
             },
             data: {
+                ID:2,
                 Title: "3"
             }
         },
@@ -44,6 +47,7 @@ const DirectoryNode = React.memo((nodeProps) => {
                 offset: 4
             },
             data: {
+                ID:3,
                 Title: "3"
             }
         },
@@ -53,6 +57,7 @@ const DirectoryNode = React.memo((nodeProps) => {
                 offset: 0
             },
             data: {
+                ID:4,
                 Title: "2"
             }
         },
@@ -62,10 +67,13 @@ const DirectoryNode = React.memo((nodeProps) => {
                 offset: 2
             },
             data: {
+                ID:5,
                 Title: "3"
             }
         },
     ]);
+
+    const [selectedNode,setSelectedNode]=useState({})
 
     return (
         <div className={"DirectoryNode"}>
@@ -73,12 +81,16 @@ const DirectoryNode = React.memo((nodeProps) => {
                 isVisible={nodeProps.selected}
                 color="#ff0071"
             />
-            <Row>
+            <Row
+                onClick={()=>{
+                    setSelectedNode({})
+                }}
+            >
                 <Input
 
                 />
             </Row>
-            <Row>
+            <Row className={"EachRow"}>
                 <Col span={24}>
                     <div>
                         <Button
@@ -101,6 +113,11 @@ const DirectoryNode = React.memo((nodeProps) => {
                             type={"link"}
                             icon={<CaretRightOutlined/>}
                         ></Button>
+                        <Button
+                            size={"small"}
+                            type={"link"}
+                            icon={<CloseOutlined />}
+                        ></Button>
                     </div>
                 </Col>
             </Row>
@@ -109,9 +126,12 @@ const DirectoryNode = React.memo((nodeProps) => {
                 renderItem={(n) => {
                     return (
                         <Row
-                            className={"EachRow"}
+                            className={"EachRow "+(selectedNode?.data?.ID==n.data.ID?'EachRowSelected':'')}
                             justify={"start"}
                             align={"middle"}
+                            onClick={()=>{
+                                setSelectedNode(n);
+                            }}
                         >
                             <Col
                                 offset={n.node_data.offset}
@@ -133,18 +153,18 @@ const DirectoryNode = React.memo((nodeProps) => {
                                 }
                             </Col>
                             <Col
+                                offset={1}
                                 span={LENGTH_AMOUNT - ICON_LENGTH - n.node_data.offset}
                             >
                                 <Input
                                     value={n.data.Title}
-                                    addonAfter={
-                                        <Button
-                                            size={"small"}
-                                            type={"link"}
-                                            icon={<CloseCircleOutlined/>}
-                                        >
-                                        </Button>
-                                    }
+                                    addonAfter={<Button
+                                        size={"small"}
+                                        type={"link"}
+                                        icon={
+                                            <ExportOutlined />
+                                        }
+                                    ></Button>}
                                 />
                             </Col>
                         </Row>
