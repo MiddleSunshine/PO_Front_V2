@@ -3,6 +3,7 @@ import {useState} from "react";
 import {CreateNodeAsync, UpdateNode} from "./BasicNode";
 import { useReactFlow } from 'reactflow';
 import {ExportOutlined,SaveOutlined} from '@ant-design/icons'
+import {CreateNewWhiteBoardAsync} from "./BaseWhiteBoard";
 const NewWhiteBoardNode=(nodeProps)=>{
 
     const [title,setTitle]=useState('');
@@ -13,16 +14,14 @@ const NewWhiteBoardNode=(nodeProps)=>{
             message.warning("请输入标题");
             return false;
         }
-        CreateNodeAsync('WhiteBoardNode',title)
+        CreateNewWhiteBoardAsync(Title)
             .then((res)=>{
                 if (res.Data.data.ID){
                     let newNode={...nodeProps};
                     newNode.type='WhiteBoardNode';
                     newNode.data.save_into_database=true;
-                    newNode.data.node_data={
-                        ID:res.Data.data.ID,
-                        Title:Title
-                    };
+                    newNode.data.data={};
+                    newNode.data.node_data=res.Data.data;
                     UpdateNode(instance,newNode);
                 }else{
                     message.warning(res.Message);
