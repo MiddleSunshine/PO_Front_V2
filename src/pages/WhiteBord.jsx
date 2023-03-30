@@ -216,7 +216,6 @@ const BasicBord = () => {
                 });
                 let newNodes=nodes.map((n)=>{
                     if (n.id==node.id){
-                        // todo 这里需要调整，需要调整成想对定位
                         if (!n.parentNode){
                             n.position.x=Math.abs(intersectionNode.position.x-n.position.x);
                             n.position.y=Math.abs(intersectionNode.position.y-n.position.y);

@@ -30,8 +30,7 @@
 
 .WhiteBoard .DirectoryNode .EachRow{
     border-bottom: 1px solid #F0F0F0;
-    padding-bottom: 5px;
-    padding-top: 5px;
+    padding: 5px;
 }
 
 .WhiteBoard .DirectoryNode .EachRowSelected{
