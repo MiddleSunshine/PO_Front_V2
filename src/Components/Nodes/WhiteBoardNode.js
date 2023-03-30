@@ -15,12 +15,12 @@ const NewWhiteBoardNode=(nodeProps)=>{
         }
         CreateNodeAsync('WhiteBoardNode',title)
             .then((res)=>{
-                if (res.Data.ID){
+                if (res.Data.data.ID){
                     let newNode={...nodeProps};
                     newNode.type='WhiteBoardNode';
                     newNode.data.save_into_database=true;
                     newNode.data.node_data={
-                        ID:res.Data.ID,
+                        ID:res.Data.data.ID,
                         Title:Title
                     };
                     UpdateNode(instance,newNode);

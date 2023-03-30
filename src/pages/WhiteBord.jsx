@@ -85,6 +85,14 @@ const BasicBord = () => {
 
         const menus=[
             {
+                label: "Save Page",
+                type: "SavePage"
+            },
+            {
+                label:"Save Draft",
+                type: "SaveDraft"
+            },
+            {
                 label: "Directory",
                 type: "DirectoryNode"
             },
@@ -151,21 +159,30 @@ const BasicBord = () => {
 
     const createNode = (event, type) => {
         event.preventDefault();
-        const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
-        const position = reactFlowInstance.project({
-            x: event.clientX - reactFlowBounds.left,
-            y: event.clientY - reactFlowBounds.top,
-        });
-        let new_node={
-            id:getId(type),
-            type:type,
-            data:{
-                ...BASIC_NODE_DATA
-            },
-            position: position
+        switch (type){
+            case 'SavePage':
+                saveWhiteBord(false);
+                break;
+            case 'SaveDraft':
+                saveWhiteBord(true)
+                break;
+            default:
+                const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
+                const position = reactFlowInstance.project({
+                    x: event.clientX - reactFlowBounds.left,
+                    y: event.clientY - reactFlowBounds.top,
+                });
+                let new_node={
+                    id:getId(type),
+                    type:type,
+                    data:{
+                        ...BASIC_NODE_DATA
+                    },
+                    position: position
+                }
+                setNodes((n) =>n.concat([new_node]) );
+                setMenuPosition({x: 0, y: 0});
         }
-        setNodes((n) =>n.concat([new_node]) );
-        setMenuPosition({x: 0, y: 0});
     }
 
     const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), [setEdges]);
@@ -245,8 +262,12 @@ const BasicBord = () => {
     let hotkeysHandler=[];
 
     hotkeysHandler['shift+s']=()=>{
-
+        saveWhiteBord(false);
     };
+
+    hotkeysHandler['shift+d']=()=>{
+        saveWhiteBord(true);
+    }
 
 
     return (
@@ -258,20 +279,6 @@ const BasicBord = () => {
                 }}
             >
                 <Row>
-                    <Button
-                        onClick={()=>{
-                            saveWhiteBord(false)
-                        }}
-                    >
-                        Save WhiteBord
-                    </Button>
-                    <Button
-                        onClick={()=>{
-                            saveWhiteBord(true)
-                        }}
-                    >
-                        Save Draft
-                    </Button>
                     <Button
                         onClick={()=>{
                             setEditMode(true)

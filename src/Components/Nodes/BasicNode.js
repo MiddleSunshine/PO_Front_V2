@@ -1,11 +1,26 @@
 import { useReactFlow } from 'reactflow';
 import {requestAPI} from "../../config/function";
+import {message} from "antd";
 
 const BASIC_NODE_DATA={
     data:{},
     node_data:{},
     settings:{},
     save_into_database:false
+}
+
+const SearchHistoryNodeAsync=(searchKeyword,type='')=>{
+    if (!searchKeyword){
+        message.warning("Please input the keyword");
+        return "";
+    }
+    return  requestAPI('index.php?action=NodeController&method=SearchNode',{
+        method:"post",
+        body:JSON.stringify({
+            keyword:searchKeyword,
+            type:type
+        })
+    });
 }
 
 const CreateNodeAsync=(type,name,node_data={})=>{
@@ -52,5 +67,6 @@ export {
     UpdateNode,
     CreateNodeAsync,
     UpdateNodeAsync,
-    GetNodeDetailAsync
+    GetNodeDetailAsync,
+    SearchHistoryNodeAsync
 }
