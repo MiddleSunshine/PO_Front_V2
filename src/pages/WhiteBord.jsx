@@ -207,8 +207,20 @@ const BasicBord = () => {
             // 相互交叉的 node
             const intersections = getIntersectingNodes(node).map((n) => n.id);
             if (intersections.length==1){
+                let intersectionNode={};
+                nodes.map((n)=>{
+                    if (n.id==intersections[0]){
+                        intersectionNode=n;
+                    }
+                    return n;
+                });
                 let newNodes=nodes.map((n)=>{
                     if (n.id==node.id){
+                        // todo 这里需要调整，需要调整成想对定位
+                        if (!n.parentNode){
+                            n.position.x=Math.abs(intersectionNode.position.x-n.position.x);
+                            n.position.y=Math.abs(intersectionNode.position.y-n.position.y);
+                        }
                         n.parentNode=intersections[0];
                     }
                     return n;
