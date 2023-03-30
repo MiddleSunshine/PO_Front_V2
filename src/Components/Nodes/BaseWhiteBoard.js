@@ -1,4 +1,5 @@
 import {requestAPI} from "../../config/function";
+import {message} from "antd";
 
 
 const CreateNewWhiteBoardAsync=(Title,Type='')=>{
@@ -14,6 +15,18 @@ const CreateNewWhiteBoardAsync=(Title,Type='')=>{
     });
 }
 
+const SearchWhiteBoardAsync=(Keyword,Type='Data')=>{
+    if (!Keyword){
+        message.warning("请输入要搜索的关键字");
+        return "";
+    }
+    return  requestAPI("index.php?action=WhiteBordController&method=SearchWhiteBoard",{
+        Keywords:Keyword,
+        Type:Type
+    });
+}
+
 export {
-    CreateNewWhiteBoardAsync
+    CreateNewWhiteBoardAsync,
+    SearchWhiteBoardAsync
 }
