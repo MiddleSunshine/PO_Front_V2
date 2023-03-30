@@ -1,8 +1,7 @@
 import {Button, Checkbox, Col, Input, message, Modal, Row} from "antd";
 import {useEffect, useState} from "react";
-import {requestAPI} from "../../config/function";
 import { JSONTree } from 'react-json-tree';
-import {UpdateNode} from "./BasicNode";
+import {SearchHistoryNodeAsync, UpdateNode} from "./BasicNode";
 import { useReactFlow } from 'reactflow';
 
 const HistoryNode=(nodeProps)=>{
@@ -16,16 +15,7 @@ const HistoryNode=(nodeProps)=>{
     const [searchState,setSearchState]=useState(1);
     const instance=useReactFlow();
     const searchNode=(searchKeyword)=>{
-        if (!searchKeyword){
-            message.warning("Please input the keyword");
-            return false;
-        }
-        requestAPI('index.php?action=NodeController&method=SearchNode',{
-            method:"post",
-            body:JSON.stringify({
-                keyword:searchKeyword
-            })
-        })
+        SearchHistoryNodeAsync(searchKeyword)
             .then((res)=>{
                 setNodes(res.Data.nodes);
             })
