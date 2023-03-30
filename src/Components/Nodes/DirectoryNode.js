@@ -1,6 +1,6 @@
 import {useState} from "react";
 import React from "react";
-import {Button, Col, Divider, Input, List, Row, Select, Timeline} from "antd";
+import {Button, Col, Input, List, Row, Modal} from "antd";
 import {
     FolderOutlined,
     FileOutlined,
@@ -84,6 +84,7 @@ const DirectoryNode = React.memo((nodeProps) => {
     ]);
 
     const [selectedNode,setSelectedNode]=useState({})
+    const [newNode,setNewNode]=useState({})
 
     const createNode=(index,offset=0)=>{
         let newNodeData=nodeData;
@@ -211,6 +212,13 @@ const DirectoryNode = React.memo((nodeProps) => {
                     )
                 }}
                 />
+            <div>
+                <Modal
+                    width={"1200px"}
+                >
+
+                </Modal>
+            </div>
         </div>
     )
 })
