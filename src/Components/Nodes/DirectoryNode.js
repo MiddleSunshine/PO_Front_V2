@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import React from "react";
 import {Button, Col, Input, List, Row, Modal} from "antd";
 import {
@@ -10,7 +10,8 @@ import {
     CaretRightOutlined,
     CloseOutlined,
     PlusOutlined,
-    SaveOutlined
+    SaveOutlined,
+    ExportOutlined
 } from '@ant-design/icons'
 import {NodeResizer} from "@reactflow/node-resizer";
 import {getId} from "../../config/WhiteBord";
@@ -19,7 +20,7 @@ import {useReactFlow} from 'reactflow'
 import {UpdateNode} from "./BasicNode";
 
 const ICON_LENGTH = 2;
-const LENGTH_AMOUNT = 23;
+const LENGTH_AMOUNT = 22;
 const TYPE_FILE = 'File';
 const TYPE_FOLDER = 'Folder';
 
@@ -35,11 +36,14 @@ var NEW_NODE_DATA_TEMPLATE = {
 }
 
 const DirectoryNode = (nodeProps) => {
-
-    const [nodeData, setNodeData] = useState(nodeProps.data.node_data);
-
-    const [selectedNode, setSelectedNode] = useState({})
+    // 展示数据
+    const [nodeData, setNodeData] = useState(nodeProps?.data?.node_data);
+    const [data,setData]=useState(nodeProps.data.data);
+    // 选中效果
+    const [selectedNode, setSelectedNode] = useState({});
+    // 搜索效果
     const [searchKeywords, setSearchKeywords] = useState({});
+    // 新建时的效果
     const [newNode, setNewNode] = useState('');
 
     const instance = useReactFlow();
@@ -48,12 +52,17 @@ const DirectoryNode = (nodeProps) => {
         setNodeData(nodeProps.data.node_data)
     }, [nodeProps])
 
-    const SAVE_DATA = () => {
+    const SAVE_DATA = (source='') => {
         let newNode = nodeProps;
+        newNode.data.data=data;
         newNode.data.node_data = nodeData;
         newNode.data.save_into_database = true;
         UpdateNode(instance, newNode);
     }
+
+    useCallback(()=>{
+        SAVE_DATA('callback');
+    },[nodeData])
 
     const createNode = (index, offset = 0, Title = '') => {
         let newNodeData = nodeData;
@@ -113,7 +122,7 @@ const DirectoryNode = (nodeProps) => {
                 color="#ff0071"
             />
             {
-                nodeData.length == 0
+                !nodeData.hasOwnProperty(0)
                     ?
                     <Row
                         className={"EachRow"}
@@ -139,22 +148,35 @@ const DirectoryNode = (nodeProps) => {
                     </Row>
                     :
                     <List
-                        header={<Button
-                            icon={<SaveOutlined />}
-                            size={"small"}
-                            type={"link"}
-                            onClick={()=>{
-                                SAVE_DATA();
+                        header={
+                        <Input
+                            allowClear={true}
+                            value={data?.Name}
+                            onChange={(e)=>{
+                                setData({
+                                    ...data,
+                                    Name:e.target.value
+                                });
                             }}
-                        ></Button>}
+                            onPressEnter={()=>{
+                                if (data?.Name){
+                                    SAVE_DATA('save title');
+                                }
+                            }}
+                        />
+                        }
                         split={true}
-                        dataSource={nodeData}
+                        dataSource={nodeData.length>0?nodeData:[]}
                         renderItem={(n, outsideIndex) => {
                             return (
                                 <div
                                     key={outsideIndex}
                                     onClick={() => {
-                                        setSelectedNode(n);
+                                        if (n.data.ID==selectedNode?.data?.ID){
+                                            setSelectedNode({});
+                                        }else{
+                                            setSelectedNode(n);
+                                        }
                                     }}
                                 >
                                     <Row
@@ -214,6 +236,21 @@ const DirectoryNode = (nodeProps) => {
                                                 }}
                                             />
                                         </Col>
+                                        {
+                                            n.node_data.type==TYPE_FILE
+                                                ?
+                                                <Col span={1}>
+                                                    <Button
+                                                        type={"link"}
+                                                        size={"small"}
+                                                        href={`/whiteboard/${n.data.ID}`}
+                                                        target={"_blank"}
+                                                        icon={<ExportOutlined />}
+                                                    >
+                                                    </Button>
+                                                </Col>
+                                                :''
+                                        }
                                     </Row>
                                     {
                                         selectedNode?.data?.ID == n.data.ID
