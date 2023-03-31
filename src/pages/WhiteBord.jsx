@@ -3,7 +3,7 @@ import ReactFlow, {useNodesState, useEdgesState, ReactFlowProvider,addEdge,useRe
 import {PointNodeView, PointNodeEditor} from '../Components/Nodes/PointNode'
 import {getId} from "../config/WhiteBord";
 import '../Css/WhiteBord.css';
-import {Button, Col, Drawer, Form, message, Row} from 'antd';
+import {Button, Cascader, Col, Drawer, Form, message, Row} from 'antd';
 import {requestAPI} from "../config/function";
 import {useParams} from "react-router-dom";
 import {HistoryNode} from '../Components/Nodes/HistoryNode'
@@ -86,39 +86,39 @@ const BasicBord = () => {
         const menus=[
             {
                 label: "Save Page",
-                type: "SavePage"
+                value: "SavePage"
             },
             {
                 label:"Save Draft",
-                type: "SaveDraft"
+                value: "SaveDraft"
             },
             {
                 label: "Directory",
-                type: "DirectoryNode"
-            },
-            {
-                label: "New Page",
-                type: "NewWhiteBoardNode"
+                value: "DirectoryNode"
             },
             {
                 label:"History Node",
-                type: "HistoryNode"
+                value: "HistoryNode"
             },
             {
                 label: "Image Node",
-                type: "ImageNode"
+                value: "ImageNode"
             },
             {
                 label: "Label",
-                type: "LabelNode"
+                value: "LabelNode"
+            },
+            {
+                label: "New Page",
+                value: "NewWhiteBoardNode"
             },
             {
                 label: "End Connection",
-                type: "InputConnectionNode"
+                value: "InputConnectionNode"
             },
             {
                 label: "Start Connection",
-                type: "OutputConnectionNode"
+                value: "OutputConnectionNode"
             }
         ];
 
@@ -128,11 +128,11 @@ const BasicBord = () => {
                     menus.map((menu)=>{
                         return (
                             <div
-                                key={menu.type}
+                                key={menu.value}
                             >
                                 <Button
                                     type={"link"}
-                                    onClick={(event)=>{ createNode(event,menu.type) }}
+                                    onClick={(event)=>{ createNode(event,menu.value) }}
                                 >
                                     {
                                         menu.label
