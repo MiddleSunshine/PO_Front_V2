@@ -122,7 +122,7 @@ const DirectoryNode = (nodeProps) => {
                 color="#ff0071"
             />
             {
-                !nodeData.hasOwnProperty(0)
+                nodeData.length==0
                     ?
                     <Row
                         className={"EachRow"}
@@ -166,7 +166,7 @@ const DirectoryNode = (nodeProps) => {
                         />
                         }
                         split={true}
-                        dataSource={nodeData.length>0?nodeData:[]}
+                        dataSource={nodeData}
                         renderItem={(n, outsideIndex) => {
                             return (
                                 <div
