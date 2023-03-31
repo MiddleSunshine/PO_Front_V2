@@ -12,7 +12,7 @@ const requestAPI=(api,init={},checkToken=true)=>{
     let requestUrl="";
     if (process.env.NODE_ENV=='development'){
         // 开发环境
-        requestUrl="http://127.0.0.1:8050";
+        requestUrl="http://127.0.0.1:8050/";
     }else{
         // 正式环境
     }
@@ -34,11 +34,11 @@ const Login=(userName,password)=>{
     let requestUrl="";
     if (process.env.NODE_ENV=='development'){
         // 开发环境
-        requestUrl="http://127.0.0.1:8050";
+        requestUrl="http://127.0.0.1:8050/";
     }else{
         // 正式环境
     }
-    return  fetch(requestUrl+"/index.php?action=LoginController&method=Login",{
+    return  fetch(requestUrl+"index.php?action=LoginController&method=Login",{
         mode:"cors",
         method:"post",
         body:JSON.stringify({
