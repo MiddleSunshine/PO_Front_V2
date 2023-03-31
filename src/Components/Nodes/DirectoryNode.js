@@ -127,14 +127,16 @@ const DirectoryNode = React.memo((nodeProps) => {
                 dataSource={nodeData}
                 renderItem={(n,outsideIndex) => {
                     return (
-                        <div>
+                        <div
+                            key={outsideIndex}
+                            onClick={()=>{
+                                setSelectedNode(n);
+                            }}
+                        >
                             <Row
                                 className={"EachRow "+(selectedNode?.data?.ID==n.data.ID?'EachRowSelected':'')}
                                 justify={"start"}
                                 align={"middle"}
-                                onClick={()=>{
-                                    setSelectedNode(n);
-                                }}
                             >
                                 <Col
                                     offset={n.node_data.offset}
@@ -148,7 +150,7 @@ const DirectoryNode = React.memo((nodeProps) => {
                                                 icon={<FolderOutlined/>}
                                                 onClick={()=>{
                                                     let newNodeData=nodeData;
-                                                    newNodeData[outsideIndex].data.type=TYPE_FILE;
+                                                    newNodeData[outsideIndex].node_data.type=TYPE_FILE;
                                                     setNodeData(newNodeData);
                                                 }}
                                             >
@@ -159,7 +161,7 @@ const DirectoryNode = React.memo((nodeProps) => {
                                                 icon={<FileOutlined/>}
                                                 onClick={()=>{
                                                     let newNodeData=nodeData;
-                                                    newNodeData[outsideIndex].data.type=TYPE_FOLDER;
+                                                    newNodeData[outsideIndex].node_data.type=TYPE_FOLDER;
                                                     setNodeData(newNodeData);
                                                 }}
                                             ></Button>
@@ -185,7 +187,6 @@ const DirectoryNode = React.memo((nodeProps) => {
                                                     outsideIndex
                                                 });
                                             }
-
                                         }}
                                     />
                                 </Col>
@@ -253,7 +254,7 @@ const DirectoryNode = React.memo((nodeProps) => {
                     }}
                 >
                     <SearchHistoryWhiteBoard
-                        keywords={searchKeywords.data.Title}
+                        keywords={searchKeywords?.data?.Title}
                         OnCancel={(newWhiteBordData)=>{
                             handleSearchHistoryWhiteBoard({
                                 ...searchKeywords,

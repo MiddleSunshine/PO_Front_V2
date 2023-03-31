@@ -21,8 +21,11 @@ const SearchWhiteBoardAsync=(Keyword,Type='Data')=>{
         return "";
     }
     return  requestAPI("index.php?action=WhiteBordController&method=SearchWhiteBoard",{
-        Keywords:Keyword,
-        Type:Type
+        body:JSON.stringify({
+            Keywords:Keyword,
+            Type:Type
+        }),
+        method:"post"
     });
 }
 

@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {CreateNewWhiteBoardAsync, SearchWhiteBoardAsync} from "./Nodes/BaseWhiteBoard";
 import {Button, Col, Input, Row} from "antd";
-
+import {ExportOutlined} from '@ant-design/icons'
 const SearchHistoryWhiteBoard=({keywords,Type='',OnCancel})=>{
 
     const [whiteboards,setWhiteBoard]=useState([]);
@@ -75,7 +75,7 @@ const SearchHistoryWhiteBoard=({keywords,Type='',OnCancel})=>{
                                         setSelectedWhiteBoard(w);
                                     }}
                                 >
-                                    {w.Title}
+                                    {w.Title ?? 'Page'}
                                 </Button>
                             </Col>
                             <Col span={4}>
@@ -84,6 +84,7 @@ const SearchHistoryWhiteBoard=({keywords,Type='',OnCancel})=>{
                                     size={"small"}
                                     href={`/whiteboard/${w.ID}`}
                                     target={"_blank"}
+                                    icon={<ExportOutlined />}
                                 >
                                 </Button>
                             </Col>
