@@ -21,90 +21,39 @@ const LENGTH_AMOUNT = 23;
 const TYPE_FILE = 'File';
 const TYPE_FOLDER = 'Folder';
 
-const NEW_NODE_DATA_TEMPLATE={
-    node_data:{
-        type:TYPE_FILE,
-        offset:0
+const NEW_NODE_DATA_TEMPLATE = {
+    node_data: {
+        type: TYPE_FILE,
+        offset: 0
     },
-    data:{}
+    data: {}
 }
 
-const DirectoryNode = React.memo((nodeProps) => {
+const DirectoryNode = (nodeProps) => {
 
-    const [nodeData, setNodeData] = useState([
-        {
-            node_data: {
-                type: "Folder",
-                offset: 0
-            },
-            data: {
-                ID:1,
-                Title: "2"
-            }
-        },
-        {
-            node_data: {
-                type: "File",
-                offset: 2
-            },
-            data: {
-                ID:2,
-                Title: "3"
-            }
-        },
-        {
-            node_data: {
-                type: "File",
-                offset: 4
-            },
-            data: {
-                ID:3,
-                Title: "3"
-            }
-        },
-        {
-            node_data: {
-                type: "Folder",
-                offset: 0
-            },
-            data: {
-                ID:4,
-                Title: "2"
-            }
-        },
-        {
-            node_data: {
-                type: "File",
-                offset: 2
-            },
-            data: {
-                ID:5,
-                Title: "3"
-            }
-        },
-    ]);
+    const [nodeData, setNodeData] = useState([]);
 
-    const [selectedNode,setSelectedNode]=useState({})
-    const [searchKeywords,setSearchKeywords]=useState({});
+    const [selectedNode, setSelectedNode] = useState({})
+    const [searchKeywords, setSearchKeywords] = useState({});
 
-    const createNode=(index,offset=0)=>{
-        let newNodeData=nodeData;
-        let newNode={
-            node_data:{
-                type:TYPE_FILE,
-                offset:offset
+    const createNode = (index, offset = 0) => {
+        let newNodeData = nodeData;
+        let newNode = {
+            node_data: {
+                type: TYPE_FILE,
+                offset: offset
             },
-            data:{
-                ID:getId(TYPE_FILE)
+            data: {
+                ID: getId(TYPE_FILE)
             }
         };
-        newNodeData.splice(index,0,newNode);
+        newNodeData.splice(index, 0, newNode);
         setNodeData(newNodeData);
         setSelectedNode(newNode)
     }
 
 
-    const handleSearchHistoryWhiteBoard=(whiteBord)=>{
+    const handleSearchHistoryWhiteBoard = (whiteBord) => {
         setSearchKeywords(whiteBord);
     }
 
@@ -115,7 +64,7 @@ const DirectoryNode = React.memo((nodeProps) => {
                 color="#ff0071"
             />
             <Row
-                onClick={()=>{
+                onClick={() => {
                     setSelectedNode({})
                 }}
             >
@@ -125,16 +74,16 @@ const DirectoryNode = React.memo((nodeProps) => {
             </Row>
             <List
                 dataSource={nodeData}
-                renderItem={(n,outsideIndex) => {
+                renderItem={(n, outsideIndex) => {
                     return (
                         <div
                             key={outsideIndex}
-                            onClick={()=>{
+                            onClick={() => {
                                 setSelectedNode(n);
                             }}
                         >
                             <Row
-                                className={"EachRow "+(selectedNode?.data?.ID==n.data.ID?'EachRowSelected':'')}
+                                className={"EachRow " + (selectedNode?.data?.ID == n.data.ID ? 'EachRowSelected' : '')}
                                 justify={"start"}
                                 align={"middle"}
                             >
@@ -148,9 +97,9 @@ const DirectoryNode = React.memo((nodeProps) => {
                                                 size={"small"}
                                                 type={"link"}
                                                 icon={<FolderOutlined/>}
-                                                onClick={()=>{
-                                                    let newNodeData=nodeData;
-                                                    newNodeData[outsideIndex].node_data.type=TYPE_FILE;
+                                                onClick={() => {
+                                                    let newNodeData = nodeData;
+                                                    newNodeData[outsideIndex].node_data.type = TYPE_FILE;
                                                     setNodeData(newNodeData);
                                                 }}
                                             >
@@ -159,9 +108,9 @@ const DirectoryNode = React.memo((nodeProps) => {
                                                 size={"small"}
                                                 type={"link"}
                                                 icon={<FileOutlined/>}
-                                                onClick={()=>{
-                                                    let newNodeData=nodeData;
-                                                    newNodeData[outsideIndex].node_data.type=TYPE_FOLDER;
+                                                onClick={() => {
+                                                    let newNodeData = nodeData;
+                                                    newNodeData[outsideIndex].node_data.type = TYPE_FOLDER;
                                                     setNodeData(newNodeData);
                                                 }}
                                             ></Button>
@@ -173,14 +122,14 @@ const DirectoryNode = React.memo((nodeProps) => {
                                 >
                                     <Input
                                         value={n.data.Title}
-                                        onChange={(e)=>{
-                                            let newNodeData=nodeData;
-                                            newNodeData[outsideIndex].data.Title=e.target.value;
+                                        onChange={(e) => {
+                                            let newNodeData = nodeData;
+                                            newNodeData[outsideIndex].data.Title = e.target.value;
                                             setNodeData(newNodeData);
 
                                         }}
-                                        onPressEnter={()=>{
-                                            if (n.node_data.type==TYPE_FILE){
+                                        onPressEnter={() => {
+                                            if (n.node_data.type == TYPE_FILE) {
                                                 // 只有是文件的情况下，才会搜索历史值
                                                 handleSearchHistoryWhiteBoard({
                                                     ...n,
@@ -192,11 +141,11 @@ const DirectoryNode = React.memo((nodeProps) => {
                                 </Col>
                             </Row>
                             {
-                                selectedNode?.data?.ID==n.data.ID
-                                ?<Row className={"EachRow"}>
+                                selectedNode?.data?.ID == n.data.ID
+                                    ? <Row className={"EachRow"}>
                                         <Col
-                                            offset={n.node_data.offset+ICON_LENGTH}
-                                            span={LENGTH_AMOUNT-ICON_LENGTH-n.node_data.offset}
+                                            offset={n.node_data.offset + ICON_LENGTH}
+                                            span={LENGTH_AMOUNT - ICON_LENGTH - n.node_data.offset}
                                         >
                                             <div>
                                                 <Button
@@ -222,52 +171,53 @@ const DirectoryNode = React.memo((nodeProps) => {
                                                 <Button
                                                     size={"small"}
                                                     type={"link"}
-                                                    icon={<CloseOutlined />}
+                                                    icon={<CloseOutlined/>}
                                                 ></Button>
                                                 <Button
                                                     size={"small"}
                                                     type={"link"}
-                                                    icon={<PlusOutlined />}
-                                                    onClick={()=>{
-                                                        createNode(outsideIndex+1,n.node_data.offset)
+                                                    icon={<PlusOutlined/>}
+                                                    onClick={() => {
+                                                        createNode(outsideIndex + 1, n.node_data.offset)
                                                     }}
                                                 >
                                                 </Button>
                                             </div>
                                         </Col>
                                     </Row>
-                                    :''
+                                    : ''
                             }
                         </div>
                     )
                 }}
-                />
+            />
             <div>
                 <Modal
                     width={"1200px"}
                     open={searchKeywords?.data?.ID}
-                    onCancel={()=>{
+                    onCancel={() => {
                         handleSearchHistoryWhiteBoard({})
                     }}
-                    onOk={()=>{
-                        debugger
-                    }}
+                    footer={null}
                 >
                     <SearchHistoryWhiteBoard
                         keywords={searchKeywords?.data?.Title}
-                        OnCancel={(newWhiteBordData)=>{
-                            handleSearchHistoryWhiteBoard({
+                        OnCancel={(newWhiteBordData) => {
+                            let newNodeData=nodeData;
+                            newNodeData[searchKeywords.outsideIndex]={
                                 ...searchKeywords,
                                 data:newWhiteBordData
-                            })
+                            };
+                            setNodeData(newNodeData);
+                            handleSearchHistoryWhiteBoard({});
                         }}
                     />
                 </Modal>
             </div>
         </div>
     )
-})
+}
 
-    export {
-        DirectoryNode
-    }
+export {
+    DirectoryNode
+}
