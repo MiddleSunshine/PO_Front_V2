@@ -26,7 +26,10 @@ const NEW_NODE_DATA_TEMPLATE = {
         type: TYPE_FILE,
         offset: 0
     },
-    data: {}
+    data: {
+        ID:0,
+        Title:""
+    }
 }
 
 const DirectoryNode = (nodeProps) => {
@@ -35,18 +38,13 @@ const DirectoryNode = (nodeProps) => {
 
     const [selectedNode, setSelectedNode] = useState({})
     const [searchKeywords, setSearchKeywords] = useState({});
-
-    const createNode = (index, offset = 0) => {
+    const [newNode,setNewNode]=useState('');
+    const createNode = (index, offset = 0,Title='') => {
         let newNodeData = nodeData;
-        let newNode = {
-            node_data: {
-                type: TYPE_FILE,
-                offset: offset
-            },
-            data: {
-                ID: getId(TYPE_FILE)
-            }
-        };
+        let newNode = {...NEW_NODE_DATA_TEMPLATE};
+        newNode.data.ID=getId(TYPE_FILE)
+        newNode.node_data.offset=offset;
+        newNode.data.Title=Title;
         newNodeData.splice(index, 0, newNode);
         setNodeData(newNodeData);
         setSelectedNode(newNode)
@@ -69,7 +67,16 @@ const DirectoryNode = (nodeProps) => {
                 }}
             >
                 <Input
-
+                    value={newNode}
+                    onChange={(e)=>{
+                        setNewNode(e.target.value);
+                    }}
+                    onPressEnter={()=>{
+                        let newNode={...NEW_NODE_DATA_TEMPLATE}
+                        newNode.data.Title=newNode;
+                        newNode.data.ID=getId(TYPE_FILE);
+                        handleSearchHistoryWhiteBoard(newNode);
+                    }}
                 />
             </Row>
             <List
