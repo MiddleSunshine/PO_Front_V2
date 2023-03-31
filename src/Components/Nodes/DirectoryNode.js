@@ -14,6 +14,7 @@ import {
 } from '@ant-design/icons'
 import {NodeResizer} from "@reactflow/node-resizer";
 import {getId} from "../../config/WhiteBord";
+import {SearchHistoryWhiteBoard} from "../SearchHistoryWhiteBoard";
 
 const ICON_LENGTH = 2;
 const LENGTH_AMOUNT = 23;
@@ -84,7 +85,7 @@ const DirectoryNode = React.memo((nodeProps) => {
     ]);
 
     const [selectedNode,setSelectedNode]=useState({})
-    const [newNode,setNewNode]=useState({})
+    const [searchKeywords,setSearchKeywords]=useState({});
 
     const createNode=(index,offset=0)=>{
         let newNodeData=nodeData;
@@ -100,6 +101,11 @@ const DirectoryNode = React.memo((nodeProps) => {
         newNodeData.splice(index,0,newNode);
         setNodeData(newNodeData);
         setSelectedNode(newNode)
+    }
+
+
+    const handleSearchHistoryWhiteBoard=(whiteBord)=>{
+        setSearchKeywords(whiteBord);
     }
 
     return (
@@ -140,12 +146,22 @@ const DirectoryNode = React.memo((nodeProps) => {
                                                 size={"small"}
                                                 type={"link"}
                                                 icon={<FolderOutlined/>}
+                                                onClick={()=>{
+                                                    let newNodeData=nodeData;
+                                                    newNodeData[outsideIndex].data.type=TYPE_FILE;
+                                                    setNodeData(newNodeData);
+                                                }}
                                             >
                                             </Button>
                                             : <Button
                                                 size={"small"}
                                                 type={"link"}
                                                 icon={<FileOutlined/>}
+                                                onClick={()=>{
+                                                    let newNodeData=nodeData;
+                                                    newNodeData[outsideIndex].data.type=TYPE_FOLDER;
+                                                    setNodeData(newNodeData);
+                                                }}
                                             ></Button>
                                     }
                                 </Col>
@@ -155,7 +171,20 @@ const DirectoryNode = React.memo((nodeProps) => {
                                 >
                                     <Input
                                         value={n.data.Title}
+                                        onChange={(e)=>{
+                                            let newNodeData=nodeData;
+                                            newNodeData[outsideIndex].data.Title=e.target.value;
+                                            setNodeData(newNodeData);
+
+                                        }}
                                         onPressEnter={()=>{
+                                            if (n.node_data.type==TYPE_FILE){
+                                                // 只有是文件的情况下，才会搜索历史值
+                                                handleSearchHistoryWhiteBoard({
+                                                    ...n,
+                                                    outsideIndex
+                                                });
+                                            }
 
                                         }}
                                     />
@@ -215,8 +244,23 @@ const DirectoryNode = React.memo((nodeProps) => {
             <div>
                 <Modal
                     width={"1200px"}
+                    open={searchKeywords?.data?.ID}
+                    onCancel={()=>{
+                        handleSearchHistoryWhiteBoard({})
+                    }}
+                    onOk={()=>{
+                        debugger
+                    }}
                 >
-
+                    <SearchHistoryWhiteBoard
+                        keywords={searchKeywords.data.Title}
+                        OnCancel={(newWhiteBordData)=>{
+                            handleSearchHistoryWhiteBoard({
+                                ...searchKeywords,
+                                data:newWhiteBordData
+                            })
+                        }}
+                    />
                 </Modal>
             </div>
         </div>
