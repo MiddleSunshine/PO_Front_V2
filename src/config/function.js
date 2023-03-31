@@ -9,7 +9,14 @@ const requestAPI=(api,init={},checkToken=true)=>{
         return false;
     }
     api+="&sign="+sign;
-    return  fetch("http://127.0.0.1:8080/"+api,{
+    let requestUrl="";
+    if (process.env.NODE_ENV=='development'){
+        // 开发环境
+        requestUrl="http://127.0.0.1:8050";
+    }else{
+        // 正式环境
+    }
+    return  fetch(requestUrl+api,{
         ...init,
         mode:"cors"
     }).then((res)=>{
@@ -24,7 +31,14 @@ const requestAPI=(api,init={},checkToken=true)=>{
 }
 
 const Login=(userName,password)=>{
-    return  fetch("http://127.0.0.1:8080/index.php?action=LoginController&method=Login",{
+    let requestUrl="";
+    if (process.env.NODE_ENV=='development'){
+        // 开发环境
+        requestUrl="http://127.0.0.1:8050";
+    }else{
+        // 正式环境
+    }
+    return  fetch(requestUrl+"/index.php?action=LoginController&method=Login",{
         mode:"cors",
         method:"post",
         body:JSON.stringify({
