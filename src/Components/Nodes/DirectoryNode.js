@@ -88,35 +88,31 @@ const DirectoryNode = (nodeProps) => {
                         align={"middle"}
                         justify={"space-around"}
                     >
-                        <Col span={ICON_LENGTH}>
-                            <Button
-                                type={"link"}
-                                size={"small"}
-                                icon={<SaveOutlined/>}
-                                onClick={() => {
-                                    SAVE_DATA();
-                                }}
-                            >
-                            </Button>
-                        </Col>
-                        <Col span={LENGTH_AMOUNT - ICON_LENGTH}>
-                            <Input
-                                value={newNode}
-                                onChange={(e) => {
-                                    setNewNode(e.target.value);
-                                }}
-                                onPressEnter={() => {
-                                    let newNodeItem = {...NEW_NODE_DATA_TEMPLATE};
-                                    newNodeItem.data.Title = newNode;
-                                    newNodeItem.data.ID = getId(TYPE_FILE);
-                                    newNodeItem.outsideIndex = 0;
-                                    handleSearchHistoryWhiteBoard(newNodeItem);
-                                }}
-                            />
-                        </Col>
+                        <Input
+                            value={newNode}
+                            onChange={(e) => {
+                                setNewNode(e.target.value);
+                            }}
+                            onPressEnter={() => {
+                                let newNodeItem = {...NEW_NODE_DATA_TEMPLATE};
+                                newNodeItem.data.Title = newNode;
+                                newNodeItem.data.ID = getId(TYPE_FILE);
+                                newNodeItem.outsideIndex = 0;
+                                handleSearchHistoryWhiteBoard(newNodeItem);
+                            }}
+                        />
                     </Row>
                     :
                     <List
+                        header={<Button
+                            icon={<SaveOutlined />}
+                            size={"small"}
+                            type={"link"}
+                            onClick={()=>{
+                                SAVE_DATA();
+                            }}
+                        ></Button>}
+                        split={true}
                         dataSource={nodeData}
                         renderItem={(n, outsideIndex) => {
                             return (
