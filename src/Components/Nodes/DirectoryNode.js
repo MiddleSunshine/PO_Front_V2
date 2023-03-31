@@ -71,6 +71,41 @@ const DirectoryNode = (nodeProps) => {
         setSearchKeywords(whiteBord);
     }
 
+    const runCmd=(index,cmd)=>{
+        let newNodeData=nodeData;
+        let amount=newNodeData.length;
+        switch (cmd){
+            case 'Up':
+                if (index>0){
+                    let preNode=nodeData[index-1];
+                    newNodeData[index-1]=newNodeData[index];
+                    newNodeData[index]=preNode;
+                }
+                break;
+            case 'Down':
+                if ((index-0+1)<amount){
+                    let nextNode=nodeData[index+1];
+                    nodeData[index+1]=nodeData[index];
+                    nodeData[index]=nextNode;
+                }
+                break;
+            case 'Left':
+                if (newNodeData[index].node_data.offset>0){
+                    newNodeData[index].node_data.offset-=2;
+                }
+                break;
+            case 'Right':
+                if ((newNodeData[index].node_data.offset+ICON_LENGTH)<LENGTH_AMOUNT){
+                    newNodeData[index].node_data.offset+=2;
+                }
+                break;
+            case 'Delete':
+                newNodeData.splice(index,1);
+                break;
+        }
+        setNodeData(newNodeData);
+    }
+
     return (
         <div className={"DirectoryNode"}>
             <NodeResizer
@@ -192,26 +227,41 @@ const DirectoryNode = (nodeProps) => {
                                                             size={"small"}
                                                             type={"link"}
                                                             icon={<CaretUpOutlined/>}
+                                                            onClick={()=>{
+                                                                runCmd(outsideIndex,'Up')
+                                                            }}
                                                         ></Button>
                                                         <Button
                                                             size={"small"}
                                                             type={"link"}
                                                             icon={<CaretDownOutlined/>}
+                                                            onClick={()=>{
+                                                                runCmd(outsideIndex,'Down')
+                                                            }}
                                                         ></Button>
                                                         <Button
                                                             size={"small"}
                                                             type={"link"}
                                                             icon={<CaretLeftOutlined/>}
+                                                            onClick={()=>{
+                                                                runCmd(outsideIndex,'Left')
+                                                            }}
                                                         ></Button>
                                                         <Button
                                                             size={"small"}
                                                             type={"link"}
                                                             icon={<CaretRightOutlined/>}
+                                                            onClick={()=>{
+                                                                runCmd(outsideIndex,'Right')
+                                                            }}
                                                         ></Button>
                                                         <Button
                                                             size={"small"}
                                                             type={"link"}
                                                             icon={<CloseOutlined/>}
+                                                            onClick={()=>{
+                                                                runCmd(outsideIndex,'Delete')
+                                                            }}
                                                         ></Button>
                                                         <Button
                                                             size={"small"}
