@@ -1,7 +1,8 @@
 import {useEffect, useState} from "react";
 import {CreateNewWhiteBoardAsync, SearchWhiteBoardAsync} from "./Nodes/BaseWhiteBoard";
-import {Button, Col, Input, Row} from "antd";
+import {Button, Col, Divider, Input, Row} from "antd";
 import {ExportOutlined} from '@ant-design/icons'
+import "../Css/SearchHistoryWhiteBoard.css";
 const SearchHistoryWhiteBoard=({keywords,Type='',OnCancel})=>{
 
     const [whiteboards,setWhiteBoard]=useState([]);
@@ -37,13 +38,15 @@ const SearchHistoryWhiteBoard=({keywords,Type='',OnCancel})=>{
     }
 
     return (
-        <div>
+        <div
+            className={"SearchHistoryWhiteBoard"}
+        >
             <Row
                 onClick={()=>{
                     setSelectedWhiteBoard({})
                 }}
             >
-                <Col span={20}>
+                <Col span={19}>
                     <Input
                         valuse={searchKeywords}
                         onChange={(e)=>{
@@ -54,29 +57,36 @@ const SearchHistoryWhiteBoard=({keywords,Type='',OnCancel})=>{
                         }}
                     />
                 </Col>
-                <Col span={4}>
+                <Col offset={1} span={4}>
                     <Button
+                        type={"primary"}
                         onClick={()=>handleSave()}
                     >
-                        Save
+                        {
+                            selectedHistoryWhiteBord.ID?'Save':'Create'
+                        }
                     </Button>
                 </Col>
             </Row>
+            <Divider>
+                History Page
+            </Divider>
             {
                 whiteboards.map((w)=>{
                     return (
                         <Row
+                            className={"EachRow"}
                             key={w.ID}
                             style={{backgroundColor:selectedHistoryWhiteBord.ID==w.ID?'#81ecec':''}}
                         >
                             <Col span={20}>
-                                <Button
+                                <div
                                     onClick={()=>{
                                         setSelectedWhiteBoard(w);
                                     }}
                                 >
                                     {w.Title ?? 'Page'}
-                                </Button>
+                                </div>
                             </Col>
                             <Col span={4}>
                                 <Button

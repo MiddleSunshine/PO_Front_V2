@@ -234,6 +234,7 @@ const DirectoryNode = (nodeProps) => {
             }
             <div>
                 <Modal
+                    title={"Search History Page Or Create"}
                     width={"1200px"}
                     open={searchKeywords?.data?.ID}
                     onCancel={() => {
