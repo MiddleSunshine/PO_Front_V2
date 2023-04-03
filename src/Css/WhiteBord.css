@@ -36,3 +36,8 @@
 .WhiteBoard .DirectoryNode .EachRowSelected{
     background-color: aliceblue;
 }
+
+.WhiteBoard .CodeNode{
+    min-width: 100px;
+    min-height: 100px;
+}

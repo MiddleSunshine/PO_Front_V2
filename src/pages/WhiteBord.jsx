@@ -17,6 +17,7 @@ import {ImageNode} from "../Components/Nodes/ImageNode";
 import {EditEdge} from "../Components/Edges/EditEdge";
 import {DirectoryNode} from '../Components/Nodes/DirectoryNode'
 import {DrawNode} from "../Components/Nodes/DrawNode";
+import {CodeNode} from "../Components/Nodes/CodeNode";
 
 const defaultViewport = {x: 0, y: 0, zoom: 1.5};
 
@@ -29,7 +30,8 @@ const AllNodeTypes = {
     OutputConnectionNode,
     ImageNode,
     DirectoryNode,
-    DrawNode
+    DrawNode,
+    CodeNode
 }
 
 const BasicBord = () => {
@@ -106,6 +108,10 @@ const BasicBord = () => {
             {
                 label: "Draw",
                 value: "DrawNode"
+            },
+            {
+                label: "Code",
+                value: "CodeNode"
             },
             {
                 label: "Image Node",
