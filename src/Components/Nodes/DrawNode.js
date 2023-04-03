@@ -1,8 +1,44 @@
-import {Input,Button} from "antd";
-import {useState} from "react";
+import {Input, Button, message} from "antd";
+import {useCallback, useState} from "react";
+import {CreateNodeAsync, UpdateNode} from "./BasicNode";
+import {
+    ExportOutlined
+} from '@ant-design/icons';
+import { useReactFlow } from 'reactflow';
 
 const DrawNode=(nodeProps)=>{
-    const [nodeData,setNodeData]=useState(nodeProps.data);
+    const [nodeData,setNodeData]=useState(nodeProps.data.data);
+    const instance=useReactFlow();
+
+    const SAVE_INTO=()=>{
+        if (nodeData.hasOwnProperty('ID')){
+            let newNode=nodeProps;
+            newNode.data.data=nodeData;
+            newNode.data.save_into_database=true;
+            UpdateNode(instance,newNode);
+        }
+    }
+
+    useCallback(()=>{
+        SAVE_INTO();
+    },[nodeData]);
+
+    const handleCreateNode=()=>{
+        if (!nodeData.hasOwnProperty('ID')){
+            if (!nodeData?.Name){
+                message.warning("Please input the title");
+                return false;
+            }
+            CreateNodeAsync('DrawNode',nodeData.Name)
+                .then((res)=>{
+                    if (res.Data.data.ID){
+                        setNodeData(res.Data.data);
+                    }else{
+                        message.warning(res.Message);
+                    }
+                })
+        }
+    }
 
     return (
         <div>
@@ -14,13 +50,20 @@ const DrawNode=(nodeProps)=>{
                         Name:e.target.value
                     })
                 }}
+                onPressEnter={()=>{
+                    handleCreateNode();
+                }}
+                onBlur={()=>{
+                    SAVE_INTO();
+                }}
                 addonAfter={
                 nodeData.hasOwnProperty('ID')
                     ?<Button
                     size={"small"}
                     type={"link"}
-                    href={`/`}
+                    href={`/draw/${nodeData.ID}`}
                     target={"_blank"}
+                    icon={<ExportOutlined />}
                     ></Button>
                     :<div></div>
                 }
