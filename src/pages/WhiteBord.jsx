@@ -18,7 +18,7 @@ import {EditEdge} from "../Components/Edges/EditEdge";
 import {DirectoryNode} from '../Components/Nodes/DirectoryNode'
 import {DrawNode} from "../Components/Nodes/DrawNode";
 import {CodeNode} from "../Components/Nodes/CodeNode";
-
+import {TitleNode} from '../Components/Nodes/TitleNode'
 const defaultViewport = {x: 0, y: 0, zoom: 1.5};
 
 const AllNodeTypes = {
@@ -31,7 +31,8 @@ const AllNodeTypes = {
     ImageNode,
     DirectoryNode,
     DrawNode,
-    CodeNode
+    CodeNode,
+    TitleNode
 }
 
 const BasicBord = () => {
@@ -104,6 +105,10 @@ const BasicBord = () => {
             {
                 label:"History Node",
                 value: "HistoryNode"
+            },
+            {
+                label: "Title",
+                value: "TitleNode"
             },
             {
                 label: "Draw",
