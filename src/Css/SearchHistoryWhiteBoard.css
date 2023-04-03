@@ -1,0 +1,9 @@
+.SearchHistoryWhiteBoard{
+
+}
+
+.SearchHistoryWhiteBoard .EachRow{
+    padding: 5px;
+    border-bottom: 1px solid #F0F0F0;
+    cursor: pointer;
+}

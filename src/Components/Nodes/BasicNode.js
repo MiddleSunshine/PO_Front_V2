@@ -58,7 +58,6 @@ const UpdateNode=(instance,node)=>{
         }
         return n;
     });
-    console.table(newNodes);
     instance.setNodes(newNodes)
 }
 

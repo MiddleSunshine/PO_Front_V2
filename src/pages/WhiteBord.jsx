@@ -3,7 +3,7 @@ import ReactFlow, {useNodesState, useEdgesState, ReactFlowProvider,addEdge,useRe
 import {PointNodeView, PointNodeEditor} from '../Components/Nodes/PointNode'
 import {getId} from "../config/WhiteBord";
 import '../Css/WhiteBord.css';
-import {Button, Col, Drawer, Form, message, Row} from 'antd';
+import {Button, Cascader, Col, Drawer, Form, message, Row} from 'antd';
 import {requestAPI} from "../config/function";
 import {useParams} from "react-router-dom";
 import {HistoryNode} from '../Components/Nodes/HistoryNode'
@@ -86,39 +86,39 @@ const BasicBord = () => {
         const menus=[
             {
                 label: "Save Page",
-                type: "SavePage"
+                value: "SavePage"
             },
             {
                 label:"Save Draft",
-                type: "SaveDraft"
+                value: "SaveDraft"
             },
             {
                 label: "Directory",
-                type: "DirectoryNode"
-            },
-            {
-                label: "New Page",
-                type: "NewWhiteBoardNode"
+                value: "DirectoryNode"
             },
             {
                 label:"History Node",
-                type: "HistoryNode"
+                value: "HistoryNode"
             },
             {
                 label: "Image Node",
-                type: "ImageNode"
+                value: "ImageNode"
             },
             {
                 label: "Label",
-                type: "LabelNode"
+                value: "LabelNode"
+            },
+            {
+                label: "New Page",
+                value: "NewWhiteBoardNode"
             },
             {
                 label: "End Connection",
-                type: "InputConnectionNode"
+                value: "InputConnectionNode"
             },
             {
                 label: "Start Connection",
-                type: "OutputConnectionNode"
+                value: "OutputConnectionNode"
             }
         ];
 
@@ -128,11 +128,11 @@ const BasicBord = () => {
                     menus.map((menu)=>{
                         return (
                             <div
-                                key={menu.type}
+                                key={menu.value}
                             >
                                 <Button
                                     type={"link"}
-                                    onClick={(event)=>{ createNode(event,menu.type) }}
+                                    onClick={(event)=>{ createNode(event,menu.value) }}
                                 >
                                     {
                                         menu.label
@@ -159,6 +159,19 @@ const BasicBord = () => {
 
     const createNode = (event, type) => {
         event.preventDefault();
+        const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
+        const position = reactFlowInstance.project({
+            x: event.clientX - reactFlowBounds.left,
+            y: event.clientY - reactFlowBounds.top,
+        });
+        let new_node={
+            id:getId(type),
+            type:type,
+            data:{
+                ...BASIC_NODE_DATA
+            },
+            position: position
+        }
         switch (type){
             case 'SavePage':
                 saveWhiteBord(false);
@@ -166,20 +179,9 @@ const BasicBord = () => {
             case 'SaveDraft':
                 saveWhiteBord(true)
                 break;
+            case 'DirectoryNode':
+                new_node.data.node_data=[];
             default:
-                const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
-                const position = reactFlowInstance.project({
-                    x: event.clientX - reactFlowBounds.left,
-                    y: event.clientY - reactFlowBounds.top,
-                });
-                let new_node={
-                    id:getId(type),
-                    type:type,
-                    data:{
-                        ...BASIC_NODE_DATA
-                    },
-                    position: position
-                }
                 setNodes((n) =>n.concat([new_node]) );
                 setMenuPosition({x: 0, y: 0});
         }
