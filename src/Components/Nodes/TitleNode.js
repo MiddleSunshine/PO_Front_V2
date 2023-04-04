@@ -1,6 +1,6 @@
 import {Input, message} from "antd";
 import {useCallback, useState} from "react";
-import {CreateNodeAsync} from "./BasicNode";
+import {CreateNodeAsync, GetNodeStyle} from "./BasicNode";
 import {Handle, useReactFlow} from 'reactflow';
 import {UpdateNode} from "./BasicNode";
 
@@ -41,7 +41,9 @@ const TitleNode=(nodeProps)=>{
         setMode(MODE_VIEW);
     }
 
-    return <div>
+    return <div
+        style={GetNodeStyle(nodeProps)}
+    >
         {
             mode==MODE_VIEW
                 ?<h3

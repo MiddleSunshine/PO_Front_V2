@@ -1,6 +1,6 @@
 import {Input, Button, message} from "antd";
 import {useCallback, useState} from "react";
-import {CreateNodeAsync, UpdateNode} from "./BasicNode";
+import {CreateNodeAsync, GetNodeStyle, UpdateNode} from "./BasicNode";
 import {
     ExportOutlined
 } from '@ant-design/icons';
@@ -40,7 +40,9 @@ const DrawNode=(nodeProps)=>{
     }
 
     return (
-        <div>
+        <div
+            style={GetNodeStyle(nodeProps)}
+        >
             <Input
                 value={nodeData.Name}
                 onChange={(e)=>{

@@ -1,7 +1,10 @@
 import {Handle} from "reactflow";
 import {LoginOutlined} from "@ant-design/icons"
+import {GetNodeStyle} from "./BasicNode";
 const InputConnectionNode=(nodeProps)=>{
-    return <div>
+    return <div
+        style={GetNodeStyle(nodeProps)}
+    >
         <Handle
             type={"target"}
             id={`${nodeProps.id}`}

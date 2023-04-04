@@ -1,6 +1,6 @@
 import {Button, Input, message} from "antd";
 import {useState} from "react";
-import {CreateNodeAsync, UpdateNode} from "./BasicNode";
+import {CreateNodeAsync, GetNodeStyle, UpdateNode} from "./BasicNode";
 import { useReactFlow } from 'reactflow';
 import {ExportOutlined,SaveOutlined} from '@ant-design/icons'
 import {CreateNewWhiteBoardAsync} from "./BaseWhiteBoard";
@@ -30,7 +30,9 @@ const NewWhiteBoardNode=(nodeProps)=>{
     }
 
     return (
-        <div>
+        <div
+            style={GetNodeStyle(nodeProps)}
+        >
             <Input
                 value={title}
                 onChange={(e)=>{
