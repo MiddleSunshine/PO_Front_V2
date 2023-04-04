@@ -3,6 +3,7 @@ import {useCallback, useState} from "react";
 import {CreateNodeAsync, GetNodeStyle} from "./BasicNode";
 import {Handle, useReactFlow} from 'reactflow';
 import {UpdateNode} from "./BasicNode";
+import {NodeResizer} from "@reactflow/node-resizer";
 
 const MODE_VIEW='View';
 const MODE_EDIT='Edit';
@@ -44,6 +45,9 @@ const TitleNode=(nodeProps)=>{
     return <div
         style={GetNodeStyle(nodeProps)}
     >
+        <NodeResizer
+            isVisible={nodeProps.selected}
+        />
         {
             mode==MODE_VIEW
                 ?<h3

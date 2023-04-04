@@ -1,6 +1,6 @@
 import {Button, Form, InputNumber, Radio} from "antd";
 import {CirclePicker} from '@hello-pangea/color-picker'
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import { useReactFlow } from 'reactflow';
 import {UpdateNode} from "./BasicNode";
 
@@ -23,7 +23,17 @@ const EditNode=({nodeProps})=>{
         newNode.data.settings.style=settingsStyle;
         newNode.data.save_into_database=(saveIntoDataBase=='YES');
         UpdateNode(instance,newNode);
+        setSettingsStyle({})
+        setSaveIntoDataBase('NO');
     }
+
+    useEffect(()=>{
+        setSettingsStyle({
+            ...BASIC_SETTING,
+            ...nodeProps.data.settings?.style
+        });
+        setSaveIntoDataBase(nodeProps.data.save_into_database?'YES':'NO');
+    },[nodeProps])
 
     return (
         <div>
