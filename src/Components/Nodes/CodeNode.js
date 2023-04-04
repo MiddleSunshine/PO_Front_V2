@@ -6,7 +6,7 @@ import {Button, Form, Modal, Select} from "antd";
 import ReactCodeMirror from "@uiw/react-codemirror";
 import {useReactFlow} from 'reactflow';
 import {GetNodeStyle, UpdateNode} from "./BasicNode";
-import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { monokaiSublime } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
 const SUPPORT_LANUAGE=[
     { value: 'oneC (1c)', label: 'ONEC (1C)' },
@@ -241,7 +241,7 @@ const CodeNode=(nodeProps)=>{
                         language={nodeData.language}
                         showLineNumbers={true}
                         wrapLongLines={true}
-                        style={atomDark}
+                        style={monokaiSublime}
                     >
                         {nodeData.code}
                     </SyntaxHighlighter>
