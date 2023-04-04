@@ -199,7 +199,7 @@ const BasicBord = () => {
             case 'CodeNode':
                 new_node.data.node_data={
                     code:"",
-                    language:"c"
+                    language:""
                 }
             default:
                 new_node.data.settings={};
