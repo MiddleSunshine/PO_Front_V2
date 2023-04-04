@@ -196,6 +196,11 @@ const BasicBord = () => {
                 new_node.data.save_into_database=true;
             case 'DrawNode':
                 new_node.data.save_into_database=true;
+            case 'CodeNode':
+                new_node.data.node_data={
+                    code:"",
+                    language:"c"
+                }
             default:
                 new_node.data.settings={};
                 setNodes((n) =>n.concat([new_node]) );
@@ -289,6 +294,10 @@ const BasicBord = () => {
         saveWhiteBord(true);
     }
 
+    hotkeysHandler['shift+e']=()=>{
+        setEditMode(true);
+    }
+
 
     return (
         <div ref={reactFlowWrapper} className="reactflow-wrapper WhiteBoard">
@@ -298,15 +307,6 @@ const BasicBord = () => {
                     hotkeysHandler[keyname]();
                 }}
             >
-                <Row>
-                    <Button
-                        onClick={()=>{
-                            setEditMode(true)
-                        }}
-                    >
-                        Edit
-                    </Button>
-                </Row>
                 <ReactFlow
                     nodeTypes={AllNodeTypes}
                     nodes={nodes}

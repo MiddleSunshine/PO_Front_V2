@@ -1,6 +1,6 @@
-import CodeMirror from '@uiw/react-codemirror';
 import {useState} from "react";
 import {NodeResizer} from "@reactflow/node-resizer";
+import SyntaxHighlighter from 'react-syntax-highlighter';
 
 const CodeNode=(nodeProps)=>{
 
@@ -12,16 +12,11 @@ const CodeNode=(nodeProps)=>{
         >
             <NodeResizer
             />
-            <CodeMirror
-                theme={"dark"}
-                value={nodeData?.code}
-                onChange={(newCode)=>{
-                    setNodeData({
-                        ...nodeData,
-                        code:newCode
-                    })
-                }}
-            />
+            <SyntaxHighlighter
+                language={nodeData.language}
+            >
+                {nodeData.code}
+            </SyntaxHighlighter>
         </div>
     )
 }
