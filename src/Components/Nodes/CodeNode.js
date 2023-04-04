@@ -291,7 +291,9 @@ const CodeNode=(nodeProps)=>{
                             allowClear={true}
                         />
                     </Form.Item>
-                    <Form.Item>
+                    <Form.Item
+                        label={"Code"}
+                    >
                         <ReactCodeMirror
                             theme={"dark"}
                             value={editNodeData?.code}
