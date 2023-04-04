@@ -3,7 +3,7 @@ import {useState} from "react";
 import React from "react";
 import { NodeResizer } from '@reactflow/node-resizer';
 import { useReactFlow,Handle } from 'reactflow';
-import {UpdateNode} from "./BasicNode";
+import {GetNodeStyle, UpdateNode} from "./BasicNode";
 
 const LabelNode=React.memo((node)=>{
 
@@ -19,7 +19,10 @@ const LabelNode=React.memo((node)=>{
     }
 
     return (
-        <div className={"BasicNodeOutside"}>
+        <div
+            className={"BasicNodeOutside"}
+            style={GetNodeStyle(node)}
+        >
             <Handle
                 id={`${node.id}_top`}
                 position={"top"}

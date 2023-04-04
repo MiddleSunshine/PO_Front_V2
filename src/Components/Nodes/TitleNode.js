@@ -16,7 +16,6 @@ const TitleNode=(nodeProps)=>{
         if (data.hasOwnProperty('ID')){
             let newNode=nodeProps;
             newNode.data.data=data;
-            newNode.data.save_into_database=true;
             UpdateNode(instance,newNode);
         }
     }

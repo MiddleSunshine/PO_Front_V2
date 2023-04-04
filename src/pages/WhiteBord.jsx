@@ -19,6 +19,7 @@ import {DirectoryNode} from '../Components/Nodes/DirectoryNode'
 import {DrawNode} from "../Components/Nodes/DrawNode";
 import {CodeNode} from "../Components/Nodes/CodeNode";
 import {TitleNode} from '../Components/Nodes/TitleNode'
+import {EditNode} from "../Components/Nodes/EditNode";
 const defaultViewport = {x: 0, y: 0, zoom: 1.5};
 
 const AllNodeTypes = {
@@ -56,14 +57,7 @@ const BasicBord = () => {
         let renderComponent='';
         if(editMode){
             if (selectedNode.id){
-                switch(selectedNode.type){
-                    case 'PointNodeView':
-                        renderComponent=<PointNodeEditor node={selectedNode} />
-                        break;
-                    default:
-                        renderComponent='';
-                        break;
-                }
+                renderComponent=<EditNode nodeProps={selectedNode} />
             }
             if (selectedEdge.id){
                 renderComponent=<EditEdge edgeProps={selectedEdge} />
@@ -210,11 +204,13 @@ const BasicBord = () => {
     const handleSelectionChange=({nodes,edges})=>{
         if(nodes.length==1){
             setSelectedNode(nodes[0]);
+            setSelectedEdge({});
         }else{
             setSelectedNode({});
         }
         if (edges.length==1){
             setSelectedEdge(edges[0]);
+            setSelectedNode({});
         }else{
             setSelectedEdge({});
         }

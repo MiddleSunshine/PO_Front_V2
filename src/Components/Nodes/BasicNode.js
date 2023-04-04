@@ -5,8 +5,18 @@ import {message} from "antd";
 const BASIC_NODE_DATA={
     data:{},
     node_data:{},
-    settings:{},
+    settings:{
+        style:{}
+    },
     save_into_database:false
+}
+
+const GetNodeStyle=(node)=>{
+    return {
+        ...node.data.settings.style,
+        width:node.width,
+        height:node.height
+    }
 }
 
 const SearchHistoryNodeAsync=(searchKeyword,type='')=>{
@@ -67,5 +77,6 @@ export {
     CreateNodeAsync,
     UpdateNodeAsync,
     GetNodeDetailAsync,
-    SearchHistoryNodeAsync
+    SearchHistoryNodeAsync,
+    GetNodeStyle
 }
