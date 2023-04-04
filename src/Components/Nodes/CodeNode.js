@@ -207,18 +207,7 @@ const CodeNode=(nodeProps)=>{
     const [nodeData,setNodeData]=useState(nodeProps.data.node_data);
     const [editCode,setEditCode]=useState(false);
 
-    const [editNodeData,setEditNodeData]=useState({});
     const instance=useReactFlow();
-
-    useCallback(()=>{
-        if (editCode){
-            // edit mode
-            setEditNodeData(nodeData);
-        }else{
-            // finish edit
-            setEditNodeData({})
-        }
-    },[editCode])
 
     const handleSave=()=>{
         let newNode=nodeProps;
@@ -267,7 +256,6 @@ const CodeNode=(nodeProps)=>{
                     setEditCode(false);
                 }}
                 onOk={()=>{
-                    setNodeData(editNodeData);
                     setEditCode(false);
                     handleSave();
                 }}
@@ -281,10 +269,10 @@ const CodeNode=(nodeProps)=>{
                         <Select
                             options={SUPPORT_LANUAGE}
                             showSearch={true}
-                            value={editNodeData?.language}
+                            value={nodeData.language}
                             onChange={(newValue)=>{
-                                setEditNodeData({
-                                    ...editNodeData,
+                                setNodeData({
+                                    ...nodeData,
                                     language:newValue
                                 })
                             }}
@@ -296,10 +284,10 @@ const CodeNode=(nodeProps)=>{
                     >
                         <ReactCodeMirror
                             theme={"dark"}
-                            value={editNodeData?.code}
+                            value={nodeData.code}
                             onChange={(newCode)=>{
-                                setEditNodeData({
-                                    ...editNodeData,
+                                setNodeData({
+                                    ...nodeData,
                                     code:newCode
                                 })
                             }}

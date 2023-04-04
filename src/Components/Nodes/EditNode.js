@@ -6,7 +6,9 @@ import {UpdateNode} from "./BasicNode";
 
 const BASIC_SETTING={
     backgroundColor:"",
-    padding:""
+    padding:"",
+    maxHeight:0,
+    overflow:"auto"
 }
 
 const EditNode=({nodeProps})=>{
@@ -20,7 +22,11 @@ const EditNode=({nodeProps})=>{
     const instance=useReactFlow();
     const handleSave=()=>{
         let newNode=nodeProps;
-        newNode.data.settings.style=settingsStyle;
+        let newNodeSettingStyle=settingsStyle;
+        if ((newNodeSettingStyle.maxHeight-0)<=0){
+            delete newNodeSettingStyle.maxHeight;
+        }
+        newNode.data.settings.style=newNodeSettingStyle;
         newNode.data.save_into_database=(saveIntoDataBase=='YES');
         UpdateNode(instance,newNode);
         setSettingsStyle({})
@@ -57,8 +63,8 @@ const EditNode=({nodeProps})=>{
                 >
                     <Radio.Group
                         value={saveIntoDataBase}
-                        onChange={(newValue)=>{
-                            setSaveIntoDataBase(newValue);
+                        onChange={(event)=>{
+                            setSaveIntoDataBase(event.target.value);
                         }}
                     >
                         <Radio value={'YES'}>YES</Radio>
@@ -90,6 +96,41 @@ const EditNode=({nodeProps})=>{
                             })
                         }}
                     />
+                </Form.Item>
+                <Form.Item
+                    label={"Max Height"}
+                >
+                    <InputNumber
+                        value={settingsStyle.maxHeight}
+                        onChange={(newValue)=>{
+                            if (!newValue){
+                                newValue=0;
+                            }
+                            setSettingsStyle({
+                                ...settingsStyle,
+                                maxHeight: newValue
+                            })
+                        }}
+                        addonAfter="px"
+                    />
+                </Form.Item>
+                <Form.Item
+                    label={"Over Size"}
+                >
+                    <Radio.Group
+                        value={settingsStyle.overflow}
+                        onChange={(event)=>{
+                            setSettingsStyle({
+                                ...settingsStyle,
+                                overflow: event.target.value
+                            });
+                        }}
+                    >
+                        <Radio value={"auto"}>Auto</Radio>
+                        <Radio value={"scroll"}>Scroll</Radio>
+                        <Radio value={"hidden"}>Hidden</Radio>
+                        <Radio value={"visible"}>Visible</Radio>
+                    </Radio.Group>
                 </Form.Item>
             </Form>
         </div>
