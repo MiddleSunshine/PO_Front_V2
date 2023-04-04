@@ -14,7 +14,6 @@ const DrawNode=(nodeProps)=>{
         if (nodeData.hasOwnProperty('ID')){
             let newNode=nodeProps;
             newNode.data.data=nodeData;
-            newNode.data.save_into_database=true;
             UpdateNode(instance,newNode);
         }
     }

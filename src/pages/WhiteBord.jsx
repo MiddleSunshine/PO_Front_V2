@@ -193,6 +193,9 @@ const BasicBord = () => {
                 break;
             case 'DirectoryNode':
                 new_node.data.node_data=[];
+                new_node.data.save_into_database=true;
+            case 'DrawNode':
+                new_node.data.save_into_database=true;
             default:
                 setNodes((n) =>n.concat([new_node]) );
                 setMenuPosition({x: 0, y: 0});

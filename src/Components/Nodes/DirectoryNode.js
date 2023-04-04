@@ -10,14 +10,13 @@ import {
     CaretRightOutlined,
     CloseOutlined,
     PlusOutlined,
-    SaveOutlined,
     ExportOutlined
 } from '@ant-design/icons'
 import {NodeResizer} from "@reactflow/node-resizer";
 import {getId} from "../../config/WhiteBord";
 import {SearchHistoryWhiteBoard} from "../SearchHistoryWhiteBoard";
 import {useReactFlow} from 'reactflow'
-import {UpdateNode} from "./BasicNode";
+import {UpdateNode,GetNodeStyle} from "./BasicNode";
 
 const ICON_LENGTH = 2;
 const LENGTH_AMOUNT = 22;
@@ -56,7 +55,6 @@ const DirectoryNode = (nodeProps) => {
         let newNode = nodeProps;
         newNode.data.data=data;
         newNode.data.node_data = nodeData;
-        newNode.data.save_into_database = true;
         UpdateNode(instance, newNode);
     }
 
@@ -116,7 +114,10 @@ const DirectoryNode = (nodeProps) => {
     }
 
     return (
-        <div className={"DirectoryNode"}>
+        <div
+            className={"DirectoryNode"}
+            style={GetNodeStyle(nodeProps)}
+        >
             <NodeResizer
                 isVisible={nodeProps.selected}
                 color="#ff0071"
