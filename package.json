@@ -10,6 +10,7 @@
     "@testing-library/user-event": "^13.5.0",
     "@tldraw/tldraw": "^1.26.4",
     "@uiw/react-codemirror": "^4.19.11",
+    "@uiw/react-markdown-preview": "^4.1.10",
     "antd": "^5.1.2",
     "clipboard": "^2.0.11",
     "react": "^18.2.0",

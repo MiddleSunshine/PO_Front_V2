@@ -20,6 +20,8 @@ import {DrawNode} from "../Components/Nodes/DrawNode";
 import {CodeNode} from "../Components/Nodes/CodeNode";
 import {TitleNode} from '../Components/Nodes/TitleNode'
 import {EditNode} from "../Components/Nodes/EditNode";
+import {MarkdownNode} from "../Components/Nodes/MarkdownNode";
+
 const defaultViewport = {x: 0, y: 0, zoom: 1.5};
 
 const AllNodeTypes = {
@@ -33,7 +35,8 @@ const AllNodeTypes = {
     DirectoryNode,
     DrawNode,
     CodeNode,
-    TitleNode
+    TitleNode,
+    MarkdownNode
 }
 
 const BasicBord = () => {
@@ -111,6 +114,10 @@ const BasicBord = () => {
             {
                 label: "Code",
                 value: "CodeNode"
+            },
+            {
+                label: "Text",
+                value: "MarkdownNode"
             },
             {
                 label: "Image Node",
@@ -201,6 +208,11 @@ const BasicBord = () => {
                     code:"",
                     language:""
                 }
+            case "MarkdownNode":
+                new_node.data.node_data={
+                    markdown:""
+                }
+                new_node.data.save_into_database=true;
             default:
                 new_node.data.settings={};
                 setNodes((n) =>n.concat([new_node]) );

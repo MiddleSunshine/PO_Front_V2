@@ -1,4 +1,4 @@
-import {useCallback, useState} from "react";
+import {useState} from "react";
 import {NodeResizer} from "@reactflow/node-resizer";
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import {NodeToolbar} from "reactflow";
@@ -205,7 +205,7 @@ const SUPPORT_LANUAGE=[
 const CodeNode=(nodeProps)=>{
 
     const [nodeData,setNodeData]=useState(nodeProps.data.node_data);
-    const [editCode,setEditCode]=useState(false);
+    const [editCode,setEditCode]=useState(nodeProps.data.node_data.code=='');
 
     const instance=useReactFlow();
 
