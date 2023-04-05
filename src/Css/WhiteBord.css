@@ -41,3 +41,11 @@
     min-width: 100px;
     min-height: 100px;
 }
+
+.WhiteBoard .TodoListNode{
+
+}
+
+.WhiteBoard .TodoListNode .EachRow{
+    padding-top: 5px;
+}

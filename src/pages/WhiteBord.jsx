@@ -21,6 +21,8 @@ import {CodeNode} from "../Components/Nodes/CodeNode";
 import {TitleNode} from '../Components/Nodes/TitleNode'
 import {EditNode} from "../Components/Nodes/EditNode";
 import {MarkdownNode} from "../Components/Nodes/MarkdownNode";
+import {CalendarNode} from "../Components/Nodes/CalendarNode";
+import {TodoListNode} from "../Components/Nodes/TodoListNode";
 
 const defaultViewport = {x: 0, y: 0, zoom: 1.5};
 
@@ -36,7 +38,9 @@ const AllNodeTypes = {
     DrawNode,
     CodeNode,
     TitleNode,
-    MarkdownNode
+    MarkdownNode,
+    CalendarNode,
+    TodoListNode
 }
 
 const BasicBord = () => {
@@ -138,7 +142,15 @@ const BasicBord = () => {
             {
                 label: "Start Connection",
                 value: "OutputConnectionNode"
+            },
+            {
+                label: "Todo List",
+                value: "TodoListNode"
             }
+            // {
+            //     label: "Calendar",
+            //     value: "CalendarNode"
+            // }
         ];
 
         return (
@@ -213,6 +225,28 @@ const BasicBord = () => {
                     markdown:""
                 }
                 new_node.data.save_into_database=true;
+            case "CalendarNode":
+                new_node.data.save_into_database=true;
+                new_node.data.node_data={
+                    list:[],
+                    mode:"List"
+                }
+            case "TodoListNode":
+                new_node.data.node_data={
+                    list:[
+                        {
+                            data:{
+                                Name:"",
+                                ID:getId('TodoListNode')
+                            },
+                            node_data:{
+                                Offset: 0,
+                                Status: "Todo"
+                            }
+                        }
+                    ],
+                    hiddenFinished:false
+                }
             default:
                 new_node.data.settings={};
                 setNodes((n) =>n.concat([new_node]) );
