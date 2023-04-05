@@ -84,10 +84,13 @@ const BasicBord = () => {
             left: menuPosition.x,
             top: menuPosition.y,
             backgroundColor: 'white',
-            padding: '10px',
+            padding: '5px',
             borderRadius: '5px',
             boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.1)',
-            zIndex:10
+            zIndex:10,
+            // height:"100px",
+            // overflowY:"scroll",
+            // overflowX:"auto"
         }
 
         const menus=[
@@ -155,24 +158,28 @@ const BasicBord = () => {
 
         return (
             <div style={menuStyle}>
-                {
-                    menus.map((menu)=>{
-                        return (
-                            <div
-                                key={menu.value}
-                            >
-                                <Button
-                                    type={"link"}
-                                    onClick={(event)=>{ createNode(event,menu.value) }}
+                <ol>
+                    {
+                        menus.map((menu)=>{
+                            return (
+                                <li
+                                    key={menu.value}
                                 >
-                                    {
-                                        menu.label
-                                    }
-                                </Button>
-                            </div>
-                        )
-                    })
-                }
+                                    <Button
+                                        size={"small"}
+                                        type={"link"}
+                                        onClick={(event)=>{ createNode(event,menu.value) }}
+                                    >
+                                        {
+                                            menu.label
+                                        }
+                                    </Button>
+                                </li>
+                            )
+                        })
+                    }
+                </ol>
+
             </div>
         )
     }
