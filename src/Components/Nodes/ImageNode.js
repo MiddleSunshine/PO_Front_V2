@@ -1,20 +1,21 @@
 import {Form, Image, Input} from "antd";
-import { NodeResizer } from '@reactflow/node-resizer';
+import {NodeResizer} from '@reactflow/node-resizer';
 import React, {useEffect, useState} from "react";
 import {GetNodeStyle, UpdateNode} from "./BasicNode";
-import { useReactFlow,Handle } from 'reactflow';
-const ImageNode=React.memo((nodeProps)=>{
+import {useReactFlow, Handle, NodeToolbar} from 'reactflow';
 
-    const [nodeData,setNodeData]=useState(nodeProps.data.node_data)
-    const instance=useReactFlow();
-    useEffect(()=>{
+const ImageNode = React.memo((nodeProps) => {
+
+    const [nodeData, setNodeData] = useState(nodeProps.data.node_data)
+    const instance = useReactFlow();
+    useEffect(() => {
         setNodeData(nodeProps?.data?.node_data);
-    },[nodeProps])
+    }, [nodeProps])
 
-    const handleSaveNodeData=()=>{
-        let newNode={...nodeProps};
-        newNode.data.node_data=nodeData;
-        UpdateNode(instance,newNode);
+    const handleSaveNodeData = () => {
+        let newNode = {...nodeProps};
+        newNode.data.node_data = nodeData;
+        UpdateNode(instance, newNode);
     }
 
     return (
@@ -25,48 +26,52 @@ const ImageNode=React.memo((nodeProps)=>{
                 isVisible={nodeProps.selected}
                 color="#ff0071"
             />
-            <Form
-                layout={"vertical"}
-            >
-                <Form.Item
-                    label={"Title"}
+            <NodeToolbar>
+                <Form
+                    layout={"vertical"}
                 >
-                    <Input
-                        value={nodeData?.Title}
-                        onChange={(e)=>{
-                            let n={...nodeData};
-                            n.Title=e.target.value
-                            setNodeData(n);
-                        }}
-                        onBlur={()=>{
-                            handleSaveNodeData();
-                        }}
-                        onPressEnter={()=>{
-                            handleSaveNodeData();
-                        }}
-                    />
-                </Form.Item>
-                <Form.Item
-                    label={"Image Src"}
-                >
-                    <Input
-                        value={nodeData?.ImageSrc}
-                        onChange={(e)=>{
-                            let n={...nodeData};
-                            n.ImageSrc=e.target.value
-                            setNodeData(n);
-                        }}
-                        onBlur={()=>{
-                            handleSaveNodeData();
-                        }}
-                        onPressEnter={()=>{
-                            handleSaveNodeData();
-                        }}
-                    />
-                </Form.Item>
-            </Form>
+                    <Form.Item
+                        label={"Title"}
+                    >
+                        <Input
+                            value={nodeData?.Title}
+                            onChange={(e) => {
+                                let n = {...nodeData};
+                                n.Title = e.target.value
+                                setNodeData(n);
+                            }}
+                            onBlur={() => {
+                                handleSaveNodeData();
+                            }}
+                            onPressEnter={() => {
+                                handleSaveNodeData();
+                            }}
+                        />
+                    </Form.Item>
+                    <Form.Item
+                        label={"Image Src"}
+                    >
+                        <Input
+                            value={nodeData?.ImageSrc}
+                            onChange={(e) => {
+                                let n = {...nodeData};
+                                n.ImageSrc = e.target.value
+                                setNodeData(n);
+                            }}
+                            onBlur={() => {
+                                handleSaveNodeData();
+                            }}
+                            onPressEnter={() => {
+                                handleSaveNodeData();
+                            }}
+                        />
+                    </Form.Item>
+                </Form>
+            </NodeToolbar>
+            <h3>{nodeData?.Title}</h3>
             <Image
-                src={nodeData?.ImageSrc}
+                src={nodeData.ImageSrc}
+                // src={`${nodeData?.ImageSrc}?x-oss-process=image/resize,h_${nodeProps.height},w_${nodeProps.with}`}
             />
         </div>
     )
