@@ -12,11 +12,16 @@ const BASIC_NODE_DATA={
 }
 
 const GetNodeStyle=(node)=>{
-    return {
+    let style={
         ...node.data.settings.style,
         width:node.width,
         height:node.height
+    };
+    if (node.data.save_into_database){
+        style.borderTop="4px solid #62DBC8";
+        style.borderRadius="5px";
     }
+    return style;
 }
 
 const SearchHistoryNodeAsync=(searchKeyword,type='')=>{

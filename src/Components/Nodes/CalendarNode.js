@@ -14,15 +14,52 @@ const CalendarNode=(nodeProps)=>{
     const [calendarData,setCalendarData]=useState({});
 
     const createListData=(nodeData)=>{
-        let lastdata='';
         let newList=[];
-        for (let date in nodeData.list){
-
+        let label="";
+        for (let year in nodeData.list){
+            for (let month in nodeData.list[year]){
+                for (let day in month.list[year][month]){
+                    label=`${year}-${month}-${day}`;
+                    for (let hour in month.list[year][month][day]){
+                        for (let minute in month.list[year][month][day][hour]){
+                            if(label!=''){
+                                label='';
+                            }
+                            month.list[year][month][day][hour][minute].map((item)=>{
+                                newList.push({
+                                    label:label,
+                                    children:item
+                                });
+                                return item;
+                            });
+                        }
+                    }
+                }
+            }
         }
+        setListData(newList);
     }
 
     const createCalendarData=(nodeData)=>{
-
+        let newList={};
+        let date='';
+        for (let year in nodeData.list){
+            for (let month in nodeData.list[year]){
+                for (let day in month.list[year][month]){
+                    date=`${year}-${month}-${day}`;
+                    newList[date]=[];
+                    for (let hour in month.list[year][month][day]){
+                        for (let minute in month.list[year][month][day][hour]){
+                            month.list[year][month][day][hour][minute].map((item)=>{
+                                newList[date].push(item);
+                                return item;
+                            });
+                        }
+                    }
+                }
+            }
+        }
+        setCalendarData(newList);
     }
 
     return (

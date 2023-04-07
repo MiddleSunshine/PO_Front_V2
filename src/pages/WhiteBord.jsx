@@ -1,12 +1,14 @@
-import React, {useEffect, useState,useRef, useCallback} from 'react';
-import ReactFlow, {useNodesState, useEdgesState, ReactFlowProvider,addEdge,useReactFlow} from 'reactflow';
-import {PointNodeView, PointNodeEditor} from '../Components/Nodes/PointNode'
-import {getId} from "../config/WhiteBord";
+import React, { useEffect, useState, useRef, useCallback } from 'react';
+import ReactFlow, { useNodesState, useEdgesState, ReactFlowProvider, addEdge, useReactFlow } from 'reactflow';
+import { PointNodeView, PointNodeEditor } from '../Components/Nodes/PointNode'
+import { getId } from "../config/WhiteBord";
 import '../Css/WhiteBord.css';
-import {Button, Cascader, Col, Drawer, Form, message, Row} from 'antd';
-import {requestAPI} from "../config/function";
-import {useParams} from "react-router-dom";
-import {HistoryNode} from '../Components/Nodes/HistoryNode'
+import '@reactflow/node-resizer/dist/style.css';
+import 'reactflow/dist/style.css';
+import { Button, Cascader, Col, Drawer, Form, message, Row } from 'antd';
+import { requestAPI } from "../config/function";
+import { useParams } from "react-router-dom";
+import { HistoryNode } from '../Components/Nodes/HistoryNode'
 import Hotkeys from 'react-hot-keys'
 import {LabelNode} from "../Components/Nodes/LabelNode";
 import {BASIC_NODE_DATA} from "../Components/Nodes/BasicNode";
@@ -46,37 +48,37 @@ const AllNodeTypes = {
 const BasicBord = () => {
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-    const [whiteboard,setWhiteBoard]=useState({});
+    const [whiteboard, setWhiteBoard] = useState({});
     const [reactFlowInstance, setReactFlowInstance] = useState(null);
 
-    const [menuPosition, setMenuPosition] = useState({x: 0, y: 0});
-    const [selectedNode,setSelectedNode]=useState({});
-    const [selectedEdge,setSelectedEdge]=useState({});
-    const [editMode,setEditMode]=useState(false);
+    const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
+    const [selectedNode, setSelectedNode] = useState({});
+    const [selectedEdge, setSelectedEdge] = useState({});
+    const [editMode, setEditMode] = useState(false);
 
     const { getIntersectingNodes } = useReactFlow();
 
-    const reactFlowWrapper=useRef(null);
+    const reactFlowWrapper = useRef(null);
 
-    const {id}=useParams();
+    const { id } = useParams();
 
-    const renderEditComponent=useCallback(()=>{
-        let renderComponent='';
-        if(editMode){
-            if (selectedNode.id){
-                renderComponent=<EditNode nodeProps={selectedNode} />
+    const renderEditComponent = useCallback(() => {
+        let renderComponent = '';
+        if (editMode) {
+            if (selectedNode.id) {
+                renderComponent = <EditNode nodeProps={selectedNode} />
             }
-            if (selectedEdge.id){
-                renderComponent=<EditEdge edgeProps={selectedEdge} />
+            if (selectedEdge.id) {
+                renderComponent = <EditEdge edgeProps={selectedEdge} />
             }
         }
         return renderComponent;
-        
-    },[editMode]);
 
-    useEffect(()=>{
+    }, [editMode]);
+
+    useEffect(() => {
         getWhiteBord(id);
-    },[])
+    }, [])
 
     const renderMenu = () => {
         const menuStyle = {
@@ -93,13 +95,13 @@ const BasicBord = () => {
             // overflowX:"auto"
         }
 
-        const menus=[
+        const menus = [
             {
                 label: "Save Page",
                 value: "SavePage"
             },
             {
-                label:"Save Draft",
+                label: "Save Draft",
                 value: "SaveDraft"
             },
             {
@@ -107,7 +109,7 @@ const BasicBord = () => {
                 value: "DirectoryNode"
             },
             {
-                label:"History Node",
+                label: "History Node",
                 value: "HistoryNode"
             },
             {
@@ -202,15 +204,15 @@ const BasicBord = () => {
             x: event.clientX - reactFlowBounds.left,
             y: event.clientY - reactFlowBounds.top,
         });
-        let new_node={
-            id:getId(type),
-            type:type,
-            data:{
+        let new_node = {
+            id: getId(type),
+            type: type,
+            data: {
                 ...BASIC_NODE_DATA
             },
             position: position
         }
-        switch (type){
+        switch (type) {
             case 'SavePage':
                 saveWhiteBord(false);
                 break;
@@ -235,7 +237,7 @@ const BasicBord = () => {
             case "CalendarNode":
                 new_node.data.save_into_database=true;
                 new_node.data.node_data={
-                    list:[],
+                    list:{},
                     mode:"List"
                 }
             case "TodoListNode":
@@ -263,59 +265,59 @@ const BasicBord = () => {
 
     const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), [setEdges]);
 
-    const handleSelectionChange=({nodes,edges})=>{
-        if(nodes.length==1){
+    const handleSelectionChange = ({ nodes, edges }) => {
+        if (nodes.length == 1) {
             setSelectedNode(nodes[0]);
             setSelectedEdge({});
-        }else{
+        } else {
             setSelectedNode({});
         }
-        if (edges.length==1){
+        if (edges.length == 1) {
             setSelectedEdge(edges[0]);
             setSelectedNode({});
-        }else{
+        } else {
             setSelectedEdge({});
         }
     }
 
-    const saveWhiteBord=(IsDraft=true)=>{
-        requestAPI("index.php?action=WhiteBordController&method=StoreWhiteBord&ID="+id,{
-            method:"post",
-            body:JSON.stringify({
-                IsDraft:IsDraft,
-                Data:{
-                    settings:{},
-                    data:{
-                        nodes:nodes,
-                        edges:edges
+    const saveWhiteBord = (IsDraft = true) => {
+        requestAPI("index.php?action=WhiteBordController&method=StoreWhiteBord&ID=" + id, {
+            method: "post",
+            body: JSON.stringify({
+                IsDraft: IsDraft,
+                Data: {
+                    settings: {},
+                    data: {
+                        nodes: nodes,
+                        edges: edges
                     }
                 }
             })
         })
-            .then((data)=>{
+            .then((data) => {
 
             })
     }
 
-    const handleOnNodeDrop=(event,node)=>{
-        if (node.type=='InputConnectionNode' || node.type=='OutputConnectionNode'){
+    const handleOnNodeDrop = (event, node) => {
+        if (node?.type == 'InputConnectionNode' || node?.type == 'OutputConnectionNode') {
             // 相互交叉的 node
             const intersections = getIntersectingNodes(node).map((n) => n.id);
-            if (intersections.length==1){
-                let intersectionNode={};
-                nodes.map((n)=>{
-                    if (n.id==intersections[0]){
-                        intersectionNode=n;
+            if (intersections.length == 1) {
+                let intersectionNode = {};
+                nodes.map((n) => {
+                    if (n.id == intersections[0]) {
+                        intersectionNode = n;
                     }
                     return n;
                 });
-                let newNodes=nodes.map((n)=>{
-                    if (n.id==node.id){
-                        if (!n.parentNode){
-                            n.position.x=Math.abs(intersectionNode.position.x-n.position.x);
-                            n.position.y=Math.abs(intersectionNode.position.y-n.position.y);
+                let newNodes = nodes.map((n) => {
+                    if (n.id == node.id) {
+                        if (!n.parentNode) {
+                            n.position.x = Math.abs(intersectionNode.position.x - n.position.x);
+                            n.position.y = Math.abs(intersectionNode.position.y - n.position.y);
                         }
-                        n.parentNode=intersections[0];
+                        n.parentNode = intersections[0];
                     }
                     return n;
                 })
@@ -324,26 +326,26 @@ const BasicBord = () => {
         }
     }
 
-    const getWhiteBord=(whiteBordId)=>{
+    const getWhiteBord = (whiteBordId) => {
         requestAPI(`index.php?action=WhiteBordController&method=GetWhiteBord&ID=${whiteBordId}`)
-            .then((json)=>{
+            .then((json) => {
                 setNodes(json.Data.WhiteBordContent.data?.nodes);
                 setEdges(json.Data.WhiteBordContent.data?.edges);
                 setWhiteBoard(json.Data.WhiteBoard);
                 return json.Data.WhiteBoard;
             })
-            .then((whiteboard)=>{
-                document.title=whiteboard.Title ?? 'WhiteBoard';
+            .then((whiteboard) => {
+                document.title = whiteboard.Title ?? 'WhiteBoard';
             })
     }
 
-    let hotkeysHandler=[];
+    let hotkeysHandler = [];
 
-    hotkeysHandler['shift+s']=()=>{
+    hotkeysHandler['shift+s'] = () => {
         saveWhiteBord(false);
     };
 
-    hotkeysHandler['shift+d']=()=>{
+    hotkeysHandler['shift+d'] = () => {
         saveWhiteBord(true);
     }
 
@@ -356,7 +358,7 @@ const BasicBord = () => {
         <div ref={reactFlowWrapper} className="reactflow-wrapper WhiteBoard">
             <Hotkeys
                 keyName={Object.keys(hotkeysHandler).join(',')}
-                onKeyDown={(keyname,e,handle)=>{
+                onKeyDown={(keyname, e, handle) => {
                     hotkeysHandler[keyname]();
                 }}
             >
@@ -389,7 +391,7 @@ const BasicBord = () => {
                 <Drawer
                     open={editMode}
                     width={500}
-                    onClose={()=>{
+                    onClose={() => {
                         setEditMode(false);
                     }}
                 >
@@ -406,7 +408,7 @@ const WhiteBord = () => {
     return (
         <div className="dndflow">
             <ReactFlowProvider>
-                <BasicBord/>
+                <BasicBord />
             </ReactFlowProvider>
         </div>
     );
