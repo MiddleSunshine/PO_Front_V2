@@ -215,31 +215,39 @@ const BasicBord = () => {
         switch (type) {
             case 'SavePage':
                 saveWhiteBord(false);
-                break;
+                return false;
             case 'SaveDraft':
                 saveWhiteBord(true)
+                return false;
+            case "TitleNode":
+                new_node.data.save_into_database=true;
                 break;
             case 'DirectoryNode':
                 new_node.data.node_data=[];
                 new_node.data.save_into_database=true;
+                break;
             case 'DrawNode':
                 new_node.data.save_into_database=true;
+                break;
             case 'CodeNode':
                 new_node.data.node_data={
                     code:"",
                     language:""
                 }
+                break;
             case "MarkdownNode":
                 new_node.data.node_data={
                     markdown:""
                 }
                 new_node.data.save_into_database=true;
+                break;
             case "CalendarNode":
                 new_node.data.save_into_database=true;
                 new_node.data.node_data={
                     list:{},
                     mode:"List"
                 }
+                break;
             case "TodoListNode":
                 new_node.data.node_data={
                     list:[
@@ -256,11 +264,11 @@ const BasicBord = () => {
                     ],
                     hiddenFinished:false
                 }
-            default:
-                new_node.data.settings={};
-                setNodes((n) =>n.concat([new_node]) );
-                setMenuPosition({x: 0, y: 0});
+                break;
         }
+        new_node.data.settings={};
+        setNodes((n) =>n.concat([new_node]) );
+        setMenuPosition({x: 0, y: 0});
     }
 
     const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), [setEdges]);
