@@ -35,7 +35,7 @@ const Index = () => {
             className={"Index"}
         >
             <Row
-                style={{height:"inherit"}}
+                style={{height:"70vh"}}
                 justify={"center"}
                 align={"middle"}
             >
@@ -77,12 +77,15 @@ const Index = () => {
                                     setStartSearch(true)
                                 }}
                                 addonAfter={
-                                    <Button
-                                        type={"link"}
-                                        size={"small"}
-                                    >
-                                        Search
-                                    </Button>
+                                    <div>
+                                        <Button
+                                            type={"link"}
+                                            size={"small"}
+                                        >
+                                            Search
+                                        </Button>
+                                    </div>
+
                                 }
                             />
                         </Col>
