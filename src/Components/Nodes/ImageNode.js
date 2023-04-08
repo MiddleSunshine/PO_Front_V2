@@ -68,7 +68,11 @@ const ImageNode = React.memo((nodeProps) => {
                     </Form.Item>
                 </Form>
             </NodeToolbar>
-            <h3>{nodeData?.Title}</h3>
+            {
+                nodeData?.Title
+                    ?<h3>{nodeData?.Title}</h3>
+                    :<h3>Settings</h3>
+            }
             <Image
                 src={nodeData.ImageSrc}
                 // src={`${nodeData?.ImageSrc}?x-oss-process=image/resize,h_${nodeProps.height},w_${nodeProps.with}`}

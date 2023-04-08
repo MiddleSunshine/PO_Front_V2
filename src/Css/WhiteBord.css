@@ -15,12 +15,12 @@
 }
 
 .WhiteBoard .BasicNodeOutside{
-    background-color: aqua;
-    padding: 10px;
+
 }
 
 .WhiteBoard .BasicNodeOutside .LabelNode{
-
+    background-color: #F0F0F0;
+    padding: 10px;
 }
 
 .WhiteBoard .DirectoryNode{
