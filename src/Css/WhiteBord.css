@@ -23,6 +23,14 @@
     padding: 10px;
 }
 
+.WhiteBoard .OutputConnectionNode{
+    /*color:rgb(0, 188, 212);*/
+}
+
+.WhiteBoard .InputConnectionNode{
+    /*color: rgb(255, 87, 34);*/
+}
+
 .WhiteBoard .DirectoryNode{
     border: 1px solid #F0F0F0;
     padding: 10px;
