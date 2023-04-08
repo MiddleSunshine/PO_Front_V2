@@ -18,7 +18,7 @@ const CreateNewWhiteBoardAsync=(Title,Type='')=>{
 const SearchWhiteBoardAsync=(Keyword,Type='Data')=>{
     if (!Keyword){
         message.warning("请输入要搜索的关键字");
-        return "";
+        return new Promise(resolve => {},reject=>{});
     }
     return  requestAPI("index.php?action=WhiteBordController&method=SearchWhiteBoard",{
         body:JSON.stringify({

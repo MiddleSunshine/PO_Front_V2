@@ -1,19 +1,22 @@
-import {Col, Image, Input, message, Row} from "antd";
+import {Button, Col, Divider, Image, Input, message, Modal, Row} from "antd";
 import Rainbow from '../Images/rainbow.png'
 import {useEffect, useState} from "react";
 import {requestAPI} from "../config/function";
+import {SearchHistoryWhiteBoard} from "../Components/SearchHistoryWhiteBoard";
 const Index = () => {
 
     const [settings,setSettings]=useState({
         Title:""
     });
+    const [searchKeyword,setSearchKeyword]=useState("")
+    const [startSearch,setStartSearch]=useState(false);
 
     useEffect(()=>{
         GetIndex();
     },[])
 
     const GetIndex=()=>{
-        requestAPI("index.php?action=IndexController&method=Index",false)
+        requestAPI("index.php?action=IndexController&method=Index", {},false)
             .then((res)=>{
                 if (res.Data){
                     setSettings(res.Data);
@@ -21,6 +24,10 @@ const Index = () => {
                     message.warning(res.Message);
                 }
             })
+    }
+
+    const finishSearch=()=>{
+        setStartSearch(false)
     }
 
     return (
@@ -55,19 +62,53 @@ const Index = () => {
                             </span>
                         </Col>
                     </Row>
+                    <br/>
                     <Row
                         justify={"center"}
                         align={"middle"}
                     >
                         <Col span={6}>
                             <Input
-
+                                value={searchKeyword}
+                                onChange={(e)=>{
+                                    setSearchKeyword(e.target.value)
+                                }}
+                                onPressEnter={()=>{
+                                    setStartSearch(true)
+                                }}
+                                addonAfter={
+                                    <Button
+                                        type={"link"}
+                                        size={"small"}
+                                    >
+                                        Search
+                                    </Button>
+                                }
                             />
                         </Col>
                     </Row>
                 </Col>
             </Row>
-
+            <Modal
+                title={`Search '${searchKeyword}' Result"`}
+                open={startSearch}
+                width={"1200px"}
+                onOk={()=>{
+                    finishSearch();
+                }}
+                onCancel={()=>{
+                    finishSearch();
+                }}
+                footer={null}
+            >
+                <SearchHistoryWhiteBoard
+                    keywords={searchKeyword}
+                    OnCancel={()=>{
+                        finishSearch();
+                    }}
+                    showCreateButton={false}
+                />
+            </Modal>
         </div>
     )
 }

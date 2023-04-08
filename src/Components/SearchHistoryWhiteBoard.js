@@ -3,7 +3,7 @@ import {CreateNewWhiteBoardAsync, SearchWhiteBoardAsync} from "./Nodes/BaseWhite
 import {Button, Col, Divider, Input, Row} from "antd";
 import {ExportOutlined} from '@ant-design/icons'
 import "../Css/SearchHistoryWhiteBoard.css";
-const SearchHistoryWhiteBoard=({keywords,Type='',OnCancel})=>{
+const SearchHistoryWhiteBoard=({keywords,Type='',OnCancel,showCreateButton=true})=>{
 
     const [whiteboards,setWhiteBoard]=useState([]);
     const [searchKeywords,setSearchKeywords]=useState(keywords);
@@ -58,14 +58,26 @@ const SearchHistoryWhiteBoard=({keywords,Type='',OnCancel})=>{
                     />
                 </Col>
                 <Col offset={1} span={4}>
-                    <Button
-                        type={"primary"}
-                        onClick={()=>handleSave()}
-                    >
-                        {
-                            selectedHistoryWhiteBord.ID?'Save':'Create'
-                        }
-                    </Button>
+                    {
+                        showCreateButton
+                            ?<Button
+                                type={"primary"}
+                                onClick={()=>handleSave()}
+                            >
+                                {
+                                    selectedHistoryWhiteBord.ID?'Save':'Create'
+                                }
+                            </Button>
+                            :<Button
+                                type={"primary"}
+                                onClick={()=>{
+                                    handleSearchKeywords();
+                                }}
+                            >
+                            Search
+                            </Button>
+                    }
+
                 </Col>
             </Row>
             <Divider>

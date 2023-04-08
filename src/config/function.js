@@ -6,7 +6,7 @@ const requestAPI=(api,init={},checkToken=true)=>{
     let sign=localStorage.getItem(LOGIN_TOKEN_KEY);
     if (!sign && checkToken){
         window.location="/login";
-        return false;
+        return new Promise(resolve => {},reject=>{});
     }
     api+="&sign="+sign;
     let requestUrl="";
