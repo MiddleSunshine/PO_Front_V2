@@ -1,9 +1,66 @@
-import {Button, Input, message} from "antd";
+import {Button, Input, message, Modal} from "antd";
 import {useState} from "react";
-import {CreateNodeAsync, GetNodeStyle, UpdateNode} from "./BasicNode";
+import {GetNodeStyle, UpdateNode} from "./BasicNode";
 import { useReactFlow } from 'reactflow';
-import {ExportOutlined,SaveOutlined} from '@ant-design/icons'
+import {
+    ExportOutlined,
+    SaveOutlined,
+    SearchOutlined
+} from '@ant-design/icons'
 import {CreateNewWhiteBoardAsync} from "./BaseWhiteBoard";
+import {SearchHistoryWhiteBoard} from "../SearchHistoryWhiteBoard";
+
+const HistoryWhiteBordNode=(nodeProps)=>{
+
+    const [searchKeyword,setSearchKeyword]=useState("");
+    const [searchMode,switchSearchMode]=useState(false);
+    const instance=useReactFlow();
+    const finishSearch=(historyWhiteBoard)=>{
+        if (historyWhiteBoard?.ID){
+            let newNode={...nodeProps};
+            newNode.type='WhiteBoardNode';
+            newNode.data.data={};
+            newNode.data.node_data=historyWhiteBoard;
+            UpdateNode(instance,newNode);
+        }
+        switchSearchMode(false);
+    }
+
+    return (
+        <div>
+            <Input
+                value={searchKeyword}
+                onChange={(e)=>{
+                    setSearchKeyword(e.target.value);
+                }}
+                onPressEnter={()=>{
+                    switchSearchMode(true);
+                }}
+                addonAfter={<Button
+                    type={"link"}
+                    size={"small"}
+                    icon={<SearchOutlined />}
+                    onClick={()=>{
+                        switchSearchMode(true);
+                    }}
+                ></Button>}
+            />
+            <Modal
+                open={searchMode}
+                width={"1200px"}
+                footer={null}
+            >
+                <SearchHistoryWhiteBoard
+                    keywords={searchKeyword}
+                    OnCancel={(historyWhiteBoard)=>{
+                        finishSearch(historyWhiteBoard);
+                    }}
+                />
+            </Modal>
+        </div>
+    )
+}
+
 const NewWhiteBoardNode=(nodeProps)=>{
 
     const [title,setTitle]=useState('');
@@ -90,5 +147,6 @@ const WhiteBoardNode=(nodeProps)=>{
 
 export {
     NewWhiteBoardNode,
-    WhiteBoardNode
+    WhiteBoardNode,
+    HistoryWhiteBordNode
 }

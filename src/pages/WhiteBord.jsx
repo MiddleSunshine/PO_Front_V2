@@ -19,7 +19,7 @@ import { HistoryNode } from '../Components/Nodes/HistoryNode'
 import Hotkeys from 'react-hot-keys'
 import {LabelNode} from "../Components/Nodes/LabelNode";
 import {BASIC_NODE_DATA} from "../Components/Nodes/BasicNode";
-import {NewWhiteBoardNode,WhiteBoardNode} from "../Components/Nodes/WhiteBoardNode";
+import {NewWhiteBoardNode,WhiteBoardNode,HistoryWhiteBordNode} from "../Components/Nodes/WhiteBoardNode";
 import {InputConnectionNode} from '../Components/Nodes/InputConnectionNode'
 import {OutputConnectionNode} from '../Components/Nodes/OutputConnectionNode'
 import {ImageNode} from "../Components/Nodes/ImageNode";
@@ -34,7 +34,7 @@ import {CalendarNode} from "../Components/Nodes/CalendarNode";
 import {TodoListNode} from "../Components/Nodes/TodoListNode";
 import {CompactPicker} from '@hello-pangea/color-picker'
 
-const defaultViewport = {x: 0, y: 0, zoom: 0.8};
+const defaultViewport = {x: 0, y: 0, zoom: 1.1};
 
 const AllNodeTypes = {
     HistoryNode,
@@ -50,7 +50,8 @@ const AllNodeTypes = {
     TitleNode,
     MarkdownNode,
     CalendarNode,
-    TodoListNode
+    TodoListNode,
+    HistoryWhiteBordNode
 }
 
 const DEFAULT_SETTINGS={
@@ -160,6 +161,10 @@ const BasicBord = () => {
             {
                 label: "New Page",
                 value: "NewWhiteBoardNode"
+            },
+            {
+                label: "History Page",
+                value: "HistoryWhiteBordNode"
             },
             {
                 label: "End Connection",
