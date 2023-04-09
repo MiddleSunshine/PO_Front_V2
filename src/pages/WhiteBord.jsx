@@ -12,7 +12,7 @@ import { getId } from "../config/WhiteBord";
 import '../Css/WhiteBord.css';
 import '@reactflow/node-resizer/dist/style.css';
 import 'reactflow/dist/style.css';
-import {Button, Col, Drawer, Form, Image, message, Modal, Radio, Row} from 'antd';
+import {Button, Col, Divider, Drawer, Form, Image, message, Modal, Radio, Row} from 'antd';
 import { requestAPI } from "../config/function";
 import { useParams } from "react-router-dom";
 import { HistoryNode } from '../Components/Nodes/HistoryNode'
@@ -120,6 +120,9 @@ const BasicBord = () => {
 
         const menus = [
             {
+                label: "Option"
+            },
+            {
                 label: "Save Page",
                 value: "SavePage"
             },
@@ -132,8 +135,22 @@ const BasicBord = () => {
             //     value: "DirectoryNode"
             // },
             {
+                label: "History"
+            },
+            {
                 label: "History Node",
                 value: "HistoryNode"
+            },
+            {
+                label: "New Page",
+                value: "NewWhiteBoardNode"
+            },
+            {
+                label: "History Page",
+                value: "HistoryWhiteBordNode"
+            },
+            {
+                label: "Node"
             },
             {
                 label: "Title",
@@ -160,12 +177,11 @@ const BasicBord = () => {
                 value: "LabelNode"
             },
             {
-                label: "New Page",
-                value: "NewWhiteBoardNode"
+                label: "Todo List",
+                value: "TodoListNode"
             },
             {
-                label: "History Page",
-                value: "HistoryWhiteBordNode"
+                label: "Connection"
             },
             {
                 label: "End Connection",
@@ -174,10 +190,6 @@ const BasicBord = () => {
             {
                 label: "Start Connection",
                 value: "OutputConnectionNode"
-            },
-            {
-                label: "Todo List",
-                value: "TodoListNode"
             },
             {
                 label: "Page Setting",
@@ -190,29 +202,37 @@ const BasicBord = () => {
         ];
 
         return (
-            <div style={menuStyle}>
-                <ol>
-                    {
-                        menus.map((menu)=>{
+            <div className={"Menu"} style={menuStyle}>
+                {
+                    menus.map((menu)=>{
+                        if (!menu?.value){
                             return (
-                                <li
-                                    key={menu.value}
+                                <div
+                                    key={menu.label}
+                                    className={"Header"}
                                 >
-                                    <Button
-                                        size={"small"}
-                                        type={"link"}
-                                        onClick={(event)=>{ createNode(event,menu.value) }}
-                                    >
-                                        {
-                                            menu.label
-                                        }
-                                    </Button>
-                                </li>
+                                    <span>{menu.label}</span>
+                                </div>
                             )
-                        })
-                    }
-                </ol>
-
+                        }
+                        return (
+                            <div
+                                className={"Item"}
+                                key={menu.value}
+                            >
+                                <Button
+                                    size={"small"}
+                                    type={"link"}
+                                    onClick={(event)=>{ createNode(event,menu.value) }}
+                                >
+                                    {
+                                        menu.label
+                                    }
+                                </Button>
+                            </div>
+                        )
+                    })
+                }
             </div>
         )
     }
