@@ -12,7 +12,7 @@ import { getId } from "../config/WhiteBord";
 import '../Css/WhiteBord.css';
 import '@reactflow/node-resizer/dist/style.css';
 import 'reactflow/dist/style.css';
-import {Button, Drawer, Form, message, Radio} from 'antd';
+import {Button, Col, Drawer, Form, Image, message, Modal, Radio, Row} from 'antd';
 import { requestAPI } from "../config/function";
 import { useParams } from "react-router-dom";
 import { HistoryNode } from '../Components/Nodes/HistoryNode'
@@ -33,6 +33,7 @@ import {MarkdownNode} from "../Components/Nodes/MarkdownNode";
 import {CalendarNode} from "../Components/Nodes/CalendarNode";
 import {TodoListNode} from "../Components/Nodes/TodoListNode";
 import {CompactPicker} from '@hello-pangea/color-picker'
+import Loading from '../Images/zannet.png';
 
 const defaultViewport = {x: 0, y: 0, zoom: 1.1};
 
@@ -77,7 +78,7 @@ const BasicBord = () => {
     const [selectedNode, setSelectedNode] = useState({});
     const [selectedEdge, setSelectedEdge] = useState({});
     const [editMode, setEditMode] = useState(false);
-
+    const [isLoading,setIsLoading]=useState(true);
     const { getIntersectingNodes } = useReactFlow();
 
     const reactFlowWrapper = useRef(null);
@@ -465,7 +466,7 @@ const BasicBord = () => {
                 return json.Data.WhiteBoard;
             })
             .then((whiteboard) => {
-                message.success("Page Load Success !");
+                setIsLoading(false);
                 document.title = whiteboard.Title ?? 'WhiteBoard';
             })
     }
@@ -600,6 +601,26 @@ const BasicBord = () => {
                         </Form.Item>
                     </Form>
                 </Drawer>
+                <Modal
+                    width={"1200px"}
+                    open={isLoading}
+                    footer={null}
+                >
+                    <Row
+                        justify={"start"}
+                        align={"middle"}
+                    >
+                        <Col span={4}>
+                            <Image
+                                height={100}
+                                src={Loading}
+                            />
+                        </Col>
+                        <Col span={20}>
+                            <h3>Data is loading...</h3>
+                        </Col>
+                    </Row>
+                </Modal>
             </Hotkeys>
         </div>
     )
