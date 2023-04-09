@@ -6,13 +6,13 @@ import ReactFlow, {
     addEdge,
     useReactFlow,
     Background,
-    Controls, MiniMap
+    Controls
 } from 'reactflow';
 import { getId } from "../config/WhiteBord";
 import '../Css/WhiteBord.css';
 import '@reactflow/node-resizer/dist/style.css';
 import 'reactflow/dist/style.css';
-import { Button, Drawer } from 'antd';
+import {Button, Drawer, Form, Radio} from 'antd';
 import { requestAPI } from "../config/function";
 import { useParams } from "react-router-dom";
 import { HistoryNode } from '../Components/Nodes/HistoryNode'
@@ -32,6 +32,7 @@ import {EditNode} from "../Components/Nodes/EditNode";
 import {MarkdownNode} from "../Components/Nodes/MarkdownNode";
 import {CalendarNode} from "../Components/Nodes/CalendarNode";
 import {TodoListNode} from "../Components/Nodes/TodoListNode";
+import {CompactPicker} from '@hello-pangea/color-picker'
 
 const defaultViewport = {x: 0, y: 0, zoom: 1.5};
 
@@ -52,9 +53,21 @@ const AllNodeTypes = {
     TodoListNode
 }
 
+const DEFAULT_SETTINGS={
+    background:{
+        variant:"lines",// dots,cross
+        color:"#f0f0f0"
+    }
+}
+
 const BasicBord = () => {
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+    const [settings,setSettings]=useState({
+        ...DEFAULT_SETTINGS
+    });
+    const [editSettings,setEditSettings]=useState(false);
+
     const [whiteboard, setWhiteBoard] = useState({});
     const [reactFlowInstance, setReactFlowInstance] = useState(null);
 
@@ -104,6 +117,10 @@ const BasicBord = () => {
         }
 
         const menus = [
+            {
+                label: "Setting",
+                value: "StartSettings"
+            },
             {
                 label: "Save Page",
                 value: "SavePage"
@@ -285,6 +302,9 @@ const BasicBord = () => {
             position: position
         }
         switch (type) {
+            case "StartSettings":
+                setEditSettings(true);
+                return false;
             case 'SavePage':
                 saveWhiteBord(false);
                 return false;
@@ -383,7 +403,7 @@ const BasicBord = () => {
             body: JSON.stringify({
                 IsDraft: IsDraft,
                 Data: {
-                    settings: {},
+                    settings: settings,
                     data: {
                         nodes: nodes,
                         edges: edges
@@ -428,6 +448,7 @@ const BasicBord = () => {
             .then((json) => {
                 setNodes(json.Data.WhiteBordContent.data?.nodes);
                 setEdges(json.Data.WhiteBordContent.data?.edges);
+                setSettings(json.Data.WhiteBordContent?.settings);
                 setWhiteBoard(json.Data.WhiteBoard);
                 return json.Data.WhiteBoard;
             })
@@ -487,7 +508,8 @@ const BasicBord = () => {
                             :''
                     }
                     <Background
-                        variant={"lines"}
+                        variant={settings.background.variant}
+                        color={settings.background.color}
                     />
                     <Controls
 
@@ -503,6 +525,67 @@ const BasicBord = () => {
                     {
                         renderEditComponent()
                     }
+                </Drawer>
+                <Drawer
+                    open={editSettings}
+                    width={500}
+                    onClose={()=>{
+                        setEditSettings(false)
+                    }}
+                >
+                    <Form
+                        layout={"vertical"}
+                    >
+                        <Form.Item
+                            label={"Option"}
+                        >
+                            <Button
+                                type={"primary"}
+                                onClick={()=>{
+                                    setSettings({
+                                        ...DEFAULT_SETTINGS
+                                    })
+                                    setEditSettings(false);
+                                }}
+                            >
+                                Reset
+                            </Button>
+                        </Form.Item>
+                        <Form.Item
+                            label={"Background Type"}
+                        >
+                            <Radio.Group
+                                value={settings.background.variant}
+                                onChange={(event)=>{
+                                    let newSettings=settings;
+                                    newSettings.background.variant=event.target.value;
+                                    setSettings(newSettings);
+                                }}
+                            >
+                                <Radio value={"lines"}>
+                                    Lines
+                                </Radio>
+                                <Radio value={"dots"}>
+                                    Dots
+                                </Radio>
+                                <Radio value={"cross"}>
+                                    Cross
+                                </Radio>
+                            </Radio.Group>
+                        </Form.Item>
+                        <Form.Item
+                            label={"Background Color"}
+                        >
+                            <CompactPicker
+                                color={settings.background.color}
+                                onChange={(color,event)=>{
+                                    let newSettings=settings;
+                                    newSettings.background.color=color.hex;
+                                    setSettings(newSettings);
+                                }}
+                            />
+                        </Form.Item>
+                    </Form>
                 </Drawer>
             </Hotkeys>
         </div>
