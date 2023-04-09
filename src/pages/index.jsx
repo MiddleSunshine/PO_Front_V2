@@ -1,8 +1,13 @@
-import {Button, Col, Divider, Image, Input, message, Modal, Row} from "antd";
+import {Button, Col, Image, Input, Menu, message, Modal, Row} from "antd";
 import Rainbow from '../Images/rainbow.png'
 import {useEffect, useState} from "react";
 import {requestAPI} from "../config/function";
 import {SearchHistoryWhiteBoard} from "../Components/SearchHistoryWhiteBoard";
+import {
+    UserAddOutlined,
+    ReadOutlined
+} from "@ant-design/icons"
+
 const Index = () => {
 
     const [settings,setSettings]=useState({
@@ -34,6 +39,44 @@ const Index = () => {
         <div
             className={"Index"}
         >
+            <Row
+                align={"middle"}
+            >
+                <Col span={24}>
+                    <Menu
+                        mode={"horizontal"}
+                        items={[
+                            {
+                                label:(
+                                    <Button
+                                        type={"link"}
+                                        href={"/whiteboard/1"}
+                                        target={"_blank"}
+                                    >
+                                        Note
+                                    </Button>
+                                ),
+                                key:"Note",
+                                icon:<ReadOutlined />
+                            },
+                            {
+                                label: (
+                                    <Button
+                                        type={"link"}
+                                        href={"/login"}
+                                        target={"_blank"}
+                                    >
+                                        Login
+                                    </Button>
+                                ),
+                                key:"Login",
+                                icon:<UserAddOutlined />
+                            }
+                        ]}
+                    >
+                    </Menu>
+                </Col>
+            </Row>
             <Row
                 style={{height:"70vh"}}
                 justify={"center"}
