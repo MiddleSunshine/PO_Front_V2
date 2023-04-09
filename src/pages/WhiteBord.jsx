@@ -215,9 +215,12 @@ const BasicBord = () => {
                     </li>
                     <li>
                         <Button
+                            danger={true}
                             size={"small"}
                             type={"link"}
-
+                            onClick={()=>{
+                                deleteNode();
+                            }}
                         >
                             Delete
                         </Button>
@@ -331,6 +334,23 @@ const BasicBord = () => {
         new_node.data.settings={};
         setNodes((n) =>n.concat([new_node]) );
         setMenuPosition({x: 0, y: 0});
+    }
+
+    const deleteNode=()=>{
+        let newNodes=nodes.filter((n)=>{
+            if (n.id==selectedNode?.id){
+                return false;
+            }
+            if (n.parentNode==selectedNode?.id){
+                return false;
+            }
+            return true;
+        });
+        setNodes(newNodes);
+        setNodeMenuPosition({
+            x:0,
+            y:0
+        })
     }
 
     const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), [setEdges]);
