@@ -2,12 +2,13 @@ import {useState} from "react";
 import {GetNodeStyle,UpdateNode} from "./BasicNode";
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import {NodeToolbar} from "reactflow";
-import {Button, Modal} from "antd";
+import {Button, Form, Input, Modal} from "antd";
 import ReactCodeMirror from "@uiw/react-codemirror";
 import {useReactFlow} from 'reactflow';
 import {NodeResizer} from "@reactflow/node-resizer";
 const MarkdownNode=(nodeProps)=>{
     const [nodeData,setNodeData]=useState(nodeProps.data.node_data);
+    const [data,setData]=useState(nodeProps.data.data);
     const [editMode,setEditMode]=useState(nodeProps.data.node_data.markdown=='');
 
     const instance=useReactFlow();
@@ -15,6 +16,7 @@ const MarkdownNode=(nodeProps)=>{
     const handleSave=()=>{
         let newNode=nodeProps;
         newNode.data.node_data=nodeData;
+        newNode.data.data=data;
         UpdateNode(instance,newNode);
     }
 
@@ -44,6 +46,21 @@ const MarkdownNode=(nodeProps)=>{
             }
             <div>
                 <Modal
+                    title={
+                        <div
+                         style={{width:"90%"}}
+                        >
+                            <Input
+                                value={data?.Name}
+                                onChange={(e)=>{
+                                    setData({
+                                        ...data,
+                                        Name:e.target.value
+                                    })
+                                }}
+                            />
+                        </div>
+                    }
                     open={editMode}
                     width={1200}
                     onCancel={()=>{
