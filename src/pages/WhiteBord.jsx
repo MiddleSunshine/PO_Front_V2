@@ -34,7 +34,7 @@ import {CalendarNode} from "../Components/Nodes/CalendarNode";
 import {TodoListNode} from "../Components/Nodes/TodoListNode";
 import {CompactPicker} from '@hello-pangea/color-picker'
 
-const defaultViewport = {x: 0, y: 0, zoom: 1.5};
+const defaultViewport = {x: 0, y: 0, zoom: 0.8};
 
 const AllNodeTypes = {
     HistoryNode,
@@ -118,10 +118,6 @@ const BasicBord = () => {
 
         const menus = [
             {
-                label: "Setting",
-                value: "StartSettings"
-            },
-            {
                 label: "Save Page",
                 value: "SavePage"
             },
@@ -176,7 +172,11 @@ const BasicBord = () => {
             {
                 label: "Todo List",
                 value: "TodoListNode"
-            }
+            },
+            {
+                label: "Page Setting",
+                value: "StartSettings"
+            },
             // {
             //     label: "Calendar",
             //     value: "CalendarNode"
@@ -448,7 +448,10 @@ const BasicBord = () => {
             .then((json) => {
                 setNodes(json.Data.WhiteBordContent.data?.nodes);
                 setEdges(json.Data.WhiteBordContent.data?.edges);
-                setSettings(json.Data.WhiteBordContent?.settings);
+                setSettings({
+                    ...DEFAULT_SETTINGS,
+                    ...json.Data.WhiteBordContent?.settings
+                });
                 setWhiteBoard(json.Data.WhiteBoard);
                 return json.Data.WhiteBoard;
             })

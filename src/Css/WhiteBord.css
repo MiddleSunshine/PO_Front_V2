@@ -19,8 +19,7 @@
 }
 
 .WhiteBoard .BasicNodeOutside .LabelNode{
-    background-color: #F0F0F0;
-    padding: 10px;
+    padding: 5px;
 }
 
 .WhiteBoard .OutputConnectionNode{
