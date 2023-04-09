@@ -52,6 +52,7 @@ const BasicBord = () => {
     const [reactFlowInstance, setReactFlowInstance] = useState(null);
 
     const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
+    const [nodeMenuPosition,setNodeMenuPosition]=useState({x:0,y:0});
     const [selectedNode, setSelectedNode] = useState({});
     const [selectedEdge, setSelectedEdge] = useState({});
     const [editMode, setEditMode] = useState(false);
@@ -185,6 +186,47 @@ const BasicBord = () => {
             </div>
         )
     }
+
+    const renderNodeMenu=()=>{
+        const menuStyle = {
+            position: 'absolute',
+            left: nodeMenuPosition.x,
+            top: nodeMenuPosition.y,
+            backgroundColor: 'white',
+            padding: '5px',
+            borderRadius: '5px',
+            boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.1)',
+            zIndex:10
+        }
+
+        return (
+            <div style={menuStyle}>
+                <ol>
+                    <li>
+                        <Button
+                            size={"small"}
+                            type={"link"}
+                            onClick={()=>{
+                                setEditMode(true)
+                            }}
+                        >
+                            Edit
+                        </Button>
+                    </li>
+                    <li>
+                        <Button
+                            size={"small"}
+                            type={"link"}
+
+                        >
+                            Delete
+                        </Button>
+                    </li>
+                </ol>
+            </div>
+        )
+    }
+
     /**
      *
      * @param MouseEvent event
@@ -194,6 +236,26 @@ const BasicBord = () => {
         setMenuPosition({
             x: event.clientX,
             y: event.clientY
+        })
+        setNodeMenuPosition({
+            x:0,
+            y:0
+        })
+    }
+
+    const handleNodeContextMene=(event,node)=>{
+        event.preventDefault();
+
+        // 这里会在 node 被右键点击的时候触发
+        setNodeMenuPosition({
+            x: event.clientX,
+            y: event.clientY
+        });
+        setSelectedNode(node);
+        setSelectedEdge({});
+        setMenuPosition({
+            x:0,
+            y:0
         })
     }
 
@@ -382,10 +444,7 @@ const BasicBord = () => {
                     minZoom={0.2}
                     maxZoom={4}
                     attributionPosition="bottom-left"
-                    onNodeContextMenu={(event, node) => {
-                        event.preventDefault();
-                        // 这里会在 node 被右键点击的时候触发
-                    }}
+                    onNodeContextMenu={handleNodeContextMene}
                     onPaneContextMenu={handleContextMenu}
                     onInit={setReactFlowInstance}
                     onSelectionChange={handleSelectionChange}
@@ -394,6 +453,11 @@ const BasicBord = () => {
                         menuPosition.x > 0 && menuPosition.y > 0
                             ? renderMenu()
                             : ''
+                    }
+                    {
+                        nodeMenuPosition.x>0 && nodeMenuPosition.y>0
+                            ?renderNodeMenu()
+                            :''
                     }
                 </ReactFlow>
                 <Drawer
