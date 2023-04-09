@@ -1,11 +1,18 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import ReactFlow, { useNodesState, useEdgesState, ReactFlowProvider, addEdge, useReactFlow } from 'reactflow';
-import { PointNodeView, PointNodeEditor } from '../Components/Nodes/PointNode'
+import ReactFlow, {
+    useNodesState,
+    useEdgesState,
+    ReactFlowProvider,
+    addEdge,
+    useReactFlow,
+    Background,
+    Controls, MiniMap
+} from 'reactflow';
 import { getId } from "../config/WhiteBord";
 import '../Css/WhiteBord.css';
 import '@reactflow/node-resizer/dist/style.css';
 import 'reactflow/dist/style.css';
-import { Button, Cascader, Col, Drawer, Form, message, Row } from 'antd';
+import { Button, Drawer } from 'antd';
 import { requestAPI } from "../config/function";
 import { useParams } from "react-router-dom";
 import { HistoryNode } from '../Components/Nodes/HistoryNode'
@@ -479,6 +486,12 @@ const BasicBord = () => {
                             ?renderNodeMenu()
                             :''
                     }
+                    <Background
+                        variant={"lines"}
+                    />
+                    <Controls
+
+                    />
                 </ReactFlow>
                 <Drawer
                     open={editMode}
