@@ -12,7 +12,7 @@ import { getId } from "../config/WhiteBord";
 import '../Css/WhiteBord.css';
 import '@reactflow/node-resizer/dist/style.css';
 import 'reactflow/dist/style.css';
-import {Button, Drawer, Form, Radio} from 'antd';
+import {Button, Drawer, Form, message, Radio} from 'antd';
 import { requestAPI } from "../config/function";
 import { useParams } from "react-router-dom";
 import { HistoryNode } from '../Components/Nodes/HistoryNode'
@@ -125,10 +125,10 @@ const BasicBord = () => {
                 label: "Save Draft",
                 value: "SaveDraft"
             },
-            {
-                label: "Directory",
-                value: "DirectoryNode"
-            },
+            // {
+            //     label: "Directory",
+            //     value: "DirectoryNode"
+            // },
             {
                 label: "History Node",
                 value: "HistoryNode"
@@ -311,9 +311,9 @@ const BasicBord = () => {
             case 'SaveDraft':
                 saveWhiteBord(true)
                 return false;
-            case "TitleNode":
-                new_node.data.save_into_database=true;
-                break;
+            // case "TitleNode":
+            //     new_node.data.save_into_database=true;
+            //     break;
             case 'DirectoryNode':
                 new_node.data.node_data=[];
                 new_node.data.save_into_database=true;
@@ -411,8 +411,12 @@ const BasicBord = () => {
                 }
             })
         })
-            .then((data) => {
-
+            .then((res) => {
+                if(res.Status==1){
+                    message.success("Save Success")
+                }else{
+                    message.warning(res.Message);
+                }
             })
     }
 
@@ -456,6 +460,7 @@ const BasicBord = () => {
                 return json.Data.WhiteBoard;
             })
             .then((whiteboard) => {
+                message.success("Page Load Success !");
                 document.title = whiteboard.Title ?? 'WhiteBoard';
             })
     }
