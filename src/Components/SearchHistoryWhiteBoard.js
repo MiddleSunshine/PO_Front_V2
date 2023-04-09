@@ -1,36 +1,40 @@
 import {useEffect, useState} from "react";
 import {CreateNewWhiteBoardAsync, SearchWhiteBoardAsync} from "./Nodes/BaseWhiteBoard";
-import {Button, Col, Divider, Input, Row} from "antd";
+import {Button, Col, Divider, Empty, Input, Row, Spin} from "antd";
 import {ExportOutlined} from '@ant-design/icons'
 import "../Css/SearchHistoryWhiteBoard.css";
-const SearchHistoryWhiteBoard=({keywords,Type='',OnCancel,showCreateButton=true})=>{
 
-    const [whiteboards,setWhiteBoard]=useState([]);
-    const [searchKeywords,setSearchKeywords]=useState(keywords);
-    const [selectedHistoryWhiteBord,setSelectedWhiteBoard]=useState({});
+const SearchHistoryWhiteBoard = ({keywords, Type = '', OnCancel, showCreateButton = true}) => {
 
-    useEffect(()=>{
+    const [whiteboards, setWhiteBoard] = useState([]);
+    const [searchKeywords, setSearchKeywords] = useState(keywords);
+    const [selectedHistoryWhiteBord, setSelectedWhiteBoard] = useState({});
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
         setSearchKeywords(keywords);
-        handleSearchKeywords(keywords,Type)
-    },[keywords])
+        setIsLoading(true);
+        handleSearchKeywords(keywords, Type);
+    }, [keywords])
 
-    const handleSearchKeywords=(searchKeywordsData,searchType)=>{
-        SearchWhiteBoardAsync(searchKeywordsData,searchType)
-            .then((res)=>{
-                if (res?.Data?.WhiteBoards){
+    const handleSearchKeywords = (searchKeywordsData, searchType) => {
+        SearchWhiteBoardAsync(searchKeywordsData, searchType)
+            .then((res) => {
+                if (res?.Data?.WhiteBoards) {
                     setWhiteBoard(res.Data.WhiteBoards)
+                    setIsLoading(false);
                 }
             })
     }
 
-    const handleSave=()=>{
-        if (selectedHistoryWhiteBord.ID){
+    const handleSave = () => {
+        if (selectedHistoryWhiteBord.ID) {
             OnCancel(selectedHistoryWhiteBord);
-        }else{
+        } else {
             // 构建新的WhiteBoard
             CreateNewWhiteBoardAsync(searchKeywords)
-                .then((res)=>{
-                    if (res?.Data.data){
+                .then((res) => {
+                    if (res?.Data.data) {
                         OnCancel(res.Data.data);
                     }
                 })
@@ -42,39 +46,39 @@ const SearchHistoryWhiteBoard=({keywords,Type='',OnCancel,showCreateButton=true}
             className={"SearchHistoryWhiteBoard"}
         >
             <Row
-                onClick={()=>{
+                onClick={() => {
                     setSelectedWhiteBoard({})
                 }}
             >
                 <Col span={19}>
                     <Input
                         valuse={searchKeywords}
-                        onChange={(e)=>{
+                        onChange={(e) => {
                             setSearchKeywords(e.target.value);
                         }}
-                        onPressEnter={()=>{
-                            handleSearchKeywords(searchKeywords,Type)
+                        onPressEnter={() => {
+                            handleSearchKeywords(searchKeywords, Type)
                         }}
                     />
                 </Col>
                 <Col offset={1} span={4}>
                     {
                         showCreateButton
-                            ?<Button
+                            ? <Button
                                 type={"primary"}
-                                onClick={()=>handleSave()}
+                                onClick={() => handleSave()}
                             >
                                 {
-                                    selectedHistoryWhiteBord.ID?'Save':'Create'
+                                    selectedHistoryWhiteBord.ID ? 'Save' : 'Create'
                                 }
                             </Button>
-                            :<Button
+                            : <Button
                                 type={"primary"}
-                                onClick={()=>{
+                                onClick={() => {
                                     handleSearchKeywords();
                                 }}
                             >
-                            Search
+                                Search
                             </Button>
                     }
 
@@ -84,35 +88,48 @@ const SearchHistoryWhiteBoard=({keywords,Type='',OnCancel,showCreateButton=true}
                 History Page
             </Divider>
             {
-                whiteboards.map((w)=>{
-                    return (
-                        <Row
-                            className={"EachRow"}
-                            key={w.ID}
-                            style={{backgroundColor:selectedHistoryWhiteBord.ID==w.ID?'#81ecec':''}}
-                        >
-                            <Col span={20}>
-                                <div
-                                    onClick={()=>{
-                                        setSelectedWhiteBoard(w);
-                                    }}
+                isLoading
+                    ? <Row
+                        justify={"center"}
+                        align={"middle"}
+                    >
+                        <Col span={1}>
+                            <Spin
+                                size={"large"}
+                            />
+                        </Col>
+                    </Row>
+                    : whiteboards.length > 0
+                        ? whiteboards.map((w) => {
+                            return (
+                                <Row
+                                    className={"EachRow"}
+                                    key={w.ID}
+                                    style={{backgroundColor: selectedHistoryWhiteBord.ID == w.ID ? '#81ecec' : ''}}
                                 >
-                                    {w.Title ?? 'Page'}
-                                </div>
-                            </Col>
-                            <Col span={4}>
-                                <Button
-                                    type={"link"}
-                                    size={"small"}
-                                    href={`/whiteboard/${w.ID}`}
-                                    target={"_blank"}
-                                    icon={<ExportOutlined />}
-                                >
-                                </Button>
-                            </Col>
-                        </Row>
-                    )
-                })
+                                    <Col span={20}>
+                                        <div
+                                            onClick={() => {
+                                                setSelectedWhiteBoard(w);
+                                            }}
+                                        >
+                                            {w.Title ?? 'Page'}
+                                        </div>
+                                    </Col>
+                                    <Col span={4}>
+                                        <Button
+                                            type={"link"}
+                                            size={"small"}
+                                            href={`/whiteboard/${w.ID}`}
+                                            target={"_blank"}
+                                            icon={<ExportOutlined/>}
+                                        >
+                                        </Button>
+                                    </Col>
+                                </Row>
+                            )
+                        })
+                        : <Empty/>
             }
         </div>
     )
