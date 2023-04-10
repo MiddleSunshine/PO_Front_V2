@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {NodeResizer} from "@reactflow/node-resizer";
-import {NodeToolbar} from "reactflow";
+import {Handle, NodeToolbar} from "reactflow";
 import {Button, Col, Divider, Input, Row} from "antd";
 import {getId} from "../../config/WhiteBord";
 import {
@@ -131,6 +131,15 @@ const TodoListNode=(nodeProps)=>{
                     Clean Finished
                 </Button>
             </NodeToolbar>
+            <Handle
+                type={"source"}
+                position={"right"}
+            >
+            </Handle>
+            <Handle
+                type={"target"}
+                position={"left"}
+            />
             <Input
                 value={data?.Name}
                 onChange={(e)=>{
@@ -196,7 +205,10 @@ const TodoListNode=(nodeProps)=>{
                                             updateItem(outsideIndex,newTodoItem);
                                         }}
                                         onPressEnter={()=>{
-                                            newItem(outsideIndex+1,todoItem.node_data.Offset)
+                                            newItem(outsideIndex+1,todoItem.node_data.Offset);
+                                        }}
+                                        onBlur={()=>{
+                                            newItem(outsideIndex+1,todoItem.node_data.Offset);
                                         }}
                                     />
                                 </Col>

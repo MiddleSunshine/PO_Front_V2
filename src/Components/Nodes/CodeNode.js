@@ -1,7 +1,7 @@
 import {useState} from "react";
 import {NodeResizer} from "@reactflow/node-resizer";
 import SyntaxHighlighter from 'react-syntax-highlighter';
-import {NodeToolbar} from "reactflow";
+import {Handle, NodeToolbar} from "reactflow";
 import {Button, Form, Modal, Select} from "antd";
 import ReactCodeMirror from "@uiw/react-codemirror";
 import {useReactFlow} from 'reactflow';
@@ -235,6 +235,15 @@ const CodeNode=(nodeProps)=>{
                     Setting ({nodeData.language})
                 </Button>
             </NodeToolbar>
+            <Handle
+                type={"source"}
+                position={"right"}
+            >
+            </Handle>
+            <Handle
+                type={"target"}
+                position={"left"}
+            />
             {
                 nodeData.language
                     ?<SyntaxHighlighter
