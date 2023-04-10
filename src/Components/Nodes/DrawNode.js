@@ -19,10 +19,6 @@ const DrawNode=(nodeProps)=>{
         }
     }
 
-    useCallback(()=>{
-        SAVE_INTO();
-    },[nodeData]);
-
     const handleCreateNode=()=>{
         if (!nodeData.hasOwnProperty('ID')){
             if (!nodeData?.Name){
@@ -37,6 +33,11 @@ const DrawNode=(nodeProps)=>{
                         message.warning(res.Message);
                     }
                 })
+                .then(()=>{
+                    SAVE_INTO();
+                })
+        }else{
+            SAVE_INTO();
         }
     }
 
@@ -60,7 +61,7 @@ const DrawNode=(nodeProps)=>{
                     handleCreateNode();
                 }}
                 onBlur={()=>{
-                    SAVE_INTO();
+                    handleCreateNode();
                 }}
                 addonAfter={
                 nodeData.hasOwnProperty('ID')
