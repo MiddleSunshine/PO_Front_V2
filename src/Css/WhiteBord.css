@@ -106,7 +106,12 @@
 }
 
 .WhiteBoard .TodoListNode{
+    border: 3px solid antiquewhite;
+    background-color: antiquewhite;
+}
 
+.WhiteBoard .TodoListNode .Content{
+    padding: 8px;
 }
 
 .WhiteBoard .TodoListNode .EachRow{

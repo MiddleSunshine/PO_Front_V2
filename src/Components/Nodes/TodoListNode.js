@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {NodeResizer} from "@reactflow/node-resizer";
-import {Handle, NodeToolbar} from "reactflow";
-import {Button, Col, Divider, Input, Row} from "antd";
+import {Handle, NodeToolbar,useReactFlow} from "reactflow";
+import {Button, Checkbox, Col, Input, message, Row} from "antd";
 import {getId} from "../../config/WhiteBord";
 import {
     CaretDownOutlined,
@@ -10,9 +10,10 @@ import {
     CaretUpOutlined,
     CloseOutlined,
     MinusOutlined,
-    CheckOutlined
+    CheckOutlined,
+    SaveOutlined
 } from "@ant-design/icons";
-import {GetNodeStyle} from "./BasicNode";
+import {GetNodeStyle, UpdateNode} from "./BasicNode";
 
 const STATUS_FINISHED='Finished';
 const STATUS_TODO='Todo';
@@ -26,15 +27,23 @@ const NODE_DATA_ITEM={
     Status:STATUS_TODO
 }
 
-const ICON_LENGTH=2;
-const SPACE_LENGTH=1;
 const LENGTH_AMOUNT=24;
 const OFFSET_STEP=2;
 
 const TodoListNode=(nodeProps)=>{
     const [nodeData,setNodeData]=useState(nodeProps.data.node_data)
     const [data,setData]=useState(nodeProps.data.data);
-    const [selectedTodoItem,setSelectedTodoItem]=useState({})
+    const [selectedTodoItem,setSelectedTodoItem]=useState({});
+    const [editMode,setEditMode]=useState(true);
+    const instance=useReactFlow();
+
+    const SAVE_DATA=()=>{
+        let newNode={...nodeProps}
+        newNode.data.data=data;
+        newNode.data.node_data=nodeData;
+        UpdateNode(instance,newNode);
+        message.info("save success")
+    }
 
     const newItem=(outsideIndex,offset)=>{
         let newList=nodeData.list;
@@ -49,7 +58,7 @@ const TodoListNode=(nodeProps)=>{
         setNodeData({
             ...nodeData,
             list:newList
-        })
+        });
     }
 
     const deleteItem=(outsideIndex)=>{
@@ -61,6 +70,18 @@ const TodoListNode=(nodeProps)=>{
         })
     }
 
+    const cleanFinishedItem=()=>{
+        let newList=nodeData.list.filter((item)=>{
+            return item.node_data.Status==STATUS_TODO;
+        });
+        setNodeData(
+            {
+                ...nodeData,
+                list:newList
+            }
+        );
+    }
+
     const updateItem=(outsideIndex,newTodoItem)=>{
         let newNodeData=nodeData;
         newNodeData.list[outsideIndex]=newTodoItem;
@@ -68,6 +89,7 @@ const TodoListNode=(nodeProps)=>{
     }
 
     const runCmd=(outsideIndex,cmd)=>{
+        debugger
         let newList=nodeData.list;
         let listAmount=newList.length;
         switch (cmd){
@@ -91,7 +113,7 @@ const TodoListNode=(nodeProps)=>{
                 }
                 break;
             case 'Right':
-                if((newList[outsideIndex].node_data.Offset+OFFSET_STEP)<=(LENGTH_AMOUNT-ICON_LENGTH-SPACE_LENGTH)){
+                if((newList[outsideIndex].node_data.Offset+OFFSET_STEP)<=(LENGTH_AMOUNT)){
                     newList[outsideIndex].node_data.Offset+=OFFSET_STEP;
                 }
                 break;
@@ -127,6 +149,9 @@ const TodoListNode=(nodeProps)=>{
                 <Button
                     type={"primary"}
                     danger={true}
+                    onClick={()=>{
+                        cleanFinishedItem();
+                    }}
                 >
                     Clean Finished
                 </Button>
@@ -140,135 +165,176 @@ const TodoListNode=(nodeProps)=>{
                 type={"target"}
                 position={"left"}
             />
-            <Input
-                value={data?.Name}
-                onChange={(e)=>{
-                    setData({
-                        ...data,
-                        Name:e.target.value
-                    });
-                }}
-                size={"small"}
-            />
-            <hr />
             {
-                nodeData.list.map((todoItem,outsideIndex)=>{
-                    return (
-                        <div
-                            className={"EachRow"}
-                            key={todoItem.data.ID}
-                        >
-                            <Row
-                                justify={"start"}
-                                align={"middle"}
-                                onClick={()=>{
-                                    if (selectedTodoItem?.data?.ID==todoItem.data.ID){
-                                        setSelectedTodoItem({});
-                                    }else{
-                                        setSelectedTodoItem(todoItem);
-                                    }
-                                }}
-                            >
-                                <Col
-                                    span={ICON_LENGTH}
-                                    offset={todoItem.node_data.Offset}
-                                >
-                                    <Button
-                                        icon={
-                                            todoItem.node_data.Status==STATUS_TODO
-                                                ?<MinusOutlined />
-                                                :<CheckOutlined />
-                                        }
-                                        ghost={
-                                            todoItem.node_data.Status==STATUS_TODO
-                                        }
-                                        shape={"circle"}
-                                        type={"primary"}
-                                        size={"small"}
-                                        onClick={()=>{
-                                            let newTodoItem=todoItem;
-                                            newTodoItem.node_data.Status=(todoItem.node_data.Status==STATUS_TODO)?STATUS_FINISHED:STATUS_TODO
-                                        }}
-                                    ></Button>
-                                </Col>
-                                <Col
-                                    offset={SPACE_LENGTH}
-                                    span={LENGTH_AMOUNT-SPACE_LENGTH-ICON_LENGTH-todoItem.node_data.Offset}
-                                >
-                                    <Input
-                                        disabled={todoItem.node_data.Status==STATUS_FINISHED}
-                                        size={"small"}
-                                        value={todoItem.data.Name}
-                                        onChange={(e)=>{
-                                            let newTodoItem=todoItem;
-                                            newTodoItem.data.Name=e.target.value;
-                                            updateItem(outsideIndex,newTodoItem);
-                                        }}
-                                        onPressEnter={()=>{
-                                            newItem(outsideIndex+1,todoItem.node_data.Offset);
-                                        }}
-                                        onBlur={()=>{
-                                            newItem(outsideIndex+1,todoItem.node_data.Offset);
-                                        }}
-                                    />
-                                </Col>
-                            </Row>
-                            {
-                                selectedTodoItem?.data?.ID==todoItem.data.ID && todoItem.node_data.Status==STATUS_TODO
-                                    ?<Row
-                                        justify={"start"}
-                                        align={"middle"}
+                !editMode
+                    ?<div className={"Content"}>
+                        {
+                            data.Name
+                                ?<h3>{data.Name}</h3>
+                                :""
+                        }
+                        <hr />
+                        {
+                            nodeData.list.map((todoItem,outsideIndex)=>{
+                                if (nodeData.hiddenFinished && todoItem.node_data.Status==STATUS_FINISHED){
+                                    return '';
+                                }
+                                return (
+                                    <div
+                                        key={outsideIndex}
+                                        className={"EachRow"}
                                     >
-                                        <Col
-                                            offset={todoItem.node_data.Offset+ICON_LENGTH}
+                                        <Row
+                                            justify={"start"}
+                                            align={"middle"}
                                         >
-                                            <Button
-                                                size={"small"}
-                                                type={"link"}
-                                                icon={<CaretUpOutlined/>}
-                                                onClick={()=>{
-                                                    runCmd(outsideIndex,'Up')
-                                                }}
-                                            ></Button>
-                                            <Button
-                                                size={"small"}
-                                                type={"link"}
-                                                icon={<CaretDownOutlined/>}
-                                                onClick={()=>{
-                                                    runCmd(outsideIndex,'Down')
-                                                }}
-                                            ></Button>
-                                            <Button
-                                                size={"small"}
-                                                type={"link"}
-                                                icon={<CaretLeftOutlined/>}
-                                                onClick={()=>{
-                                                    runCmd(outsideIndex,'Left')
-                                                }}
-                                            ></Button>
-                                            <Button
-                                                size={"small"}
-                                                type={"link"}
-                                                icon={<CaretRightOutlined/>}
-                                                onClick={()=>{
-                                                    runCmd(outsideIndex,'Right')
-                                                }}
-                                            ></Button>
-                                            <Button
-                                                size={"small"}
-                                                type={"link"}
-                                                icon={<CloseOutlined/>}
-                                                onClick={()=>{
-                                                    deleteItem(outsideIndex)
-                                                }}
-                                            ></Button>
-                                        </Col>
-                                    </Row>
-                                    :''
+                                            <Col
+                                                span={LENGTH_AMOUNT-todoItem.node_data.Offset}
+                                                offset={todoItem.node_data.Offset}
+                                            >
+                                                <Checkbox
+                                                    checked={todoItem.node_data.Status==STATUS_FINISHED}
+                                                >
+                                                    {todoItem.data.Name}
+                                                </Checkbox>
+                                            </Col>
+                                        </Row>
+                                    </div>
+                                )
+                            })
+                        }
+                    </div>
+                    :<div
+                        className={"Content"}
+                    >
+                        <Input
+                            value={data?.Name}
+                            onChange={(e)=>{
+                                setData({
+                                    ...data,
+                                    Name:e.target.value
+                                });
+                            }}
+                            size={"small"}
+                            addonAfter={
+                                <Button
+                                    size={"small"}
+                                    type={"link"}
+                                    icon={<SaveOutlined />}
+                                    onClick={()=>{
+                                        SAVE_DATA();
+                                    }}
+                                ></Button>
                             }
-                        </div>
-                    )
-                })
+                        />
+                        <hr />
+                        {
+                            nodeData.list.map((todoItem,outsideIndex)=>{
+                                if (nodeData.hiddenFinished && todoItem.node_data.Status==STATUS_FINISHED){
+                                    return '';
+                                }
+                                return (
+                                    <div
+                                        className={"EachRow"}
+                                        key={todoItem.data.ID}
+                                    >
+                                        <Row
+                                            justify={"start"}
+                                            align={"middle"}
+                                            onClick={()=>{
+                                                if (selectedTodoItem?.data?.ID==todoItem.data.ID){
+                                                    setSelectedTodoItem({});
+                                                }else{
+                                                    setSelectedTodoItem(todoItem);
+                                                }
+                                            }}
+                                        >
+                                            <Col
+                                                span={LENGTH_AMOUNT-todoItem.node_data.Offset}
+                                                offset={todoItem.node_data.Offset}
+                                            >
+                                                <Checkbox
+                                                    checked={todoItem.node_data.Status==STATUS_FINISHED}
+                                                    onChange={(event)=>{
+                                                        let newTodoItem=todoItem;
+                                                        newTodoItem.node_data.Status=(event.target.checked)?STATUS_FINISHED:STATUS_TODO;
+                                                        updateItem(outsideIndex,newTodoItem);
+                                                    }}
+                                                >
+                                                    <Input
+                                                        disabled={todoItem.node_data.Status==STATUS_FINISHED}
+                                                        size={"small"}
+                                                        value={todoItem.data.Name}
+                                                        onChange={(e)=>{
+                                                            let newTodoItem=todoItem;
+                                                            newTodoItem.data.Name=e.target.value;
+                                                            updateItem(outsideIndex,newTodoItem);
+                                                        }}
+                                                        onPressEnter={()=>{
+                                                            newItem(outsideIndex+1,todoItem.node_data.Offset);
+                                                        }}
+                                                    />
+                                                </Checkbox>
+                                            </Col>
+                                        </Row>
+                                        {
+                                            selectedTodoItem?.data?.ID==todoItem.data.ID && todoItem.node_data.Status==STATUS_TODO
+                                                ?<Row
+                                                    justify={"start"}
+                                                    align={"middle"}
+                                                >
+                                                    <Col
+                                                        offset={todoItem.node_data.Offset}
+                                                    >
+                                                        <Button
+                                                            size={"small"}
+                                                            type={"link"}
+                                                            icon={<CaretUpOutlined/>}
+                                                            onClick={()=>{
+                                                                runCmd(outsideIndex,'Up')
+                                                            }}
+                                                        ></Button>
+                                                        <Button
+                                                            size={"small"}
+                                                            type={"link"}
+                                                            icon={<CaretDownOutlined/>}
+                                                            onClick={()=>{
+                                                                runCmd(outsideIndex,'Down')
+                                                            }}
+                                                        ></Button>
+                                                        <Button
+                                                            size={"small"}
+                                                            type={"link"}
+                                                            icon={<CaretLeftOutlined/>}
+                                                            onClick={()=>{
+                                                                runCmd(outsideIndex,'Left')
+                                                            }}
+                                                        ></Button>
+                                                        <Button
+                                                            size={"small"}
+                                                            type={"link"}
+                                                            icon={<CaretRightOutlined/>}
+                                                            onClick={()=>{
+                                                                runCmd(outsideIndex,'Right')
+                                                            }}
+                                                        ></Button>
+                                                        <Button
+                                                            size={"small"}
+                                                            type={"link"}
+                                                            icon={<CloseOutlined/>}
+                                                            onClick={()=>{
+                                                                deleteItem(outsideIndex)
+                                                            }}
+                                                        ></Button>
+                                                    </Col>
+                                                </Row>
+                                                :''
+                                        }
+                                    </div>
+                                )
+                            })
+                        }
+                    </div>
             }
         </div>
     )
