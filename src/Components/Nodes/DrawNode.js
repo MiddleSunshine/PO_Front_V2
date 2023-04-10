@@ -44,44 +44,49 @@ const DrawNode=(nodeProps)=>{
     return (
         <div
             style={GetNodeStyle(nodeProps)}
+            className={"DrawNode"}
         >
             <Handle
                 type={"target"}
                 position={"left"}
             />
-            <Input
-                value={nodeData.Name}
-                onChange={(e)=>{
-                    setNodeData({
-                        ...nodeData,
-                        Name:e.target.value
-                    })
-                }}
-                onPressEnter={()=>{
-                    handleCreateNode();
-                }}
-                onBlur={()=>{
-                    handleCreateNode();
-                }}
-                addonAfter={
-                nodeData.hasOwnProperty('ID')
-                    ?<Button
-                    size={"small"}
-                    type={"link"}
-                    href={`/draw/${nodeData.ID}`}
-                    target={"_blank"}
-                    icon={<ExportOutlined />}
-                    ></Button>
-                    :<Button
-                        size={"small"}
-                        type={"link"}
-                        icon={<SaveOutlined />}
-                        onClick={()=>{
-                            handleCreateNode();
-                        }}
-                    ></Button>
-                }
-            />
+            <div
+                className={"Content"}
+            >
+                <Input
+                    value={nodeData.Name}
+                    onChange={(e)=>{
+                        setNodeData({
+                            ...nodeData,
+                            Name:e.target.value
+                        })
+                    }}
+                    onPressEnter={()=>{
+                        handleCreateNode();
+                    }}
+                    onBlur={()=>{
+                        handleCreateNode();
+                    }}
+                    addonAfter={
+                        nodeData.hasOwnProperty('ID')
+                            ?<Button
+                                size={"small"}
+                                type={"link"}
+                                href={`/draw/${nodeData.ID}`}
+                                target={"_blank"}
+                                icon={<ExportOutlined />}
+                            ></Button>
+                            :<Button
+                                size={"small"}
+                                type={"link"}
+                                icon={<SaveOutlined />}
+                                onClick={()=>{
+                                    handleCreateNode();
+                                }}
+                            ></Button>
+                    }
+                />
+            </div>
         </div>
     )
 }

@@ -44,6 +44,7 @@ const TitleNode=(nodeProps)=>{
 
     return <div
         style={GetNodeStyle(nodeProps)}
+        className={"TitleNode"}
     >
         <NodeResizer
             isVisible={nodeProps.selected}
@@ -57,43 +58,44 @@ const TitleNode=(nodeProps)=>{
             type={"target"}
             position={"left"}
         />
-        {
-            mode==MODE_VIEW
-                ?<h3
-                    onClick={()=>{
-                        setMode(MODE_EDIT);
-                    }}
-                >
-                    {data.Name}
-                </h3>
-                :<Input
-                    value={data.Name}
-                    onChange={(e)=>{
-                        setData({
-                            ...data,
-                            Name:e.target.value
-                        })
-                    }}
-                    onPressEnter={()=>{
-                        finishInput();
-                    }}
-                    onBlur={()=>{
-                        finishInput();
-                    }}
-                    addonAfter={
-                        <Button
-                            size={"small"}
-                            type={"link"}
-                            icon={<SaveOutlined />}
-                            onClick={()=>{
-                                finishInput();
-                            }}
-                        >
-                        </Button>
-                    }
-                />
-        }
-
+        <div className={"Content"}>
+            {
+                mode==MODE_VIEW
+                    ?<h3
+                        onClick={()=>{
+                            setMode(MODE_EDIT);
+                        }}
+                    >
+                        {data.Name}
+                    </h3>
+                    :<Input
+                        value={data.Name}
+                        onChange={(e)=>{
+                            setData({
+                                ...data,
+                                Name:e.target.value
+                            })
+                        }}
+                        onPressEnter={()=>{
+                            finishInput();
+                        }}
+                        onBlur={()=>{
+                            finishInput();
+                        }}
+                        addonAfter={
+                            <Button
+                                size={"small"}
+                                type={"link"}
+                                icon={<SaveOutlined />}
+                                onClick={()=>{
+                                    finishInput();
+                                }}
+                            >
+                            </Button>
+                        }
+                    />
+            }
+        </div>
     </div>
 }
 

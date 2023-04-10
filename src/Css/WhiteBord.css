@@ -41,6 +41,23 @@
 
 }
 
+.WhiteBoard .TitleNode{
+
+}
+
+.WhiteBoard .TitleNode .Content{
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.WhiteBoard .DrawNode{
+
+}
+
+.WhiteBoard .DrawNode .Content{
+    padding-left: 8px;
+}
+
 .WhiteBoard .BasicNodeOutside .LabelNode{
     padding: 5px;
 }
