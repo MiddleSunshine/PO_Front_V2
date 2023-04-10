@@ -4,7 +4,7 @@ import {CreateNodeAsync, GetNodeStyle, UpdateNode} from "./BasicNode";
 import {
     ExportOutlined
 } from '@ant-design/icons';
-import { useReactFlow } from 'reactflow';
+import {Handle, useReactFlow} from 'reactflow';
 
 const DrawNode=(nodeProps)=>{
     const [nodeData,setNodeData]=useState(nodeProps.data.data);
@@ -43,6 +43,10 @@ const DrawNode=(nodeProps)=>{
         <div
             style={GetNodeStyle(nodeProps)}
         >
+            <Handle
+                type={"target"}
+                position={"left"}
+            />
             <Input
                 value={nodeData.Name}
                 onChange={(e)=>{

@@ -4,7 +4,6 @@ import {CreateNodeAsync, GetNodeStyle} from "./BasicNode";
 import {Handle, useReactFlow} from 'reactflow';
 import {UpdateNode} from "./BasicNode";
 import {NodeResizer} from "@reactflow/node-resizer";
-
 const MODE_VIEW='View';
 const MODE_EDIT='Edit';
 
@@ -47,6 +46,15 @@ const TitleNode=(nodeProps)=>{
     >
         <NodeResizer
             isVisible={nodeProps.selected}
+        />
+        <Handle
+            type={"source"}
+            position={"right"}
+        >
+        </Handle>
+        <Handle
+            type={"target"}
+            position={"left"}
         />
         {
             mode==MODE_VIEW
