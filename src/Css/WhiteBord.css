@@ -108,6 +108,7 @@
 .WhiteBoard .TodoListNode{
     border: 3px solid antiquewhite;
     background-color: antiquewhite;
+    min-width: 150px;
 }
 
 .WhiteBoard .TodoListNode .Content{

@@ -9,9 +9,7 @@ import {
     CaretRightOutlined,
     CaretUpOutlined,
     CloseOutlined,
-    MinusOutlined,
-    CheckOutlined,
-    SaveOutlined
+    PlusOutlined
 } from "@ant-design/icons";
 import {GetNodeStyle, UpdateNode} from "./BasicNode";
 
@@ -34,7 +32,7 @@ const TodoListNode=(nodeProps)=>{
     const [nodeData,setNodeData]=useState(nodeProps.data.node_data)
     const [data,setData]=useState(nodeProps.data.data);
     const [selectedTodoItem,setSelectedTodoItem]=useState({});
-    const [editMode,setEditMode]=useState(true);
+    const [editMode,setEditMode]=useState(false);
     const instance=useReactFlow();
 
     const SAVE_DATA=()=>{
@@ -85,7 +83,8 @@ const TodoListNode=(nodeProps)=>{
     const updateItem=(outsideIndex,newTodoItem)=>{
         let newNodeData=nodeData;
         newNodeData.list[outsideIndex]=newTodoItem;
-        setNodeData(newNodeData)
+        setNodeData(newNodeData);
+        setSelectedTodoItem(newNodeData);
     }
 
     const runCmd=(outsideIndex,cmd)=>{
@@ -133,6 +132,19 @@ const TodoListNode=(nodeProps)=>{
                 isVisible={nodeProps.selected}
             />
             <NodeToolbar>
+                <Button
+                    type={"primary"}
+                    onClick={()=>{
+                        if (editMode){
+                            SAVE_DATA();
+                        }
+                        setEditMode(!editMode);
+                    }}
+                >
+                    {
+                        editMode?"Save":"Edit"
+                    }
+                </Button>
                 <Button
                     type={"primary"}
                     onClick={()=>{
@@ -216,16 +228,16 @@ const TodoListNode=(nodeProps)=>{
                                 });
                             }}
                             size={"small"}
-                            addonAfter={
-                                <Button
-                                    size={"small"}
-                                    type={"link"}
-                                    icon={<SaveOutlined />}
-                                    onClick={()=>{
-                                        SAVE_DATA();
-                                    }}
-                                ></Button>
-                            }
+                            // addonAfter={
+                            //     <Button
+                            //         size={"small"}
+                            //         type={"link"}
+                            //         icon={<SaveOutlined />}
+                            //         onClick={()=>{
+                            //             SAVE_DATA();
+                            //         }}
+                            //     ></Button>
+                            // }
                         />
                         <hr />
                         {
@@ -243,7 +255,7 @@ const TodoListNode=(nodeProps)=>{
                                             align={"middle"}
                                             onClick={()=>{
                                                 if (selectedTodoItem?.data?.ID==todoItem.data.ID){
-                                                    setSelectedTodoItem({});
+                                                    setSelectedTodoItem({})
                                                 }else{
                                                     setSelectedTodoItem(todoItem);
                                                 }
@@ -278,7 +290,7 @@ const TodoListNode=(nodeProps)=>{
                                             </Col>
                                         </Row>
                                         {
-                                            selectedTodoItem?.data?.ID==todoItem.data.ID && todoItem.node_data.Status==STATUS_TODO
+                                            selectedTodoItem?.data?.ID==todoItem.data.ID
                                                 ?<Row
                                                     justify={"start"}
                                                     align={"middle"}
@@ -326,6 +338,15 @@ const TodoListNode=(nodeProps)=>{
                                                                 deleteItem(outsideIndex)
                                                             }}
                                                         ></Button>
+                                                        <Button
+                                                            size={"small"}
+                                                            type={"link"}
+                                                            icon={<PlusOutlined />}
+                                                            onClick={()=>{
+                                                                newItem(outsideIndex+1,todoItem.node_data.Offset)
+                                                            }}
+                                                        >
+                                                        </Button>
                                                     </Col>
                                                 </Row>
                                                 :''
