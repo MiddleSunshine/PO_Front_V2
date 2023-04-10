@@ -1,9 +1,10 @@
-import {Input, message} from "antd";
+import {Button, Input, message} from "antd";
 import {useCallback, useState} from "react";
 import {CreateNodeAsync, GetNodeStyle} from "./BasicNode";
 import {Handle, useReactFlow} from 'reactflow';
 import {UpdateNode} from "./BasicNode";
 import {NodeResizer} from "@reactflow/node-resizer";
+import {SaveOutlined} from "@ant-design/icons";
 const MODE_VIEW='View';
 const MODE_EDIT='Edit';
 
@@ -79,6 +80,17 @@ const TitleNode=(nodeProps)=>{
                     onBlur={()=>{
                         finishInput();
                     }}
+                    addonAfter={
+                        <Button
+                            size={"small"}
+                            type={"link"}
+                            icon={<SaveOutlined />}
+                            onClick={()=>{
+                                finishInput();
+                            }}
+                        >
+                        </Button>
+                    }
                 />
         }
 

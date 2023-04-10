@@ -2,7 +2,8 @@ import {Input, Button, message} from "antd";
 import {useCallback, useState} from "react";
 import {CreateNodeAsync, GetNodeStyle, UpdateNode} from "./BasicNode";
 import {
-    ExportOutlined
+    ExportOutlined,
+    SaveOutlined
 } from '@ant-design/icons';
 import {Handle, useReactFlow} from 'reactflow';
 
@@ -70,7 +71,14 @@ const DrawNode=(nodeProps)=>{
                     target={"_blank"}
                     icon={<ExportOutlined />}
                     ></Button>
-                    :<div></div>
+                    :<Button
+                        size={"small"}
+                        type={"link"}
+                        icon={<SaveOutlined />}
+                        onClick={()=>{
+                            handleCreateNode();
+                        }}
+                    ></Button>
                 }
             />
         </div>
