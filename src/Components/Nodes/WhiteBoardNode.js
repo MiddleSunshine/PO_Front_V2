@@ -1,11 +1,12 @@
 import {Button, Input, message, Modal} from "antd";
 import {useState} from "react";
 import {GetNodeStyle, UpdateNode} from "./BasicNode";
-import { useReactFlow } from 'reactflow';
+import {Handle, useReactFlow} from 'reactflow';
 import {
     ExportOutlined,
     SaveOutlined,
-    SearchOutlined
+    SearchOutlined,
+    FileOutlined
 } from '@ant-design/icons'
 import {CreateNewWhiteBoardAsync} from "./BaseWhiteBoard";
 import {SearchHistoryWhiteBoard} from "../SearchHistoryWhiteBoard";
@@ -119,28 +120,49 @@ const WhiteBoardNode=(nodeProps)=>{
     const [nodeData,setNodeData]=useState(nodeProps.data.node_data);
     const instance=useReactFlow();
 
+    const finishInput=()=>{
+        let newNode=nodeProps;
+        newNode.data.node_data=nodeData;
+        UpdateNode(instance,newNode);
+    }
+
     return (
-        <div>
-            <Input
-                value={nodeData.Title}
-                onChange={(e)=>{
-                    setNodeData({
-                        ...nodeData,
-                        Title:e.target.value
-                    })
-                }}
-                onPressEnter={()=>{
-                    let newNode=nodeProps;
-                    newNode.data.node_data=nodeData;
-                    UpdateNode(instance,newNode);
-                }}
-                addonAfter={<a
-                    href={`/whiteboard/${nodeData?.ID}`}
-                    target={"_blank"} rel="noreferrer"
-                >
-                    <ExportOutlined />
-                </a>}
+        <div
+            style={GetNodeStyle(nodeProps)}
+            className={"WhiteBoardNode"}
+        >
+            <Handle
+                type={"target"}
+                position={"left"}
             />
+            <div
+                className={"Content"}
+            >
+                <Input
+                    value={nodeData.Title}
+                    onChange={(e)=>{
+                        setNodeData({
+                            ...nodeData,
+                            Title:e.target.value
+                        })
+                    }}
+                    onPressEnter={()=>{
+                        finishInput();
+                    }}
+                    onBlur={()=>{
+                        finishInput();
+                    }}
+                    addonBefore={
+                        <FileOutlined />
+                    }
+                    addonAfter={<a
+                        href={`/whiteboard/${nodeData?.ID}`}
+                        target={"_blank"} rel="noreferrer"
+                    >
+                        <ExportOutlined />
+                    </a>}
+                />
+            </div>
         </div>
     )
 }

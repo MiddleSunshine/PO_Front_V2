@@ -70,6 +70,14 @@
     padding: 5px;
 }
 
+.WhiteBoard .WhiteBoardNode{
+
+}
+
+.WhiteBoard .WhiteBoardNode .Content{
+    padding-left: 8px;
+}
+
 .WhiteBoard .OutputConnectionNode{
     /*color:rgb(0, 188, 212);*/
 }

@@ -1,9 +1,10 @@
 import {Input, Button, message} from "antd";
-import {useCallback, useState} from "react";
+import {useState} from "react";
 import {CreateNodeAsync, GetNodeStyle, UpdateNode} from "./BasicNode";
 import {
     ExportOutlined,
-    SaveOutlined
+    SaveOutlined,
+    FundViewOutlined
 } from '@ant-design/icons';
 import {Handle, useReactFlow} from 'reactflow';
 
@@ -54,6 +55,7 @@ const DrawNode=(nodeProps)=>{
                 className={"Content"}
             >
                 <Input
+
                     value={nodeData.Name}
                     onChange={(e)=>{
                         setNodeData({
@@ -84,6 +86,9 @@ const DrawNode=(nodeProps)=>{
                                     handleCreateNode();
                                 }}
                             ></Button>
+                    }
+                    addonBefore={
+                        <FundViewOutlined />
                     }
                 />
             </div>
