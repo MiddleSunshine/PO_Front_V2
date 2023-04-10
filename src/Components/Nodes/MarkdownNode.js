@@ -1,7 +1,7 @@
 import {useState} from "react";
 import {GetNodeStyle,UpdateNode} from "./BasicNode";
 import MarkdownPreview from '@uiw/react-markdown-preview';
-import {NodeToolbar} from "reactflow";
+import {Handle, NodeToolbar} from "reactflow";
 import {Button, Form, Input, Modal} from "antd";
 import ReactCodeMirror from "@uiw/react-codemirror";
 import {useReactFlow} from 'reactflow';
@@ -23,6 +23,7 @@ const MarkdownNode=(nodeProps)=>{
     return(
         <div
             style={GetNodeStyle(nodeProps)}
+            className={"MarkdownNode"}
         >
             <NodeResizer
                 isVisible={nodeProps.selected}
@@ -37,13 +38,26 @@ const MarkdownNode=(nodeProps)=>{
                     Settings
                 </Button>
             </NodeToolbar>
-            {
-                nodeData.markdown
-                    ?<MarkdownPreview
-                        source={nodeData.markdown}
-                    />
-                    :<h3>Input</h3>
-            }
+            <Handle
+                type={"target"}
+                position={"left"}
+            />
+            <div
+                className={"Content"}
+            >
+                {
+                    data.Name
+                        ?<h3>{data.Name}</h3>
+                        :""
+                }
+                {
+                    nodeData.markdown
+                        ?<MarkdownPreview
+                            source={nodeData.markdown}
+                        />
+                        :<h3>Input</h3>
+                }
+            </div>
             <div>
                 <Modal
                     title={

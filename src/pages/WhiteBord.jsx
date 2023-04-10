@@ -465,6 +465,7 @@ const BasicBord = () => {
                             n.position.y = Math.abs(intersectionNode.position.y - n.position.y);
                         }
                         n.parentNode = intersections[0];
+                        message.success("Connected");
                     }
                     return n;
                 })

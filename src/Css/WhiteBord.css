@@ -58,6 +58,14 @@
     padding-left: 8px;
 }
 
+.WhiteBoard .MarkdownNode{
+
+}
+
+.WhiteBoard .MarkdownNode .Content{
+    padding-left: 8px;
+}
+
 .WhiteBoard .BasicNodeOutside .LabelNode{
     padding: 5px;
 }
