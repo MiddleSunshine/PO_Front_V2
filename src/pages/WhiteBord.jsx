@@ -367,7 +367,26 @@ const BasicBord = () => {
             case "CalendarNode":
                 new_node.data.save_into_database=true;
                 new_node.data.node_data={
-                    list:{},
+                    list:{
+                        2023:{
+                            4:{
+                                1:{
+                                    3:{
+                                        11:[
+                                            {
+                                                node_data:{
+                                                    date:""
+                                                },
+                                                data:{
+                                                    Name:"测试1"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
                     mode:"Calendar"
                 }
                 break;
