@@ -46,8 +46,8 @@
 }
 
 .WhiteBoard .FullCalendarNode{
-    min-width: 400px;
-    min-height: 400px;
+    /*min-width: 400px;*/
+    /*min-height: 400px;*/
     background-color: #F0F0F0;
 }
 
