@@ -1,8 +1,12 @@
-import React from 'react'
+import React, {useState} from 'react'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
+import listPlugin from '@fullcalendar/list';
+import timeGridPlugin from '@fullcalendar/timegrid'
 import {GetNodeStyle} from "./BasicNode";
 import {NodeResizer} from "@reactflow/node-resizer";
+import {NodeToolbar} from "reactflow";
+import {Button} from "antd";
 
 const initialDate = '2023-04-10'
 const events = [
@@ -13,16 +17,12 @@ const events = [
     }
 ]
 
-const FullCalendarNode=(nodeProps)=>{
+const MODE_LIST='listWeek';
+const MODE_MONTH='dayGridMonth';
+const MODE_WEEK='timeGridWeek';
 
-    const renderEventContent=(eventInfo)=>{
-        return (
-            <>
-                <b>{eventInfo.timeText}</b>
-                <i>{eventInfo.event.title}</i>
-            </>
-        )
-    }
+const FullCalendarNode=(nodeProps)=>{
+    const [mode,setMode]=useState(MODE_WEEK);
 
     return (
         <div
@@ -32,16 +32,33 @@ const FullCalendarNode=(nodeProps)=>{
             <NodeResizer
                 isVisible={nodeProps.selected}
             />
+            <NodeToolbar>
+                <Button
+                    type={"primary"}
+                    size={"small"}
+                    onClick={()=>{
+                        setMode(MODE_LIST);
+                    }}
+                >List</Button>
+                <Button
+                    type={"primary"}
+                    size={"small"}
+                    onClick={()=>{
+                        setMode(MODE_MONTH);
+                    }}
+                >Month</Button>
+            </NodeToolbar>
             <FullCalendar
                 firstDay={1}
                 contentHeight="auto"
                 aspectRatio={1}
                 plugins={[
-                    dayGridPlugin
+                    dayGridPlugin,
+                    listPlugin,
+                    timeGridPlugin
                 ]}
-                initialView='dayGridMonth'
+                initialView={mode}
                 events={events}
-                eventContent={renderEventContent}
             />
         </div>
     )
