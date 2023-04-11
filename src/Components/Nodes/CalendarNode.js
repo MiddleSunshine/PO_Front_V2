@@ -1,17 +1,17 @@
-import {Button, Calendar, Input, List, Timeline} from "antd";
+import {Button, Calendar, DatePicker, Form, Input, List, Modal, Timeline, TimePicker} from "antd";
 import {useEffect, useState} from "react";
 import {GetNodeStyle} from "./BasicNode";
 import {NodeToolbar} from "reactflow";
+import dayjs from "dayjs";
 
 const MODE_LIST='List';
 const MODE_CALENDAR='Calendar';
-
+const DATE_FORMAT='YYYY-M-D';
 const NODE_DATE_TEMPLATE={
-    node_data:{
-        date:""
-    },
+    node_data:{},
     data:{
-        Name:""
+        Name:"",
+        Note:""
     }
 };
 /**
@@ -20,7 +20,9 @@ const NODE_DATE_TEMPLATE={
         year:{
             month:{
                 day:{
-                    mins:[]
+                    mins:[
+                    {...NODE_DATE_TEMPLATE}
+                    ]
                 }
             }
         }
@@ -39,7 +41,15 @@ const CalendarNode=(nodeProps)=>{
     const [data,setData]=useState(nodeProps.data.data);
     const [listData,setListData]=useState([]);
     const [calendarData,setCalendarData]=useState({});
-    const [selectedDate,changeSelectedDate]=useState("")
+    const [selectedDate,changeSelectedDate]=useState(dayjs().format(DATE_FORMAT))
+    const [editData,setEditData]=useState({});
+    const [editNodeLocation,setEditNodeLocation]=useState({
+        year:"",
+        month:"",
+        day:"",
+        min:"",
+        index:0
+    });
 
     useEffect(()=>{
         createListData(nodeProps.data.node_data);
@@ -149,11 +159,23 @@ const CalendarNode=(nodeProps)=>{
                             :"Show Timeline"
                     }
                 </Button>
+                &nbsp;&nbsp;
+                <Button
+                    type={"primary"}
+                    onClick={()=>{
+
+                    }}
+                >
+                    Input
+                </Button>
             </NodeToolbar>
             <Input
                 value={data?.Name}
                 onChange={(e)=>{
-
+                    setData({
+                        ...data,
+                        Name:e.target.value
+                    })
                 }}
             />
             {
@@ -173,7 +195,8 @@ const CalendarNode=(nodeProps)=>{
                             headerRender={()=>{
                                 return (
                                     <Button
-
+                                        type={"primary"}
+                                        size={"middle"}
                                     >
                                         {
                                             selectedDate?selectedDate:"Date"
@@ -191,6 +214,39 @@ const CalendarNode=(nodeProps)=>{
                         />
                     </div>
             }
+            <Modal
+                open={true}
+                width={1200}
+            >
+                <Form
+                    layout={"vertical"}
+                >
+                    <Form.Item
+                        label={"Date"}
+                    >
+                        <DatePicker
+                            format={DATE_FORMAT}
+                        />
+                        <TimePicker
+                            format={"H:m"}
+                        />
+                    </Form.Item>
+                    <Form.Item
+                        label={"Title"}
+                    >
+                        <Input
+
+                        />
+                    </Form.Item>
+                    <Form.Item
+                        label={"Note"}
+                    >
+                        <Input.TextArea
+
+                        />
+                    </Form.Item>
+                </Form>
+            </Modal>
         </div>
     )
 }
