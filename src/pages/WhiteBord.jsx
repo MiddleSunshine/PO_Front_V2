@@ -32,6 +32,7 @@ import {EditNode} from "../Components/Nodes/EditNode";
 import {MarkdownNode} from "../Components/Nodes/MarkdownNode";
 import {CalendarNode} from "../Components/Nodes/CalendarNode";
 import {TodoListNode} from "../Components/Nodes/TodoListNode";
+import {FullCalendarNode} from "../Components/Nodes/FullCalendarNode";
 import {CompactPicker} from '@hello-pangea/color-picker'
 import Loading from '../Images/zannet.png';
 
@@ -52,7 +53,8 @@ const AllNodeTypes = {
     MarkdownNode,
     CalendarNode,
     TodoListNode,
-    HistoryWhiteBordNode
+    HistoryWhiteBordNode,
+    FullCalendarNode
 }
 
 const DEFAULT_SETTINGS={
@@ -179,6 +181,10 @@ const BasicBord = () => {
             {
                 label: "Todo List",
                 value: "TodoListNode"
+            },
+            {
+                label: "Calendar",
+                value: "FullCalendarNode"
             },
             {
                 label: "Connection"

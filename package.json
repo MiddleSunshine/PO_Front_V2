@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@fullcalendar/core": "^6.1.5",
+    "@fullcalendar/daygrid": "^6.1.5",
+    "@fullcalendar/react": "^6.1.5",
     "@hello-pangea/color-picker": "^3.2.2",
     "@reactflow/node-resizer": "^2.1.0",
     "@testing-library/jest-dom": "^5.16.5",

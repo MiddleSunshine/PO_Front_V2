@@ -85,9 +85,6 @@ const CalendarNode=(nodeProps)=>{
 
                     />
                     :<Calendar
-                        dateCellRender={(date)=>{
-
-                        }}
 
                     />
             }

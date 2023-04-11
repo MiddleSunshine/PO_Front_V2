@@ -45,6 +45,12 @@
 
 }
 
+.WhiteBoard .FullCalendarNode{
+    min-width: 400px;
+    min-height: 400px;
+    background-color: #F0F0F0;
+}
+
 .WhiteBoard .TitleNode .Content{
     padding-left: 8px;
     padding-right: 8px;
