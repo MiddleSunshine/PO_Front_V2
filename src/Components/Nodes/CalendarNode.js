@@ -6,6 +6,15 @@ import {NodeToolbar} from "reactflow";
 const MODE_LIST='List';
 const MODE_CALENDAR='Calendar';
 
+const NODE_DATE_TEMPLATE={
+    node_data:{
+        date:""
+    },
+    data:{
+        Name:""
+    }
+};
+
 const CalendarNode=(nodeProps)=>{
 
     const [nodeData,setNodeData]=useState(nodeProps.data.node_data)
@@ -65,6 +74,7 @@ const CalendarNode=(nodeProps)=>{
     return (
         <div
             style={GetNodeStyle(nodeProps)}
+            className={"CalendarNode"}
         >
             <NodeToolbar>
                 <Button
@@ -85,7 +95,11 @@ const CalendarNode=(nodeProps)=>{
 
                     />
                     :<Calendar
+                        cellRender={(current,today)=>{
+                            return <div>
 
+                            </div>
+                        }}
                     />
             }
         </div>
