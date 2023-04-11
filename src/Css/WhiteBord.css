@@ -76,6 +76,11 @@
     padding: 5px;
 }
 
+.WhiteBoard .CalendarNode{
+    background-color: aliceblue;
+    width: 800px;
+}
+
 .WhiteBoard .WhiteBoardNode{
 
 }

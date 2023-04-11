@@ -53,8 +53,7 @@ const AllNodeTypes = {
     MarkdownNode,
     CalendarNode,
     TodoListNode,
-    HistoryWhiteBordNode,
-    FullCalendarNode
+    HistoryWhiteBordNode
 }
 
 const DEFAULT_SETTINGS={
@@ -184,7 +183,7 @@ const BasicBord = () => {
             },
             {
                 label: "Calendar",
-                value: "FullCalendarNode"
+                value: "CalendarNode"
             },
             {
                 label: "Connection"
@@ -369,7 +368,7 @@ const BasicBord = () => {
                 new_node.data.save_into_database=true;
                 new_node.data.node_data={
                     list:{},
-                    mode:"List"
+                    mode:"Calendar"
                 }
                 break;
             case "TodoListNode":
