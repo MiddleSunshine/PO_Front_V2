@@ -14,6 +14,24 @@ const NODE_DATE_TEMPLATE={
         Name:""
     }
 };
+/**
+ node_data:{
+    list:{
+        year:{
+            month:{
+                day:{
+                    mins:[]
+                }
+            }
+        }
+    },
+    mode:List or Calendar
+ },
+ data:{
+    ID:ID,
+    Name:Name
+ }
+ */
 
 const CalendarNode=(nodeProps)=>{
 
@@ -21,31 +39,38 @@ const CalendarNode=(nodeProps)=>{
     const [data,setData]=useState(nodeProps.data.data);
     const [listData,setListData]=useState([]);
     const [calendarData,setCalendarData]=useState({});
+    const [selectedDate,changeSelectedDate]=useState("")
 
     useEffect(()=>{
-        // createListData(nodeProps.data.node_data);
+        createListData(nodeProps.data.node_data);
         createCalendarData(nodeProps.data.node_data);
     },[])
 
     const createListData=(nodeData)=>{
-        let newList=[];
         let label="";
+        let newList=[];
         for (let year in nodeData.list){
-            for (let month in nodeData.list[year]){
-                for (let day in month.list[year][month]){
+            let months=nodeData.list[year];
+            for (let month in months){
+                let days=months[month];
+                for (let day in days){
                     label=`${year}-${month}-${day}`;
-                    for (let hour in month.list[year][month][day]){
-                        for (let minute in month.list[year][month][day][hour]){
-                            if(label!=''){
-                                label='';
-                            }
-                            month.list[year][month][day][hour][minute].map((item)=>{
+                    let hours=days[day];
+                    for (let hour in hours){
+                        let minutes=hours[hour];
+                        for (let minute in minutes){
+                            let items=minutes[minute];
+                            items.map((i)=>{
                                 newList.push({
                                     label:label,
-                                    children:item
+                                    children:i.data.Name
                                 });
-                                return item;
+                                if (label){
+                                    label='';
+                                }
+                                return i;
                             });
+
                         }
                     }
                 }
@@ -111,8 +136,18 @@ const CalendarNode=(nodeProps)=>{
             <NodeToolbar>
                 <Button
                     type={"primary"}
+                    onClick={()=>{
+                        setNodeData({
+                            ...nodeData,
+                            mode:nodeData.mode==MODE_LIST?MODE_CALENDAR:MODE_LIST
+                        })
+                    }}
                 >
-                    Settings
+                    {
+                        nodeData.mode==MODE_LIST
+                            ?"Show Calendar"
+                            :"Show Timeline"
+                    }
                 </Button>
             </NodeToolbar>
             <Input
@@ -123,15 +158,38 @@ const CalendarNode=(nodeProps)=>{
             />
             {
                 nodeData.mode==MODE_LIST
-                    ?<Timeline
+                    ?<div
+                        className={"Timeline"}
+                    >
+                        <Timeline
+                            mode={"left"}
+                            items={listData}
+                        />
+                    </div>
+                    :<div
+                        className={"Calendar"}
+                    >
+                        <Calendar
+                            headerRender={()=>{
+                                return (
+                                    <Button
 
-                    />
-                    :<Calendar
-                        cellRender={(current,today)=>{
-                            let date=`${current.$y}-${current.$M-0+1}-${current.$D}`;
-                            return renderCalendarItem(date);
-                        }}
-                    />
+                                    >
+                                        {
+                                            selectedDate?selectedDate:"Date"
+                                        }
+                                    </Button>
+                                )
+                            }}
+                            cellRender={(current,today)=>{
+                                let date=`${current.$y}-${current.$M-0+1}-${current.$D}`;
+                                return renderCalendarItem(date);
+                            }}
+                            onChange={(date)=>{
+                                changeSelectedDate(date.format("YYYY-M-D"));
+                            }}
+                        />
+                    </div>
             }
         </div>
     )

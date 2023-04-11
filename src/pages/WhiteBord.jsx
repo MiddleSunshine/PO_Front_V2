@@ -380,14 +380,22 @@ const BasicBord = () => {
                                                 data:{
                                                     Name:"测试1"
                                                 }
-                                            }
+                                            },
+                                            {
+                                                node_data:{
+                                                    date:""
+                                                },
+                                                data:{
+                                                    Name:"测试2"
+                                                }
+                                            },
                                         ]
                                     }
                                 }
                             }
                         }
                     },
-                    mode:"Calendar"
+                    mode:"List"
                 }
                 break;
             case "TodoListNode":

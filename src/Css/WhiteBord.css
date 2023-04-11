@@ -78,7 +78,14 @@
 
 .WhiteBoard .CalendarNode{
     background-color: aliceblue;
-    width: 800px;
+}
+
+.WhiteBoard .CalendarNode .Timeline{
+    padding: 10px;
+}
+
+.WhiteBoard .CalendarNode .Calendar{
+    width: 900px;
 }
 
 .WhiteBoard .WhiteBoardNode{
