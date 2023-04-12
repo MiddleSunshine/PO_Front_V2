@@ -39,7 +39,9 @@ const CalendarNode=(nodeProps)=>{
 
     const [nodeData,setNodeData]=useState(nodeProps.data.node_data)
     const [data,setData]=useState(nodeProps.data.data);
+    // [ {label:string,children:string} ]
     const [listData,setListData]=useState([]);
+    // { date=>[ NODE_DATE_TEMPLATE ] }
     const [calendarData,setCalendarData]=useState({});
     const [selectedDate,changeSelectedDate]=useState(dayjs().format(DATE_FORMAT))
     const [editData,setEditData]=useState({});
@@ -114,6 +116,39 @@ const CalendarNode=(nodeProps)=>{
             }
         }
         setCalendarData(newList);
+    }
+
+    const createNewItem=(year,month,day,hour,min,data)=>{
+        let newList=nodeData.list;
+        if (!newList.hasOwnProperty(year)){
+            newList[year]={};
+        }
+        if (!newList[year].hasOwnProperty(month)){
+            newList[year][month]={};
+        }
+        if (!newList[year][month].hasOwnProperty(day)){
+            newList[year][month][day]={};
+        }
+        if (!newList[year][month][day].hasOwnProperty(hour)){
+            newList[year][month][day][hour]={};
+        }
+        if (!newList[year][month][day][hour].hasOwnProperty(min)){
+            newList[year][month][day][hour][min]=[];
+        }
+        newList[year][month][day][hour][min].push(data);
+        let newNodeData={
+            ...nodeData,
+            list:newList
+        }
+        switch (nodeData.mode){
+            case MODE_CALENDAR:
+                createCalendarData(newNodeData)
+                break;
+            case MODE_LIST:
+                createListData(newNodeData);
+                break;
+        }
+        setNodeData(newNodeData);
     }
 
     const renderCalendarItem=(date)=>{
