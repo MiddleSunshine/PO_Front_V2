@@ -417,6 +417,14 @@ const BasicBord = () => {
                     hiddenFinished:false
                 }
                 break;
+            case 'TableNode':
+                new_node.data.node_data={
+                    table:[],
+                    columns:1,
+                    rows:1
+                }
+                new_node.data.save_into_database=true;
+                break;
         }
         new_node.data.settings={};
         setNodes((n) =>n.concat([new_node]) );

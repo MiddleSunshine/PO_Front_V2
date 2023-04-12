@@ -1,12 +1,56 @@
 import {GetNodeStyle} from "./BasicNode";
+import {useState} from "react";
+import {NodeToolbar} from "reactflow";
+import {Form, InputNumber} from "antd";
 
 const TableNode=(nodeProps)=>{
+
+    const [nodeData,setNodeData]=useState(nodeProps.node_data);
+
     return (
         <div
             className={"TableNode"}
             style={GetNodeStyle(nodeProps)}
         >
-
+            <NodeToolbar>
+                <Form>
+                    <Form.Item
+                        label={"Row"}
+                    >
+                        <InputNumber />
+                    </Form.Item>
+                    <Form.Item
+                        label={"Column"}
+                    >
+                        <InputNumber />
+                    </Form.Item>
+                </Form>
+            </NodeToolbar>
+            <table>
+            {
+                nodeData.table.map((row,rowIndex)=>{
+                    return (
+                        <tr>
+                            {
+                                row.map((colums,columnIndex)=>{
+                                    colums.map((column,index)=>{
+                                        if (rowIndex==1){
+                                            return (
+                                                <th>{column}</th>
+                                            )
+                                        }else{
+                                            return (
+                                                <td>{column}</td>
+                                            )
+                                        }
+                                    })
+                                })
+                            }
+                        </tr>
+                    )
+                })
+            }
+            </table>
         </div>
     )
 }
@@ -14,31 +58,3 @@ const TableNode=(nodeProps)=>{
 export {
     TableNode
 }
-
-/**
- let titleIndexMap=[
- "column_3",
- "column_2",
- "column_1"
- ];
-
- let titles=[];
-
- let columns=[];
-
- let length=3;
- let height=10;
- for (let i=1;i<=length;i++){
-    titles[i]={
-        title:i,
-        dataIndex:titleIndexMap[i-1]
-    };
-}
-
- for (let row=0;row<height;row++){
-    columns[row]={};
-    for (let i=1;i<=length;i++){
-        columns[row][titleIndexMap[i-1]]=1;
-    }
-}
- */
