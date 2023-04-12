@@ -65,7 +65,22 @@ const Login=(userName,password)=>{
         })
 }
 
+const Now=()=>{
+   return  requestAPI("index.php?action=DateController&method=Now")
+       .then((json)=>{
+           return {
+               Year:"",
+               Month:"",
+               Day:"",
+               Hour:"",
+               Min:"",
+               ...json.Data
+           }
+       })
+}
+
 export {
     requestAPI,
-    Login
+    Login,
+    Now
 }

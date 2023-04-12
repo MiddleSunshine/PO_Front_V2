@@ -1,4 +1,4 @@
-import {Button, Calendar, DatePicker, Form, Input, List, Modal, Timeline, TimePicker} from "antd";
+import {Breadcrumb, Button, Calendar, DatePicker, Form, Input, List, Modal, Timeline, TimePicker} from "antd";
 import {useEffect, useState} from "react";
 import {GetNodeStyle} from "./BasicNode";
 import {NodeToolbar} from "reactflow";
@@ -8,10 +8,17 @@ const MODE_LIST='List';
 const MODE_CALENDAR='Calendar';
 const DATE_FORMAT='YYYY-M-D';
 const NODE_DATE_TEMPLATE={
-    node_data:{},
+    node_data:{
+        year:"",
+        month:"",
+        day:"",
+        hour:"",
+        min:""
+    },
     data:{
         Name:"",
-        Note:""
+        Note:"",
+        ID:""
     }
 };
 /**
@@ -27,13 +34,17 @@ const NODE_DATE_TEMPLATE={
             }
         }
     },
-    mode:List or Calendar
+    mode:List or Calendar,
+    default_date:""
  },
  data:{
     ID:ID,
     Name:Name
  }
  */
+
+const INPUT_MODE_EDIT='Edit';
+const INPUT_MODE_HIDDEN='Hidden';
 
 const CalendarNode=(nodeProps)=>{
 
@@ -43,20 +54,19 @@ const CalendarNode=(nodeProps)=>{
     const [listData,setListData]=useState([]);
     // { date=>[ NODE_DATE_TEMPLATE ] }
     const [calendarData,setCalendarData]=useState({});
-    const [selectedDate,changeSelectedDate]=useState(dayjs().format(DATE_FORMAT))
-    const [editData,setEditData]=useState({});
-    const [editNodeLocation,setEditNodeLocation]=useState({
-        year:"",
-        month:"",
-        day:"",
-        min:"",
-        index:0
+    const [selectedDate,changeSelectedDate]=useState(
+        nodeProps.node_data.default_date
+    )
+    const [editData,setEditData]=useState({
+        ...NODE_DATE_TEMPLATE
     });
+    // EDIT
+    const [inputMode,setInputMode]=useState(INPUT_MODE_HIDDEN);
 
     useEffect(()=>{
         createListData(nodeProps.data.node_data);
         createCalendarData(nodeProps.data.node_data);
-    },[])
+    },[]);
 
     const createListData=(nodeData)=>{
         let label="";
@@ -116,6 +126,10 @@ const CalendarNode=(nodeProps)=>{
             }
         }
         setCalendarData(newList);
+    }
+
+    const startInput=()=>{
+
     }
 
     const createNewItem=(year,month,day,hour,min,data)=>{
@@ -234,7 +248,7 @@ const CalendarNode=(nodeProps)=>{
                                         size={"middle"}
                                     >
                                         {
-                                            selectedDate?selectedDate:"Date"
+                                            selectedDate
                                         }
                                     </Button>
                                 )
@@ -244,13 +258,13 @@ const CalendarNode=(nodeProps)=>{
                                 return renderCalendarItem(date);
                             }}
                             onChange={(date)=>{
-                                changeSelectedDate(date.format("YYYY-M-D"));
+                                changeSelectedDate(date());
                             }}
                         />
                     </div>
             }
             <Modal
-                open={true}
+                open={inputMode==INPUT_MODE_EDIT}
                 width={1200}
             >
                 <Form
@@ -259,25 +273,51 @@ const CalendarNode=(nodeProps)=>{
                     <Form.Item
                         label={"Date"}
                     >
-                        <DatePicker
-                            format={DATE_FORMAT}
-                        />
-                        <TimePicker
-                            format={"H:m"}
-                        />
+                        <Breadcrumb>
+                            <Breadcrumb.Item>
+                                <Input
+                                    addonBefore={<span>Year</span>}
+                                    value={editData.node_data.year}
+                                />
+                            </Breadcrumb.Item>
+                            <Breadcrumb.Item>
+                                <Input
+                                    addonBefore={<span>Month</span>}
+                                    value={editData.node_data.month}
+                                />
+                            </Breadcrumb.Item>
+                            <Breadcrumb.Item>
+                                <Input
+                                    addonBefore={<span>Day</span>}
+                                    value={editData.node_data.day}
+                                />
+                            </Breadcrumb.Item>
+                            <Breadcrumb.Item>
+                                <Input
+                                    addonBefore={<span>Hour</span>}
+                                    value={editData.node_data.hour}
+                                />
+                            </Breadcrumb.Item>
+                            <Breadcrumb.Item>
+                                <Input
+                                    addonBefore={<span>Min</span>}
+                                    value={editData.node_data.min}
+                                />
+                            </Breadcrumb.Item>
+                        </Breadcrumb>
                     </Form.Item>
                     <Form.Item
                         label={"Title"}
                     >
                         <Input
-
+                            value={editData.data.Name}
                         />
                     </Form.Item>
                     <Form.Item
                         label={"Note"}
                     >
                         <Input.TextArea
-
+                            value={editData.data.Note}
                         />
                     </Form.Item>
                 </Form>

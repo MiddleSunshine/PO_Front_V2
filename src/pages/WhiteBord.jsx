@@ -395,7 +395,8 @@ const BasicBord = () => {
                             }
                         }
                     },
-                    mode:"List"
+                    mode:"List",
+                    default_date:""
                 }
                 break;
             case "TodoListNode":
