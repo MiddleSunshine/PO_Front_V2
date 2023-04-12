@@ -129,7 +129,24 @@ const CalendarNode=(nodeProps)=>{
     }
 
     const startInput=()=>{
-        setInputMode(INPUT_MODE_EDIT)
+        setInputMode(INPUT_MODE_EDIT);
+        let newEditData={
+            ...NODE_DATE_TEMPLATE
+        };
+        // 设置初始值
+        let date=dayjs(selectedDate);
+        newEditData.node_data.year=date.year();
+        newEditData.node_data.month=date.add(1,'month').month();
+        newEditData.node_data.day=date.day();
+        newEditData.node_data.hour=date.hour();
+        newEditData.node_data.min=date.minute();
+        setEditData(newEditData);
+    }
+
+    const finishInput=()=>{
+        new Promise((resolve, reject) => {}).then(()=>{
+            // todo 从这里开始写
+        })
     }
 
     const createNewItem=(year,month,day,hour,min,data)=>{
