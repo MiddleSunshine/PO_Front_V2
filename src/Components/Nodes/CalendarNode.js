@@ -1,8 +1,10 @@
-import {Breadcrumb, Button, Calendar, DatePicker, Form, Input, List, Modal, Timeline, TimePicker} from "antd";
+import {Breadcrumb, Button, Calendar, DatePicker, Form, Input, List, Modal, Row,Col, Timeline, TimePicker} from "antd";
 import {useEffect, useState} from "react";
 import {GetNodeStyle} from "./BasicNode";
 import {NodeToolbar} from "reactflow";
 import dayjs from "dayjs";
+import 'dayjs/locale/zh-cn';
+import locale from 'antd/es/date-picker/locale/zh_CN';
 
 const MODE_LIST='List';
 const MODE_CALENDAR='Calendar';
@@ -54,9 +56,7 @@ const CalendarNode=(nodeProps)=>{
     const [listData,setListData]=useState([]);
     // { date=>[ NODE_DATE_TEMPLATE ] }
     const [calendarData,setCalendarData]=useState({});
-    const [selectedDate,changeSelectedDate]=useState(
-        nodeProps.node_data.default_date
-    )
+    const [selectedDate,changeSelectedDate]=useState(()=>dayjs(nodeProps.data.node_data.default_date))
     const [editData,setEditData]=useState({
         ...NODE_DATE_TEMPLATE
     });
@@ -129,7 +129,7 @@ const CalendarNode=(nodeProps)=>{
     }
 
     const startInput=()=>{
-
+        setInputMode(INPUT_MODE_EDIT)
     }
 
     const createNewItem=(year,month,day,hour,min,data)=>{
@@ -212,7 +212,7 @@ const CalendarNode=(nodeProps)=>{
                 <Button
                     type={"primary"}
                     onClick={()=>{
-
+                        startInput();
                     }}
                 >
                     Input
@@ -241,24 +241,14 @@ const CalendarNode=(nodeProps)=>{
                         className={"Calendar"}
                     >
                         <Calendar
-                            headerRender={()=>{
-                                return (
-                                    <Button
-                                        type={"primary"}
-                                        size={"middle"}
-                                    >
-                                        {
-                                            selectedDate
-                                        }
-                                    </Button>
-                                )
-                            }}
+                            locale={locale}
+                            value={selectedDate}
                             cellRender={(current,today)=>{
                                 let date=`${current.$y}-${current.$M-0+1}-${current.$D}`;
                                 return renderCalendarItem(date);
                             }}
                             onChange={(date)=>{
-                                changeSelectedDate(date());
+                                changeSelectedDate(date);
                             }}
                         />
                     </div>
@@ -273,38 +263,41 @@ const CalendarNode=(nodeProps)=>{
                     <Form.Item
                         label={"Date"}
                     >
-                        <Breadcrumb>
-                            <Breadcrumb.Item>
+                        <Row
+                            justify={"space-between"}
+                            align={"middle"}
+                        >
+                            <Col span={3}>
                                 <Input
-                                    addonBefore={<span>Year</span>}
+                                    addonBefore={"Year"}
                                     value={editData.node_data.year}
                                 />
-                            </Breadcrumb.Item>
-                            <Breadcrumb.Item>
+                            </Col>
+                            <Col span={3}>
                                 <Input
-                                    addonBefore={<span>Month</span>}
+                                    addonBefore={"Month"}
                                     value={editData.node_data.month}
                                 />
-                            </Breadcrumb.Item>
-                            <Breadcrumb.Item>
+                            </Col>
+                            <Col span={3}>
                                 <Input
-                                    addonBefore={<span>Day</span>}
+                                    addonBefore={"Day"}
                                     value={editData.node_data.day}
                                 />
-                            </Breadcrumb.Item>
-                            <Breadcrumb.Item>
+                            </Col>
+                            <Col span={3}>
                                 <Input
-                                    addonBefore={<span>Hour</span>}
+                                    addonBefore={"Hour"}
                                     value={editData.node_data.hour}
                                 />
-                            </Breadcrumb.Item>
-                            <Breadcrumb.Item>
+                            </Col>
+                            <Col span={3}>
                                 <Input
-                                    addonBefore={<span>Min</span>}
+                                    addonBefore={"Min"}
                                     value={editData.node_data.min}
                                 />
-                            </Breadcrumb.Item>
-                        </Breadcrumb>
+                            </Col>
+                        </Row>
                     </Form.Item>
                     <Form.Item
                         label={"Title"}

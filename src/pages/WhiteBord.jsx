@@ -35,6 +35,7 @@ import {TodoListNode} from "../Components/Nodes/TodoListNode";
 import {FullCalendarNode} from "../Components/Nodes/FullCalendarNode";
 import {CompactPicker} from '@hello-pangea/color-picker'
 import Loading from '../Images/zannet.png';
+import dayjs from "dayjs";
 
 const defaultViewport = {x: 0, y: 0, zoom: 1.1};
 
@@ -396,7 +397,7 @@ const BasicBord = () => {
                         }
                     },
                     mode:"List",
-                    default_date:""
+                    default_date:dayjs()
                 }
                 break;
             case "TodoListNode":
