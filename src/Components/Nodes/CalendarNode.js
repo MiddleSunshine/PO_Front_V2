@@ -1,24 +1,22 @@
 import {
-    Breadcrumb,
     Button,
     Calendar,
-    DatePicker,
     Form,
     Input,
-    List,
     Modal,
     Row,
     Col,
     Timeline,
-    TimePicker,
     InputNumber
 } from "antd";
 import {useEffect, useState} from "react";
-import {GetNodeStyle} from "./BasicNode";
+import {GetNodeStyle,UpdateNode} from "./BasicNode";
 import {NodeToolbar} from "reactflow";
 import dayjs from "dayjs";
 import 'dayjs/locale/zh-cn';
 import locale from 'antd/es/date-picker/locale/zh_CN';
+import {getId} from "../../config/WhiteBord";
+import {useReactFlow} from 'reactflow';
 
 const MODE_LIST='List';
 const MODE_CALENDAR='Calendar';
@@ -76,7 +74,7 @@ const CalendarNode=(nodeProps)=>{
     });
     // EDIT
     const [inputMode,setInputMode]=useState(INPUT_MODE_HIDDEN);
-
+    const instance=useReactFlow();
     useEffect(()=>{
         createListData(nodeProps.data.node_data);
         createCalendarData(nodeProps.data.node_data);
@@ -114,6 +112,16 @@ const CalendarNode=(nodeProps)=>{
         }
         setListData(newList);
     }
+
+    const SAVE_DATA=()=>{
+        let newNode={
+            ...nodeProps
+        }
+        newNode.data.node_data=nodeData;
+        newNode.data.data=data;
+        UpdateNode(instance,newNode);
+    }
+
     // 组件 Calendar 的数据
     const createCalendarData=(nodeData)=>{
         let newList={};
@@ -187,6 +195,7 @@ const CalendarNode=(nodeProps)=>{
         let newItem={
             ...editData
         }
+        newItem.data.ID=getId('CalendarNode_Item')
         newItem.node_data.year-=0;
         newItem.node_data.month-=0;
         newItem.node_data.day-=0;
@@ -229,6 +238,11 @@ const CalendarNode=(nodeProps)=>{
             ...nodeData,
             list:newList
         }
+        reRenderContent(newNodeData);
+    }
+
+    // 重新渲染页面
+    const reRenderContent=(newNodeData)=>{
         switch (nodeData.mode){
             case MODE_CALENDAR:
                 createCalendarData(newNodeData)
@@ -238,6 +252,18 @@ const CalendarNode=(nodeProps)=>{
                 break;
         }
         setNodeData(newNodeData);
+    }
+
+    // 删除事件
+    const deleteItem=(deleteItem)=>{
+        let newNodeData={
+            ...nodeData
+        }
+        let subItems=newNodeData.list[deleteItem.node_data.year][deleteItem.node_data.month][deleteItem.node_data.hour][deleteItem.node_data.min].filter((i)=>{
+            return i.data.ID!=deleteItem.data.ID;
+        });
+        newNodeData.list[deleteItem.node_data.year][deleteItem.node_data.month][deleteItem.node_data.hour][deleteItem.node_data.min]=subItems;
+        reRenderContent(newNodeData);
     }
 
     // 渲染 Calendar 中每一列的数据
@@ -293,6 +319,15 @@ const CalendarNode=(nodeProps)=>{
                 >
                     Input
                 </Button>
+                &nbsp;&nbsp;
+                <Button
+                    type={"primary"}
+                    onClick={()=>{
+                        SAVE_DATA();
+                    }}
+                >
+                    Save Update
+                </Button>
             </NodeToolbar>
             <Input
                 value={data?.Name}
@@ -338,11 +373,27 @@ const CalendarNode=(nodeProps)=>{
                 onCancel={()=>{
                     setInputMode(INPUT_MODE_HIDDEN)
                 }}
-                title={"New Item"}
+                title={"Edit Item"}
             >
                 <Form
                     layout={"vertical"}
                 >
+                    {
+                        editData.data.ID
+                            ?<Form.Item
+                               label={"Options"}
+                            >
+                              <Button
+                                  type={"primary"}
+                                  danger={true}
+                                  onClick={()=>{
+                                      deleteItem(editData);
+                                      setInputMode(INPUT_MODE_HIDDEN);
+                                  }}
+                              >Delete</Button>
+                            </Form.Item>
+                            :""
+                    }
                     <Form.Item
                         label={"Date"}
                     >
