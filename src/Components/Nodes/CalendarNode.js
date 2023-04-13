@@ -78,8 +78,10 @@ const CalendarNode=(nodeProps)=>{
     useEffect(()=>{
         createListData(nodeProps.data.node_data);
         createCalendarData(nodeProps.data.node_data);
+        changeSelectedDate(()=>dayjs(nodeProps.data.node_data.default_date))
     },[]);
-    // 组件 Timeline 的数据
+
+    // 组件 Timeline 的数据xia
     const createListData=(nodeData)=>{
         let label="";
         let newList=[];
@@ -118,6 +120,7 @@ const CalendarNode=(nodeProps)=>{
             ...nodeProps
         }
         newNode.data.node_data=nodeData;
+        newNode.data.node_data.default_date=selectedDate;
         newNode.data.data=data;
         UpdateNode(instance,newNode);
     }
@@ -152,7 +155,6 @@ const CalendarNode=(nodeProps)=>{
 
     // 开始输入数据
     const startInput=(editData)=>{
-        setInputMode(INPUT_MODE_EDIT);
         if (editData.data.ID){
             // 编辑历史数据
             setEditData(editData);
@@ -170,6 +172,7 @@ const CalendarNode=(nodeProps)=>{
             newEditData.node_data.min=date.minute();
             setEditData(newEditData);
         }
+        setInputMode(INPUT_MODE_EDIT);
     }
 
     const updateInput=(field,value)=>{
@@ -256,13 +259,14 @@ const CalendarNode=(nodeProps)=>{
 
     // 删除事件
     const deleteItem=(deleteItem)=>{
+        debugger
         let newNodeData={
             ...nodeData
         }
-        let subItems=newNodeData.list[deleteItem.node_data.year][deleteItem.node_data.month][deleteItem.node_data.hour][deleteItem.node_data.min].filter((i)=>{
+        let subItems=newNodeData.list[deleteItem.node_data.year][deleteItem.node_data.month][deleteItem.node_data.day][deleteItem.node_data.hour][deleteItem.node_data.min].filter((i)=>{
             return i.data.ID!=deleteItem.data.ID;
         });
-        newNodeData.list[deleteItem.node_data.year][deleteItem.node_data.month][deleteItem.node_data.hour][deleteItem.node_data.min]=subItems;
+        newNodeData.list[deleteItem.node_data.year][deleteItem.node_data.month][deleteItem.node_data.day][deleteItem.node_data.hour][deleteItem.node_data.min]=subItems;
         reRenderContent(newNodeData);
     }
 
@@ -280,7 +284,15 @@ const CalendarNode=(nodeProps)=>{
                             <li
                                 key={index}
                             >
-                                {value.data.Name}
+                                <Button
+                                    type={"link"}
+                                    size={"small"}
+                                    onClick={()=>{
+                                        startInput(value);
+                                    }}
+                                >
+                                    {value.data.Name}
+                                </Button>
                             </li>
                         )
                     })
@@ -314,7 +326,7 @@ const CalendarNode=(nodeProps)=>{
                 <Button
                     type={"primary"}
                     onClick={()=>{
-                        startInput(NODE_DATE_TEMPLATE);
+                        startInput({...NODE_DATE_TEMPLATE});
                     }}
                 >
                     Input
