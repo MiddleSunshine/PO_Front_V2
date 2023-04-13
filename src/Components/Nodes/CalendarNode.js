@@ -1,4 +1,18 @@
-import {Breadcrumb, Button, Calendar, DatePicker, Form, Input, List, Modal, Row,Col, Timeline, TimePicker} from "antd";
+import {
+    Breadcrumb,
+    Button,
+    Calendar,
+    DatePicker,
+    Form,
+    Input,
+    List,
+    Modal,
+    Row,
+    Col,
+    Timeline,
+    TimePicker,
+    InputNumber
+} from "antd";
 import {useEffect, useState} from "react";
 import {GetNodeStyle} from "./BasicNode";
 import {NodeToolbar} from "reactflow";
@@ -67,7 +81,7 @@ const CalendarNode=(nodeProps)=>{
         createListData(nodeProps.data.node_data);
         createCalendarData(nodeProps.data.node_data);
     },[]);
-
+    // 组件 Timeline 的数据
     const createListData=(nodeData)=>{
         let label="";
         let newList=[];
@@ -100,7 +114,7 @@ const CalendarNode=(nodeProps)=>{
         }
         setListData(newList);
     }
-
+    // 组件 Calendar 的数据
     const createCalendarData=(nodeData)=>{
         let newList={};
         let date='';
@@ -128,6 +142,7 @@ const CalendarNode=(nodeProps)=>{
         setCalendarData(newList);
     }
 
+    // 开始输入数据
     const startInput=()=>{
         setInputMode(INPUT_MODE_EDIT);
         let newEditData={
@@ -137,18 +152,55 @@ const CalendarNode=(nodeProps)=>{
         let date=dayjs(selectedDate);
         newEditData.node_data.year=date.year();
         newEditData.node_data.month=date.add(1,'month').month();
-        newEditData.node_data.day=date.day();
+        newEditData.node_data.day=date.date();
         newEditData.node_data.hour=date.hour();
         newEditData.node_data.min=date.minute();
         setEditData(newEditData);
     }
 
+    const updateInput=(field,value)=>{
+        let newEditData={...editData};
+        switch (field){
+            case 'year':
+            case 'month':
+            case 'day':
+            case 'hour':
+            case 'min':
+                newEditData.node_data[field]=value;
+                break;
+            case 'Name':
+            case 'Note':
+                newEditData.data[field]=value;
+                break;
+        }
+        setEditData(newEditData);
+    }
+
+    // 保存输入值
     const finishInput=()=>{
-        new Promise((resolve, reject) => {}).then(()=>{
-            // todo 从这里开始写
+        let newItem={
+            ...editData
+        }
+        newItem.node_data.year-=0;
+        newItem.node_data.month-=0;
+        newItem.node_data.day-=0;
+        newItem.node_data.hour-=0;
+        newItem.node_data.min-=0;
+        createNewItem(
+            newItem.node_data.year,
+            newItem.node_data.month,
+            newItem.node_data.day,
+            newItem.node_data.hour,
+            newItem.node_data.min,
+            newItem
+        );
+        setInputMode(INPUT_MODE_HIDDEN);
+        setEditData({
+            ...NODE_DATE_TEMPLATE
         })
     }
 
+    // 将数据保存进 node_data 中
     const createNewItem=(year,month,day,hour,min,data)=>{
         let newList=nodeData.list;
         if (!newList.hasOwnProperty(year)){
@@ -182,6 +234,7 @@ const CalendarNode=(nodeProps)=>{
         setNodeData(newNodeData);
     }
 
+    // 渲染 Calendar 中每一列的数据
     const renderCalendarItem=(date)=>{
         let data=[];
         if (calendarData.hasOwnProperty(date)){
@@ -273,6 +326,13 @@ const CalendarNode=(nodeProps)=>{
             <Modal
                 open={inputMode==INPUT_MODE_EDIT}
                 width={1200}
+                onOk={()=>{
+                    finishInput();
+                }}
+                onCancel={()=>{
+                    setInputMode(INPUT_MODE_HIDDEN)
+                }}
+                title={"New Item"}
             >
                 <Form
                     layout={"vertical"}
@@ -281,37 +341,52 @@ const CalendarNode=(nodeProps)=>{
                         label={"Date"}
                     >
                         <Row
-                            justify={"space-between"}
+                            justify={"start"}
                             align={"middle"}
                         >
                             <Col span={3}>
-                                <Input
+                                <InputNumber
                                     addonBefore={"Year"}
                                     value={editData.node_data.year}
+                                    onChange={(newValue)=>{
+                                        updateInput('year',newValue)
+                                    }}
                                 />
                             </Col>
-                            <Col span={3}>
-                                <Input
+                            <Col span={3} offset={1}>
+                                <InputNumber
                                     addonBefore={"Month"}
                                     value={editData.node_data.month}
+                                    onChange={(newValue)=>{
+                                        updateInput('month',newValue)
+                                    }}
                                 />
                             </Col>
-                            <Col span={3}>
-                                <Input
+                            <Col span={3} offset={1}>
+                                <InputNumber
                                     addonBefore={"Day"}
                                     value={editData.node_data.day}
+                                    onChange={(newValue)=>{
+                                        updateInput('day',newValue)
+                                    }}
                                 />
                             </Col>
-                            <Col span={3}>
-                                <Input
+                            <Col span={3} offset={1}>
+                                <InputNumber
                                     addonBefore={"Hour"}
                                     value={editData.node_data.hour}
+                                    onChange={(newValue)=>{
+                                        updateInput('hour',newValue)
+                                    }}
                                 />
                             </Col>
-                            <Col span={3}>
-                                <Input
+                            <Col span={3} offset={1}>
+                                <InputNumber
                                     addonBefore={"Min"}
                                     value={editData.node_data.min}
+                                    onChange={(newValue)=>{
+                                        updateInput('min',newValue)
+                                    }}
                                 />
                             </Col>
                         </Row>
@@ -321,6 +396,9 @@ const CalendarNode=(nodeProps)=>{
                     >
                         <Input
                             value={editData.data.Name}
+                            onChange={(e)=>{
+                                updateInput('Name',e.target.value)
+                            }}
                         />
                     </Form.Item>
                     <Form.Item
@@ -328,6 +406,9 @@ const CalendarNode=(nodeProps)=>{
                     >
                         <Input.TextArea
                             value={editData.data.Note}
+                            onChange={(e)=>{
+                                updateInput('Note',e.target.value)
+                            }}
                         />
                     </Form.Item>
                 </Form>
