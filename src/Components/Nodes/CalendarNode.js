@@ -143,19 +143,25 @@ const CalendarNode=(nodeProps)=>{
     }
 
     // 开始输入数据
-    const startInput=()=>{
+    const startInput=(editData)=>{
         setInputMode(INPUT_MODE_EDIT);
-        let newEditData={
-            ...NODE_DATE_TEMPLATE
-        };
-        // 设置初始值
-        let date=dayjs(selectedDate);
-        newEditData.node_data.year=date.year();
-        newEditData.node_data.month=date.add(1,'month').month();
-        newEditData.node_data.day=date.date();
-        newEditData.node_data.hour=date.hour();
-        newEditData.node_data.min=date.minute();
-        setEditData(newEditData);
+        if (editData.data.ID){
+            // 编辑历史数据
+            setEditData(editData);
+        }else{
+            let newEditData={
+                ...editData
+            };
+            // 新建数据
+            // 设置初始值
+            let date=dayjs(selectedDate);
+            newEditData.node_data.year=date.year();
+            newEditData.node_data.month=date.add(1,'month').month();
+            newEditData.node_data.day=date.date();
+            newEditData.node_data.hour=date.hour();
+            newEditData.node_data.min=date.minute();
+            setEditData(newEditData);
+        }
     }
 
     const updateInput=(field,value)=>{
@@ -282,7 +288,7 @@ const CalendarNode=(nodeProps)=>{
                 <Button
                     type={"primary"}
                     onClick={()=>{
-                        startInput();
+                        startInput(NODE_DATE_TEMPLATE);
                     }}
                 >
                     Input
