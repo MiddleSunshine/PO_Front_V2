@@ -32,7 +32,7 @@ import {EditNode} from "../Components/Nodes/EditNode";
 import {MarkdownNode} from "../Components/Nodes/MarkdownNode";
 import {CalendarNode} from "../Components/Nodes/CalendarNode";
 import {TodoListNode} from "../Components/Nodes/TodoListNode";
-import {FullCalendarNode} from "../Components/Nodes/FullCalendarNode";
+import {TableNode} from "../Components/Nodes/TableNode";
 import {CompactPicker} from '@hello-pangea/color-picker'
 import Loading from '../Images/zannet.png';
 import dayjs from "dayjs";
@@ -54,7 +54,8 @@ const AllNodeTypes = {
     MarkdownNode,
     CalendarNode,
     TodoListNode,
-    HistoryWhiteBordNode
+    HistoryWhiteBordNode,
+    TableNode
 }
 
 const DEFAULT_SETTINGS={
@@ -185,6 +186,10 @@ const BasicBord = () => {
             {
                 label: "Calendar",
                 value: "CalendarNode"
+            },
+            {
+                label: "Table",
+                value: "TableNode"
             },
             {
                 label: "Connection"
@@ -368,34 +373,7 @@ const BasicBord = () => {
             case "CalendarNode":
                 new_node.data.save_into_database=true;
                 new_node.data.node_data={
-                    list:{
-                        2023:{
-                            4:{
-                                1:{
-                                    3:{
-                                        11:[
-                                            {
-                                                node_data:{
-                                                    date:""
-                                                },
-                                                data:{
-                                                    Name:"测试1"
-                                                }
-                                            },
-                                            {
-                                                node_data:{
-                                                    date:""
-                                                },
-                                                data:{
-                                                    Name:"测试2"
-                                                }
-                                            },
-                                        ]
-                                    }
-                                }
-                            }
-                        }
-                    },
+                    list:{},
                     mode:"List",
                     default_date:dayjs()
                 }
@@ -420,8 +398,9 @@ const BasicBord = () => {
             case 'TableNode':
                 new_node.data.node_data={
                     table:[],
-                    columns:1,
-                    rows:1
+                    titles:[],
+                    rows:0,
+                    columns:0
                 }
                 new_node.data.save_into_database=true;
                 break;

@@ -7,7 +7,7 @@ import {
     Row,
     Col,
     Timeline,
-    InputNumber
+    InputNumber, message
 } from "antd";
 import {useEffect, useState} from "react";
 import {GetNodeStyle,UpdateNode} from "./BasicNode";
@@ -123,6 +123,7 @@ const CalendarNode=(nodeProps)=>{
         newNode.data.node_data.default_date=selectedDate;
         newNode.data.data=data;
         UpdateNode(instance,newNode);
+        message.info("Synced");
     }
 
     // 组件 Calendar 的数据
