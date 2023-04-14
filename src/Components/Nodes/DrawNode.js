@@ -30,6 +30,7 @@ const DrawNode=(nodeProps)=>{
                 .then((res)=>{
                     if (res.Data.data.ID){
                         setNodeData(res.Data.data);
+                        message.success("Create Draw Success");
                     }else{
                         message.warning(res.Message);
                     }
@@ -55,7 +56,6 @@ const DrawNode=(nodeProps)=>{
                 className={"Content"}
             >
                 <Input
-
                     value={nodeData.Name}
                     onChange={(e)=>{
                         setNodeData({
