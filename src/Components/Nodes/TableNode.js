@@ -33,7 +33,7 @@ const TableNode = (nodeProps) => {
 
     // 切换选中项
     const switchSelected=(rowIndex=-1,columnIndex=-1)=>{
-        let newSelect={...selected};
+        let newSelect={...SELECT_ITEM};
         if (rowIndex>-1){
             if (rowIndex==newSelect.RowIndex){
                 newSelect.RowIndex=-1;
@@ -101,8 +101,25 @@ const TableNode = (nodeProps) => {
         setNodeData(newNodeData)
     }
 
+    // 删除其中某一列或者某一行
     const deleteTable=()=>{
-
+        let newNodeData={...nodeData};
+        if (selected.RowIndex>-1){
+            // 删除某一行
+            newNodeData.table.splice(selected.RowIndex,1);
+        }
+        if (selected.ColumnIndex>-1){
+            // 删除某一列
+            // 先删除某一 title
+            newNodeData.titles.splice(selected.ColumnIndex,1);
+            // 再删除具体列
+            newNodeData.table.map((row)=>{
+                row.splice(selected.ColumnIndex,1);
+                return row;
+            })
+        }
+        setNodeData(newNodeData);
+        switchSelected(-1,-1);
     }
 
     const updateItem = (type, value, rowIndex, columnIndex = 0) => {
@@ -218,7 +235,11 @@ const TableNode = (nodeProps) => {
                                         <Button
                                             type={"primary"}
                                             onClick={()=>{
-                                                switchSelected(-1,index);
+                                                if (selected.ColumnIndex==index){
+                                                    deleteTable();
+                                                }else{
+                                                    switchSelected(-1,index);
+                                                }
                                             }}
                                             danger={selected.ColumnIndex==index}
                                         >
@@ -275,7 +296,11 @@ const TableNode = (nodeProps) => {
                                                                 <Button
                                                                     type={"primary"}
                                                                     onClick={()=>{
-                                                                        switchSelected(rowIndex,-1);
+                                                                        if(selected.RowIndex==rowIndex){
+                                                                            deleteTable();
+                                                                        }else{
+                                                                            switchSelected(rowIndex,-1);
+                                                                        }
                                                                     }}
                                                                     danger={selected.RowIndex==rowIndex}
                                                                 >
