@@ -33,6 +33,7 @@ import {MarkdownNode} from "../Components/Nodes/MarkdownNode";
 import {CalendarNode} from "../Components/Nodes/CalendarNode";
 import {TodoListNode} from "../Components/Nodes/TodoListNode";
 import {TableNode} from "../Components/Nodes/TableNode";
+import {LinkNode} from "../Components/Nodes/LinkNode";
 import {CompactPicker} from '@hello-pangea/color-picker'
 import Loading from '../Images/zannet.png';
 import dayjs from "dayjs";
@@ -55,7 +56,8 @@ const AllNodeTypes = {
     CalendarNode,
     TodoListNode,
     HistoryWhiteBordNode,
-    TableNode
+    TableNode,
+    LinkNode
 }
 
 const DEFAULT_SETTINGS={
@@ -190,6 +192,10 @@ const BasicBord = () => {
             {
                 label: "Table",
                 value: "TableNode"
+            },
+            {
+                label: "Link",
+                value: "LinkNode"
             },
             {
                 label: "Connection"
@@ -401,6 +407,13 @@ const BasicBord = () => {
                     titles:[],
                     rows:0,
                     columns:0
+                }
+                new_node.data.save_into_database=true;
+                break;
+            case "LinkNode":
+                new_node.data.node_data={
+                    link:"#",
+                    icon:"glyphicon glyphicon-paperclip"
                 }
                 new_node.data.save_into_database=true;
                 break;

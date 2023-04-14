@@ -4,6 +4,7 @@ import {NodeToolbar} from "reactflow";
 import {Button, Col, Form, Input, InputNumber, Row} from "antd";
 import {Table} from "react-bootstrap";
 import {useReactFlow} from "reactflow";
+import {NodeResizer} from "@reactflow/node-resizer";
 
 const TITLE_ITEM = {
     Name: ""
@@ -34,7 +35,7 @@ const TableNode = (nodeProps) => {
     const updateTable=(rowsLength,columnLength)=>{
         let newNodeData={...nodeData};
         // 保证长度
-        newNodeData.titles.slice(0,columnLength);
+        newNodeData.titles=newNodeData.titles.slice(0,columnLength);
         // 开始组件数据
         for (let i=0;i<columnLength;i++){
             if (!newNodeData.titles[i]){
@@ -44,13 +45,13 @@ const TableNode = (nodeProps) => {
             }
         }
         // 扩充最外层数组
-        newNodeData.table.slice(0,rowsLength);
+        newNodeData.table=newNodeData.table.slice(0,rowsLength);
         // 修改内部数组
         for (let row=0;row<rowsLength;row++){
             if (!newNodeData.table.hasOwnProperty(row)){
                 newNodeData.table[row]=[];
             }
-            newNodeData.table[row].slice(0,columnLength);
+            newNodeData.table[row]=newNodeData.table[row].slice(0,columnLength);
             for (let column=0;column<columnLength;column++){
                 if (!newNodeData.table[row].hasOwnProperty(column)){
                     newNodeData.table[row][column]={
@@ -144,6 +145,9 @@ const TableNode = (nodeProps) => {
                     </Form.Item>
                 </Form>
             </NodeToolbar>
+            <NodeResizer
+                isVisible={nodeProps.selected}
+            />
             <Input
                 value={data?.Name}
                 onChange={(e) => {
@@ -153,7 +157,9 @@ const TableNode = (nodeProps) => {
                     })
                 }}
             />
-            <Table>
+            <table
+                className={"table table-striped table-condensed"}
+            >
                 <thead>
                 <tr>
                     {
@@ -200,7 +206,7 @@ const TableNode = (nodeProps) => {
                     })
                 }
                 </tbody>
-            </Table>
+            </table>
         </div>
     )
 }
