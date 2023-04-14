@@ -7,7 +7,7 @@ import {
     Row,
     Col,
     Timeline,
-    InputNumber, message
+    InputNumber, message, Divider
 } from "antd";
 import {useEffect, useState} from "react";
 import {GetNodeStyle,UpdateNode} from "./BasicNode";
@@ -20,7 +20,6 @@ import {useReactFlow} from 'reactflow';
 
 const MODE_LIST='List';
 const MODE_CALENDAR='Calendar';
-const DATE_FORMAT='YYYY-M-D';
 const NODE_DATE_TEMPLATE={
     node_data:{
         year:"",
@@ -120,6 +119,7 @@ const CalendarNode=(nodeProps)=>{
             ...nodeProps
         }
         newNode.data.node_data=nodeData;
+        newNode.data.node_data.mode=MODE_LIST;
         newNode.data.node_data.default_date=selectedDate;
         newNode.data.data=data;
         UpdateNode(instance,newNode);
@@ -311,16 +311,26 @@ const CalendarNode=(nodeProps)=>{
                 <Button
                     type={"primary"}
                     onClick={()=>{
-                        setNodeData({
-                            ...nodeData,
-                            mode:nodeData.mode==MODE_LIST?MODE_CALENDAR:MODE_LIST
+                        new Promise((resolve, reject) =>{
+                            return resolve();
                         })
+                            .then(()=>{
+                                setNodeData({
+                                    ...nodeData,
+                                    mode:nodeData.mode==MODE_LIST?MODE_CALENDAR:MODE_LIST
+                                });
+                            })
+                            .then(()=>{
+                                if(nodeData.mode==MODE_CALENDAR){
+                                    SAVE_DATA();
+                                }
+                            });
                     }}
                 >
                     {
                         nodeData.mode==MODE_LIST
-                            ?"Show Calendar"
-                            :"Show Timeline"
+                            ?"Settng Data"
+                            :"Save Change"
                     }
                 </Button>
                 &nbsp;&nbsp;
@@ -332,15 +342,15 @@ const CalendarNode=(nodeProps)=>{
                 >
                     Input
                 </Button>
-                &nbsp;&nbsp;
-                <Button
-                    type={"primary"}
-                    onClick={()=>{
-                        SAVE_DATA();
-                    }}
-                >
-                    Save Update
-                </Button>
+                {/*&nbsp;&nbsp;*/}
+                {/*<Button*/}
+                {/*    type={"primary"}*/}
+                {/*    onClick={()=>{*/}
+                {/*        SAVE_DATA();*/}
+                {/*    }}*/}
+                {/*>*/}
+                {/*    Save Update*/}
+                {/*</Button>*/}
             </NodeToolbar>
             <Input
                 value={data?.Name}
@@ -351,6 +361,11 @@ const CalendarNode=(nodeProps)=>{
                     })
                 }}
             />
+            {
+                nodeData.mode==MODE_LIST
+                    ?<Divider>Items</Divider>
+                    :""
+            }
             {
                 nodeData.mode==MODE_LIST
                     ?<div
@@ -373,6 +388,23 @@ const CalendarNode=(nodeProps)=>{
                             }}
                             onChange={(date)=>{
                                 changeSelectedDate(date);
+                            }}
+                            headerRender={()=>{
+                                return (
+                                    <div>
+                                        <Divider />
+                                        <Divider>
+                                            <Input
+                                                addonBefore={"Selected Date : "}
+                                                value={selectedDate.format('YYYY-M-D')}
+                                                onChange={(e)=>{
+                                                    changeSelectedDate(dayjs(e.target.value));
+                                                }}
+                                            />
+                                        </Divider>
+                                        <Divider />
+                                    </div>
+                                )
                             }}
                         />
                     </div>
