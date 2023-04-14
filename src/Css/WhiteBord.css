@@ -87,15 +87,24 @@
 }
 
 .WhiteBoard .MarkdownNode{
-
+    border: 3px solid #F0F0F0;
 }
 
-.WhiteBoard .MarkdownNode .Content{
-    padding-left: 8px;
+.WhiteBoard .MarkdownNode .Title{
+    background-color: #303030;
+    text-align: center;
+    color: white;
 }
 
-.WhiteBoard .BasicNodeOutside .LabelNode{
+.WhiteBoard .LabelNode{
     padding: 5px;
+    background-color: antiquewhite;
+    border-radius: 6px;
+}
+
+.WhiteBoard .ImageNode{
+    padding: 10px;
+    background-color: #b4dbf0;
 }
 
 .WhiteBoard .CalendarNode{

@@ -2,7 +2,7 @@ import {useState} from "react";
 import {GetNodeStyle,UpdateNode} from "./BasicNode";
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import {Handle, NodeToolbar} from "reactflow";
-import {Button, Form, Input, Modal} from "antd";
+import {Button, Divider, Form, Input, Modal} from "antd";
 import ReactCodeMirror from "@uiw/react-codemirror";
 import {useReactFlow} from 'reactflow';
 import {NodeResizer} from "@reactflow/node-resizer";
@@ -43,19 +43,23 @@ const MarkdownNode=(nodeProps)=>{
                 position={"left"}
             />
             <div
-                className={"Content"}
+                className={"Title"}
             >
                 {
                     data.Name
-                        ?<h3>{data.Name}</h3>
+                        ?<h4>{data.Name}</h4>
                         :""
                 }
+            </div>
+            <div
+                className={"Content"}
+            >
                 {
                     nodeData.markdown
                         ?<MarkdownPreview
                             source={nodeData.markdown}
                         />
-                        :<h3>Input</h3>
+                        :"......"
                 }
             </div>
             <div>

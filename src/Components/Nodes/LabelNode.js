@@ -20,7 +20,7 @@ const LabelNode=React.memo((node)=>{
 
     return (
         <div
-            className={"BasicNodeOutside"}
+            className={"LabelNode"}
             style={GetNodeStyle(node)}
         >
             <Handle
@@ -47,7 +47,7 @@ const LabelNode=React.memo((node)=>{
                 isVisible={node.selected}
                 color="#ff0071"
             />
-            <div className={"LabelNode"}>
+            <div>
                 <Input
                     value={label}
                     onChange={(e)=>{

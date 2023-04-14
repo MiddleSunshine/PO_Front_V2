@@ -1,4 +1,4 @@
-import {Form, Image, Input} from "antd";
+import {Divider, Form, Image, Input} from "antd";
 import {NodeResizer} from '@reactflow/node-resizer';
 import React, {useEffect, useState} from "react";
 import {GetNodeStyle, UpdateNode} from "./BasicNode";
@@ -20,8 +20,18 @@ const ImageNode = React.memo((nodeProps) => {
 
     return (
         <div
+            className={"ImageNode"}
             style={GetNodeStyle(nodeProps)}
         >
+            <Handle
+                type={"source"}
+                position={"right"}
+            >
+            </Handle>
+            <Handle
+                type={"target"}
+                position={"left"}
+            />
             <NodeResizer
                 isVisible={nodeProps.selected}
                 color="#ff0071"
@@ -68,11 +78,13 @@ const ImageNode = React.memo((nodeProps) => {
                     </Form.Item>
                 </Form>
             </NodeToolbar>
-            {
-                nodeData?.Title
-                    ?<h3>{nodeData?.Title}</h3>
-                    :<h3>Settings</h3>
-            }
+            <Divider>
+                {
+                    nodeData?.Title
+                        ?<h4>{nodeData?.Title}</h4>
+                        :<h4>Image</h4>
+                }
+            </Divider>
             <Image
                 src={nodeData.ImageSrc}
                 // src={`${nodeData?.ImageSrc}?x-oss-process=image/resize,h_${nodeProps.height},w_${nodeProps.with}`}
