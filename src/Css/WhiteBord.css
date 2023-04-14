@@ -45,6 +45,24 @@
 
 }
 
+.WhiteBoard .TableNode{
+    border: 2px solid gainsboro;
+    padding: 5px;
+    background-color: cornsilk;
+}
+
+.WhiteBoard .TableNode .Selected{
+    background-color: #f9a825;
+}
+
+.WhiteBoard .TableNode .TitlePart{
+    padding-bottom: 5px;
+}
+
+.WhiteBoard .TableNode .TablePart{
+    border-top: 2px solid gainsboro;
+}
+
 .WhiteBoard .FullCalendarNode{
     min-height: 300px;
     min-width: 400px;

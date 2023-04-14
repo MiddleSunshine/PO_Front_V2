@@ -14,65 +14,101 @@ const DATA_ITEM = {
     Value: ""
 }
 
+const SELECT_ITEM={
+    RowIndex:-1,
+    ColumnIndex:-1
+}
+
 const TableNode = (nodeProps) => {
 
     const [nodeData, setNodeData] = useState(nodeProps.data.node_data);
     const [data, setData] = useState(nodeProps.data.data);
+    const [selected,setSelected]=useState({...SELECT_ITEM});
 
     useEffect(() => {
         setNodeData(nodeProps.data.node_data)
     }, [])
 
-    const instance=useReactFlow();
+    const instance = useReactFlow();
 
-    const SAVE_DATA=()=>{
-        let node={...nodeProps}
-        node.data.node_data=nodeData;
-        node.data.data=data;
-        UpdateNode(instance,node);
+    // 切换选中项
+    const switchSelected=(rowIndex=-1,columnIndex=-1)=>{
+        let newSelect={...selected};
+        if (rowIndex>-1){
+            if (rowIndex==newSelect.RowIndex){
+                newSelect.RowIndex=-1;
+            }else{
+                newSelect.RowIndex=rowIndex;
+            }
+            newSelect.ColumnIndex=-1;
+        }
+        if (columnIndex>-1){
+            if (newSelect.ColumnIndex==columnIndex){
+                newSelect.ColumnIndex=-1;
+            }else{
+                newSelect.ColumnIndex=columnIndex;
+            }
+            newSelect.RowIndex=-1;
+        }
+        setSelected(newSelect);
     }
 
-    const updateTable=(rowsLength,columnLength)=>{
-        let newNodeData={...nodeData};
+    const getItemClass=(rowIndex,columnIndex)=>{
+        let returnData='';
+        if (selected.RowIndex==rowIndex || selected.ColumnIndex==columnIndex){
+            returnData='Selected';
+        }
+        return returnData;
+    }
+
+    const SAVE_DATA = () => {
+        let node = {...nodeProps}
+        node.data.node_data = nodeData;
+        node.data.data = data;
+        UpdateNode(instance, node);
+    }
+
+    const updateTable = (rowsLength, columnLength) => {
+        let newNodeData = {...nodeData};
         // 保证长度
-        newNodeData.titles=newNodeData.titles.slice(0,columnLength);
+        newNodeData.titles = newNodeData.titles.slice(0, columnLength);
         // 开始组件数据
-        for (let i=0;i<columnLength;i++){
-            if (!newNodeData.titles[i]){
-                newNodeData.titles[i]={
+        for (let i = 0; i < columnLength; i++) {
+            if (!newNodeData.titles[i]) {
+                newNodeData.titles[i] = {
                     ...TITLE_ITEM
                 }
             }
         }
         // 扩充最外层数组
-        newNodeData.table=newNodeData.table.slice(0,rowsLength);
+        newNodeData.table = newNodeData.table.slice(0, rowsLength);
         // 修改内部数组
-        for (let row=0;row<rowsLength;row++){
-            if (!newNodeData.table.hasOwnProperty(row)){
-                newNodeData.table[row]=[];
+        for (let row = 0; row < rowsLength; row++) {
+            if (!newNodeData.table.hasOwnProperty(row)) {
+                newNodeData.table[row] = [];
             }
-            newNodeData.table[row]=newNodeData.table[row].slice(0,columnLength);
-            for (let column=0;column<columnLength;column++){
-                if (!newNodeData.table[row].hasOwnProperty(column)){
-                    newNodeData.table[row][column]={
+            newNodeData.table[row] = newNodeData.table[row].slice(0, columnLength);
+            for (let column = 0; column < columnLength; column++) {
+                if (!newNodeData.table[row].hasOwnProperty(column)) {
+                    newNodeData.table[row][column] = {
                         ...DATA_ITEM
                     }
                 }
             }
         }
-        newNodeData.rows=rowsLength;
-        newNodeData.columns=columnLength;
+        newNodeData.rows = rowsLength;
+        newNodeData.columns = columnLength;
         setNodeData(newNodeData)
     }
 
-    const updateItem=(type,value,rowIndex,columnIndex=0)=>{
-        let newNodeData={...nodeData};
-        switch (type){
+    const updateItem = (type, value, rowIndex, columnIndex = 0) => {
+        let newNodeData = {...nodeData};
+        switch (type) {
             case 'Title':
-                newNodeData.titles[columnIndex].Name=value;
+                newNodeData.titles[columnIndex].Name = value;
                 break;
             case 'Table':
-                newNodeData.table[rowIndex][columnIndex].Value=value;
+                newNodeData.table[rowIndex][columnIndex].Value = value;
                 break;
         }
         setNodeData(newNodeData);
@@ -97,10 +133,10 @@ const TableNode = (nodeProps) => {
                             <Col span={8}>
                                 <Input
                                     value={nodeData.columns}
-                                    onChange={(e)=>{
+                                    onChange={(e) => {
                                         setNodeData({
                                             ...nodeData,
-                                            columns:e.target.value
+                                            columns: e.target.value
                                         })
                                     }}
                                 />
@@ -108,10 +144,10 @@ const TableNode = (nodeProps) => {
                             <Col offset={1} span={8}>
                                 <Input
                                     value={nodeData.rows}
-                                    onChange={(e)=>{
+                                    onChange={(e) => {
                                         setNodeData({
                                             ...nodeData,
-                                            rows:e.target.value
+                                            rows: e.target.value
                                         })
                                     }}
                                 />
@@ -119,7 +155,7 @@ const TableNode = (nodeProps) => {
                             <Col span={2} offset={1}>
                                 <Button
                                     type={"primary"}
-                                    onClick={()=>{
+                                    onClick={() => {
                                         updateTable(
                                             nodeData.rows,
                                             nodeData.columns
@@ -136,7 +172,7 @@ const TableNode = (nodeProps) => {
                     >
                         <Button
                             type={"primary"}
-                            onClick={()=>{
+                            onClick={() => {
                                 SAVE_DATA();
                             }}
                         >
@@ -148,65 +184,120 @@ const TableNode = (nodeProps) => {
             <NodeResizer
                 isVisible={nodeProps.selected}
             />
-            <Input
-                value={data?.Name}
-                onChange={(e) => {
-                    setData({
-                        ...data,
-                        Name: e.target.value
-                    })
-                }}
-            />
-            <table
-                className={"table table-striped table-condensed"}
-            >
-                <thead>
-                <tr>
+            <div className="TitlePart">
+                <Input
+                    value={data?.Name}
+                    onChange={(e) => {
+                        setData({
+                            ...data,
+                            Name: e.target.value
+                        })
+                    }}
+                />
+            </div>
+            <div className="TablePart">
+                <table
+                    className={"table table-condensed"}
+                >
+                    <thead>
+                    <tr>
+                        <th>
+
+                        </th>
+                        {
+                            nodeData.titles.map((title, index) => {
+                                return (
+                                    <th
+                                        key={index}
+                                    >
+                                        <Button
+                                            type={"primary"}
+                                            onClick={()=>{
+                                                switchSelected(-1,index);
+                                            }}
+                                            ghost={selected.ColumnIndex==index}
+                                        >
+                                            {
+                                                selected.ColumnIndex==index?"Selected":(index + 1)
+                                            }
+                                        </Button>
+                                    </th>
+                                )
+                            })
+                        }
+                    </tr>
+                    <tr>
+                        <th></th>
+                        {
+                            nodeData.titles.map((title, index) => {
+                                return (
+                                    <th
+                                        className={getItemClass(-2,index)}
+                                        key={index}
+                                    >
+                                        <input
+                                            value={title?.Name}
+                                            onChange={(e) => {
+                                                updateItem('Title', e.target.value, 0, index);
+                                            }}
+                                        />
+                                    </th>
+                                )
+                            })
+                        }
+                    </tr>
+                    </thead>
+                    <tbody>
                     {
-                        nodeData.titles.map((title, index) => {
+                        nodeData.table.map((row, rowIndex) => {
                             return (
-                                <th
-                                    key={index}
+                                <tr
+                                    key={rowIndex}
                                 >
-                                    <input
-                                        value={title?.Name}
-                                        onChange={(e)=>{
-                                            updateItem('Title',e.target.value,0,index);
-                                        }}
-                                    />
-                                </th>
+                                    {
+                                        row.map((column, columnIndex) => {
+                                            return (
+                                                <>
+                                                    {
+                                                        columnIndex==0
+                                                            ?<td>
+                                                                <Button
+                                                                    type={"primary"}
+                                                                    onClick={()=>{
+                                                                        switchSelected(rowIndex,-1);
+                                                                    }}
+                                                                    ghost={selected.RowIndex==rowIndex}
+                                                                >
+                                                                    {
+                                                                        selected.RowIndex==rowIndex
+                                                                            ?"Selected"
+                                                                            :(rowIndex+1)
+                                                                    }
+                                                                </Button>
+                                                            </td>
+                                                            :''
+                                                    }
+                                                    <td
+                                                        className={getItemClass(rowIndex,columnIndex)}
+                                                    >
+                                                        <input
+                                                            value={column?.Value}
+                                                            onChange={(e) => {
+                                                                updateItem('Table', e.target.value, rowIndex, columnIndex)
+                                                            }}
+                                                        />
+                                                    </td>
+                                                </>
+                                            )
+                                        })
+                                    }
+                                </tr>
                             )
                         })
                     }
-                </tr>
-                </thead>
-                <tbody>
-                {
-                    nodeData.table.map((row, rowIndex) => {
-                        return (
-                            <tr
-                                key={rowIndex}
-                            >
-                                {
-                                    row.map((column, columnIndex) => {
-                                        return (
-                                            <td>
-                                                <input
-                                                    value={column?.Value}
-                                                    onChange={(e)=>{
-                                                        updateItem('Table',e.target.value,rowIndex,columnIndex)
-                                                    }}
-                                                />
-                                            </td>
-                                        )
-                                    })
-                                }
-                            </tr>
-                        )
-                    })
-                }
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
     )
 }
