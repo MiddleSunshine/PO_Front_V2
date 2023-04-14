@@ -412,8 +412,7 @@ const BasicBord = () => {
                 break;
             case "LinkNode":
                 new_node.data.node_data={
-                    link:"#",
-                    icon:"glyphicon glyphicon-paperclip"
+                    link:"#"
                 }
                 new_node.data.save_into_database=true;
                 break;
