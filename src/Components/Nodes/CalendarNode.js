@@ -352,15 +352,24 @@ const CalendarNode=(nodeProps)=>{
                 {/*    Save Update*/}
                 {/*</Button>*/}
             </NodeToolbar>
-            <Input
-                value={data?.Name}
-                onChange={(e)=>{
-                    setData({
-                        ...data,
-                        Name:e.target.value
-                    })
-                }}
-            />
+            {
+                nodeData.mode==MODE_LIST
+                    ?<div>
+                        <Divider>
+                            <h4>{data?.Name}</h4>
+                        </Divider>
+                    </div>
+                    :<Input
+                        value={data?.Name}
+                        onChange={(e)=>{
+                            setData({
+                                ...data,
+                                Name:e.target.value
+                            })
+                        }}
+                    />
+            }
+
             {
                 nodeData.mode==MODE_LIST
                     ?<Divider>Items</Divider>

@@ -28,7 +28,9 @@ const HistoryNode=(nodeProps)=>{
         console.table(instance.getNodes())
     },[])
 
-    return <div>
+    return <div
+        className={"HistoryNode"}
+    >
         <Input
             value={keyword}
             onChange={(e)=>{

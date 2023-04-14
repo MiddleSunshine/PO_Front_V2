@@ -78,6 +78,12 @@
     padding-right: 8px;
 }
 
+.WhiteBoard .HistoryNode{
+    padding: 10px;
+    background-color: #c3f0b7;
+    border-radius: 6px;
+}
+
 .WhiteBoard .DrawNode{
 
 }

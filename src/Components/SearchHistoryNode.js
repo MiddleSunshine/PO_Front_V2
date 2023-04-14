@@ -43,7 +43,9 @@ const SearchHistoryNode = ({defaultSearchKeywords, type = '', onCancel}) => {
 
 
     return (
-        <div>
+        <div
+            className={"SearchHistoryNode"}
+        >
             <Row
                 onClick={() => {
                     setSelectedHistoryNode({})
