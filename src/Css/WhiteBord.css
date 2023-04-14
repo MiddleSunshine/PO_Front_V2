@@ -51,6 +51,10 @@
     background-color: cornsilk;
 }
 
+.WhiteBoard .Option{
+    min-width: 100px;
+}
+
 .WhiteBoard .TableNode .Selected{
     background-color: #f9a825;
 }

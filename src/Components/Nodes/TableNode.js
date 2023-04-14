@@ -101,6 +101,10 @@ const TableNode = (nodeProps) => {
         setNodeData(newNodeData)
     }
 
+    const deleteTable=()=>{
+
+    }
+
     const updateItem = (type, value, rowIndex, columnIndex = 0) => {
         let newNodeData = {...nodeData};
         switch (type) {
@@ -124,7 +128,7 @@ const TableNode = (nodeProps) => {
                     layout={"vertical"}
                 >
                     <Form.Item
-                        label={"Columns / Rows"}
+                        label={"Rows / Columns"}
                     >
                         <Row
                             justify={"start"}
@@ -132,22 +136,22 @@ const TableNode = (nodeProps) => {
                         >
                             <Col span={8}>
                                 <Input
-                                    value={nodeData.columns}
+                                    value={nodeData.rows}
                                     onChange={(e) => {
                                         setNodeData({
                                             ...nodeData,
-                                            columns: e.target.value
+                                            rows: e.target.value
                                         })
                                     }}
                                 />
                             </Col>
                             <Col offset={1} span={8}>
                                 <Input
-                                    value={nodeData.rows}
+                                    value={nodeData.columns}
                                     onChange={(e) => {
                                         setNodeData({
                                             ...nodeData,
-                                            rows: e.target.value
+                                            columns: e.target.value
                                         })
                                     }}
                                 />
@@ -176,7 +180,7 @@ const TableNode = (nodeProps) => {
                                 SAVE_DATA();
                             }}
                         >
-                            Sync
+                            Save Change
                         </Button>
                     </Form.Item>
                 </Form>
@@ -209,16 +213,17 @@ const TableNode = (nodeProps) => {
                                 return (
                                     <th
                                         key={index}
+                                        className={"Option"}
                                     >
                                         <Button
                                             type={"primary"}
                                             onClick={()=>{
                                                 switchSelected(-1,index);
                                             }}
-                                            ghost={selected.ColumnIndex==index}
+                                            danger={selected.ColumnIndex==index}
                                         >
                                             {
-                                                selected.ColumnIndex==index?"Selected":(index + 1)
+                                                selected.ColumnIndex==index?"Delete":(index + 1)
                                             }
                                         </Button>
                                     </th>
@@ -227,7 +232,9 @@ const TableNode = (nodeProps) => {
                         }
                     </tr>
                     <tr>
-                        <th></th>
+                        <th>
+
+                        </th>
                         {
                             nodeData.titles.map((title, index) => {
                                 return (
@@ -236,6 +243,8 @@ const TableNode = (nodeProps) => {
                                         key={index}
                                     >
                                         <input
+                                            className="form-control"
+                                            placeholder={"Title..."}
                                             value={title?.Name}
                                             onChange={(e) => {
                                                 updateItem('Title', e.target.value, 0, index);
@@ -260,17 +269,19 @@ const TableNode = (nodeProps) => {
                                                 <>
                                                     {
                                                         columnIndex==0
-                                                            ?<td>
+                                                            ?<td
+                                                            className={"Option"}
+                                                            >
                                                                 <Button
                                                                     type={"primary"}
                                                                     onClick={()=>{
                                                                         switchSelected(rowIndex,-1);
                                                                     }}
-                                                                    ghost={selected.RowIndex==rowIndex}
+                                                                    danger={selected.RowIndex==rowIndex}
                                                                 >
                                                                     {
                                                                         selected.RowIndex==rowIndex
-                                                                            ?"Selected"
+                                                                            ?"Delete"
                                                                             :(rowIndex+1)
                                                                     }
                                                                 </Button>
@@ -281,6 +292,8 @@ const TableNode = (nodeProps) => {
                                                         className={getItemClass(rowIndex,columnIndex)}
                                                     >
                                                         <input
+                                                            className="form-control input-sm"
+                                                            placeholder={"Content"}
                                                             value={column?.Value}
                                                             onChange={(e) => {
                                                                 updateItem('Table', e.target.value, rowIndex, columnIndex)
