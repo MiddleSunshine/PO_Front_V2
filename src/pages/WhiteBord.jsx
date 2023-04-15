@@ -336,13 +336,19 @@ const BasicBord = () => {
             x: event.clientX - reactFlowBounds.left,
             y: event.clientY - reactFlowBounds.top,
         });
+        let id=getId(type);
         let new_node = {
-            id: getId(type),
+            id: id,
             type: type,
             data: {
                 ...BASIC_NODE_DATA
             },
             position: position
+        }
+        new_node.data.data={
+            Name:"",
+            Type:type,
+            node_id:id
         }
         switch (type) {
             case "StartSettings":

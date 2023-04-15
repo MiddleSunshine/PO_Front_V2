@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import {CreateNodeAsync, SearchHistoryNodeAsync} from "./Nodes/BasicNode";
 import {Button, Checkbox, Col, Empty, Input, message, Row, Spin} from "antd";
+import {getId} from "../config/WhiteBord";
 import {JSONTree} from "react-json-tree";
 
 const SearchHistoryNode = ({defaultSearchKeywords, type = '', onCancel}) => {
@@ -30,7 +31,7 @@ const SearchHistoryNode = ({defaultSearchKeywords, type = '', onCancel}) => {
             onCancel(selectedHistoryNode)
         } else {
             // 创建了新的值
-            CreateNodeAsync(type, searchKeyword)
+            CreateNodeAsync(type, searchKeyword,getId(type))
                 .then((res) => {
                     if (res.Data.data.ID) {
                         onCancel({ID: res.Data.data.ID})

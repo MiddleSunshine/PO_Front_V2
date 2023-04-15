@@ -26,7 +26,7 @@ const DrawNode=(nodeProps)=>{
                 message.warning("Please input the title");
                 return false;
             }
-            CreateNodeAsync('DrawNode',nodeData.Name)
+            CreateNodeAsync('DrawNode',nodeProps.id,nodeData.Name)
                 .then((res)=>{
                     if (res.Data.data.ID){
                         setNodeData(res.Data.data);

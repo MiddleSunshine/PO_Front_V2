@@ -13,11 +13,11 @@ const BASIC_NODE_DATA={
 
 const GetNodeStyle=(node)=>{
     let style={
-        ...node.data.settings.style,
+        ...node.data?.settings?.style,
         width:node.width,
         height:node.height
     };
-    if (node.data.save_into_database){
+    if (node?.data?.save_into_database){
         style.borderTop="4px solid #62DBC8";
         style.borderRadius="5px";
     }
@@ -38,13 +38,14 @@ const SearchHistoryNodeAsync=(searchKeyword,type='')=>{
     });
 }
 
-const CreateNodeAsync=(type,name,node_data={})=>{
+const CreateNodeAsync=(type,name,node_id,node_data={})=>{
     return  requestAPI("index.php?action=NodeController&method=CreateNode",{
         method:"post",
         body:JSON.stringify({
             data:{
                 Type:type,
-                Name:name
+                Name:name,
+                node_id:node_id
             },
             node_data:node_data
         })

@@ -27,7 +27,7 @@ const TitleNode=(nodeProps)=>{
             return false;
         }
         if (!data.hasOwnProperty('ID')){
-            CreateNodeAsync('TitleNode',data.Name)
+            CreateNodeAsync('TitleNode',nodeProps.id,data.Name)
                 .then((res)=>{
                     if (res.Data.data){
                         setData(res.Data.data)

@@ -50,6 +50,9 @@ const HistoryWhiteBordNode=(nodeProps)=>{
                 open={searchMode}
                 width={"1200px"}
                 footer={null}
+                onCancel={()=>{
+                    switchSearchMode(false)
+                }}
             >
                 <SearchHistoryWhiteBoard
                     keywords={searchKeyword}
