@@ -52,6 +52,7 @@ const HistoryNode=(nodeProps)=>{
                     let newNode={...nodeProps};
                     newNode.type=selectedNode.data.Type;
                     newNode.data=selectedNode;
+                    newNode.data.save_into_database=true;
                     UpdateNode(instance,newNode);
                     setSearchState(1);
                 }

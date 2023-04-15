@@ -81,7 +81,6 @@ const NewWhiteBoardNode=(nodeProps)=>{
                     let newNode={...nodeProps};
                     newNode.type='WhiteBoardNode';
                     newNode.data.save_into_database=true;
-                    newNode.data.data={};
                     newNode.data.node_data=res.Data.data;
                     UpdateNode(instance,newNode);
                 }else{
