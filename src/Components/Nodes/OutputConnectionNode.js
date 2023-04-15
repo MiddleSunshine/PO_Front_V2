@@ -4,15 +4,15 @@ import {GetNodeStyle} from "./BasicNode";
 
 const OutputConnectionNode=(nodeProps)=>{
     return <div
-        style={GetNodeStyle(nodeProps)}
-        className={"OutputConnectionNode"}
+        style={GetNodeStyle(nodeProps,nodeProps.selected)}
+        className={"OutputConnectionNode ConnectionNode"}
     >
         <Handle
             type={"source"}
             id={`${nodeProps.id}`}
             position={"right"}
         />
-        <LogoutOutlined />
+        <div className={"Content"}></div>
     </div>
 }
 

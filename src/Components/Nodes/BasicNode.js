@@ -11,7 +11,7 @@ const BASIC_NODE_DATA={
     save_into_database:false
 }
 
-const GetNodeStyle=(node)=>{
+const GetNodeStyle=(node,selected=false)=>{
     let style={
         ...node.data?.settings?.style,
         width:node.width,
@@ -20,6 +20,9 @@ const GetNodeStyle=(node)=>{
     if (node?.data?.save_into_database){
         style.borderTop="4px solid #62DBC8";
         style.borderRadius="5px";
+    }
+    if (selected){
+        style.backgroundColor="#ff5722";
     }
     return style;
 }
