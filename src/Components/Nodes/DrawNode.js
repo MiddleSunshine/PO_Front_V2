@@ -7,6 +7,7 @@ import {
     FundViewOutlined
 } from '@ant-design/icons';
 import {Handle, useReactFlow} from 'reactflow';
+import {NodeResizer} from "@reactflow/node-resizer";
 
 const DrawNode=(nodeProps)=>{
     const [nodeData,setNodeData]=useState(nodeProps.data.data);
@@ -51,6 +52,9 @@ const DrawNode=(nodeProps)=>{
             <Handle
                 type={"target"}
                 position={"left"}
+            />
+            <NodeResizer
+                isVisible={nodeProps.selected}
             />
             <div
                 className={"Content"}

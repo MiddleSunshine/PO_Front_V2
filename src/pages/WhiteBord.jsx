@@ -150,10 +150,10 @@ const BasicBord = () => {
                 label: "New Page",
                 value: "NewWhiteBoardNode"
             },
-            {
-                label: "History Page",
-                value: "HistoryWhiteBordNode"
-            },
+            // {
+            //     label: "History Page",
+            //     value: "HistoryWhiteBordNode"
+            // },
             {
                 label: "Node"
             },

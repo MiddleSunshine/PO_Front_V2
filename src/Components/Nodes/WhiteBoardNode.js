@@ -10,6 +10,7 @@ import {
 } from '@ant-design/icons'
 import {CreateNewWhiteBoardAsync} from "./BaseWhiteBoard";
 import {SearchHistoryWhiteBoard} from "../SearchHistoryWhiteBoard";
+import {NodeResizer} from "@reactflow/node-resizer";
 
 const HistoryWhiteBordNode=(nodeProps)=>{
 
@@ -20,7 +21,6 @@ const HistoryWhiteBordNode=(nodeProps)=>{
         if (historyWhiteBoard?.ID){
             let newNode={...nodeProps};
             newNode.type='WhiteBoardNode';
-            newNode.data.data={};
             newNode.data.node_data=historyWhiteBoard;
             UpdateNode(instance,newNode);
         }
@@ -136,6 +136,9 @@ const WhiteBoardNode=(nodeProps)=>{
             <Handle
                 type={"target"}
                 position={"left"}
+            />
+            <NodeResizer
+                isVisible={nodeProps.selected}
             />
             <div
                 className={"Content"}
