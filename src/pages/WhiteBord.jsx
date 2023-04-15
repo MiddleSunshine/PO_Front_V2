@@ -123,133 +123,140 @@ const BasicBord = () => {
             // overflowX:"auto"
         }
 
-        const menus = [
-            {
-                label: "Option"
-            },
-            {
-                label: "Save Page",
-                value: "SavePage"
-            },
-            {
-                label: "Save Draft",
-                value: "SaveDraft"
-            },
-            // {
-            //     label: "Directory",
-            //     value: "DirectoryNode"
-            // },
-            {
-                label: "History"
-            },
-            {
-                label: "History Node",
-                value: "HistoryNode"
-            },
-            {
-                label: "New Page",
-                value: "NewWhiteBoardNode"
-            },
-            // {
-            //     label: "History Page",
-            //     value: "HistoryWhiteBordNode"
-            // },
-            {
-                label: "Node"
-            },
-            {
-                label: "Title",
-                value: "TitleNode"
-            },
-            {
-                label: "Draw",
-                value: "DrawNode"
-            },
-            {
-                label: "Code",
-                value: "CodeNode"
-            },
-            {
-                label: "Text",
-                value: "MarkdownNode"
-            },
-            {
-                label: "Image Node",
-                value: "ImageNode"
-            },
-            {
-                label: "Label",
-                value: "LabelNode"
-            },
-            {
-                label: "Todo List",
-                value: "TodoListNode"
-            },
-            {
-                label: "Calendar",
-                value: "CalendarNode"
-            },
-            {
-                label: "Table",
-                value: "TableNode"
-            },
-            {
-                label: "Link",
-                value: "LinkNode"
-            },
-            {
-                label: "Connection"
-            },
-            {
-                label: "End Connection",
-                value: "InputConnectionNode"
-            },
-            {
-                label: "Start Connection",
-                value: "OutputConnectionNode"
-            },
-            {
-                label: "Page Setting",
-                value: "StartSettings"
-            },
-            // {
-            //     label: "Calendar",
-            //     value: "CalendarNode"
-            // }
+        const menuSetting = [
+            [
+
+                {
+                    label: "Node"
+                },
+                {
+                    label: "History Node",
+                    value: "HistoryNode"
+                },
+                {
+                    label: "Title",
+                    value: "TitleNode"
+                },
+                {
+                    label: "Draw",
+                    value: "DrawNode"
+                },
+                {
+                    label: "Code",
+                    value: "CodeNode"
+                },
+                {
+                    label: "Text",
+                    value: "MarkdownNode"
+                },
+                {
+                    label: "Image Node",
+                    value: "ImageNode"
+                },
+                {
+                    label: "Label",
+                    value: "LabelNode"
+                },
+                {
+                    label: "Todo List",
+                    value: "TodoListNode"
+                },
+                {
+                    label: "Calendar",
+                    value: "CalendarNode"
+                },
+                {
+                    label: "Table",
+                    value: "TableNode"
+                },
+                {
+                    label: "Link",
+                    value: "LinkNode"
+                },
+                {
+                    label: "Start Connection",
+                    value: "OutputConnectionNode"
+                },
+                {
+                    label: "End Connection",
+                    value: "InputConnectionNode"
+                }
+            ],
+            [
+                {
+                    label: "Page"
+                },
+                {
+                    label: "New Page",
+                    value: "NewWhiteBoardNode"
+                },
+                {
+                    label: "History Page",
+                    value: "HistoryWhiteBordNode"
+                },
+                {
+                    label: "Option"
+                },
+                {
+                    label: "Save Page",
+                    value: "SavePage"
+                },
+                {
+                    label: "Save Draft",
+                    value: "SaveDraft"
+                },
+                {
+                    label: "Page Setting",
+                    value: "StartSettings"
+                }
+            ]
         ];
 
         return (
             <div className={"Menu"} style={menuStyle}>
-                {
-                    menus.map((menu)=>{
-                        if (!menu?.value){
+                <Row>
+                    {
+                        menuSetting.map((menus,menuIndex)=>{
                             return (
-                                <div
-                                    key={menu.label}
-                                    className={"Header"}
-                                >
-                                    <span>{menu.label}</span>
-                                </div>
-                            )
-                        }
-                        return (
-                            <div
-                                className={"Item"}
-                                key={menu.value}
-                            >
-                                <Button
-                                    size={"small"}
-                                    type={"link"}
-                                    onClick={(event)=>{ createNode(event,menu.value) }}
+                                <Col
+                                    span={12}
+                                    key={menuIndex}
                                 >
                                     {
-                                        menu.label
+                                        menus.map((menu)=>{
+                                            if (!menu?.value){
+                                                return (
+                                                    <div
+                                                        key={menu.label}
+                                                        className={"Header"}
+                                                    >
+                                                        <span>{menu.label}</span>
+                                                    </div>
+                                                )
+                                            }
+                                            return (
+                                                <div
+                                                    className={"Item"}
+                                                    key={menu.value}
+                                                >
+                                                    <Button
+                                                        size={"small"}
+                                                        type={"link"}
+                                                        onClick={(event)=>{ createNode(event,menu.value) }}
+                                                    >
+                                                        {
+                                                            menu.label
+                                                        }
+                                                    </Button>
+                                                </div>
+                                            )
+                                        })
                                     }
-                                </Button>
-                            </div>
-                        )
-                    })
-                }
+                                </Col>
+                            )
+                        })
+                    }
+                </Row>
             </div>
         )
     }

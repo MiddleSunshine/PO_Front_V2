@@ -14,8 +14,22 @@
 
 }
 
+.WhiteBoard .react-flow__handle.connectionindicator{
+    width: 10px;
+    height: 10px;
+}
+
+.WhiteBoard .react-flow__handle-left{
+    background-color: cadetblue;
+}
+
+.WhiteBoard .react-flow__handle-right{
+    background-color: #f9a825;
+}
+
 .WhiteBoard .Menu{
     background-color: #F0F0F0;
+    width: 280px;
 }
 
 .WhiteBoard .Menu .Header{
