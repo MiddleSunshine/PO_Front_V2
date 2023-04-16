@@ -54,21 +54,25 @@ const LinkNode=(nodeProps)=>{
                 isVisible={nodeProps.selected}
             />
             <Handle
+                className={"TargetConnection"}
                 id={`${nodeProps.id}_top`}
                 position={"top"}
                 type={"target"}
             />
             <Handle
+                className={"SourceConnection"}
                 id={`${nodeProps.id}_bottom`}
                 position={"bottom"}
                 type={"source"}
             />
             <Handle
+                className={"TargetConnection"}
                 id={`${nodeProps.id}_left`}
                 position={"left"}
                 type={"target"}
             />
             <Handle
+                className={"SourceConnection"}
                 id={`${nodeProps.id}_right`}
                 position={"right"}
                 type={"source"}

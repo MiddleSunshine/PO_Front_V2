@@ -50,6 +50,7 @@ const DrawNode=(nodeProps)=>{
             className={"DrawNode"}
         >
             <Handle
+                className={"TargetConnection"}
                 type={"target"}
                 position={"left"}
             />

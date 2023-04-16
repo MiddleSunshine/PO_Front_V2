@@ -236,11 +236,13 @@ const CodeNode=(nodeProps)=>{
                 </Button>
             </NodeToolbar>
             <Handle
+                className={"SourceConnection"}
                 type={"source"}
                 position={"right"}
             >
             </Handle>
             <Handle
+                className={"TargetConnection"}
                 type={"target"}
                 position={"left"}
             />

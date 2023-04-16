@@ -24,21 +24,25 @@ const LabelNode=React.memo((node)=>{
             style={GetNodeStyle(node)}
         >
             <Handle
+                className={"TargetConnection"}
                 id={`${node.id}_top`}
                 position={"top"}
                 type={"target"}
             />
             <Handle
+                className={"SourceConnection"}
                 id={`${node.id}_bottom`}
                 position={"bottom"}
                 type={"source"}
             />
             <Handle
+                className={"TargetConnection"}
                 id={`${node.id}_left`}
                 position={"left"}
                 type={"target"}
             />
             <Handle
+                className={"SourceConnection"}
                 id={`${node.id}_right`}
                 position={"right"}
                 type={"source"}

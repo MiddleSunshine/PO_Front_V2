@@ -39,6 +39,7 @@ const MarkdownNode=(nodeProps)=>{
                 </Button>
             </NodeToolbar>
             <Handle
+                className={"TargetConnection"}
                 type={"target"}
                 position={"left"}
             />

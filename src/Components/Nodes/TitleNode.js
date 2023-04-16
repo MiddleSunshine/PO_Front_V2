@@ -50,11 +50,13 @@ const TitleNode=(nodeProps)=>{
             isVisible={nodeProps.selected}
         />
         <Handle
+            className={"SourceConnection"}
             type={"source"}
             position={"right"}
         >
         </Handle>
         <Handle
+            className={"TargetConnection"}
             type={"target"}
             position={"left"}
         />

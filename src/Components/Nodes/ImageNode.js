@@ -24,11 +24,13 @@ const ImageNode = React.memo((nodeProps) => {
             style={GetNodeStyle(nodeProps)}
         >
             <Handle
+                className={"SourceConnection"}
                 type={"source"}
                 position={"right"}
             >
             </Handle>
             <Handle
+                className={"TargetConnection"}
                 type={"target"}
                 position={"left"}
             />

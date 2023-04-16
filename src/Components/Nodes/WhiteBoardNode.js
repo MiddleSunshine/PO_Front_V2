@@ -133,6 +133,7 @@ const WhiteBoardNode=(nodeProps)=>{
             className={"WhiteBoardNode"}
         >
             <Handle
+                className={"TargetConnection"}
                 type={"target"}
                 position={"left"}
             />
