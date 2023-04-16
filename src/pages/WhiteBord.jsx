@@ -85,6 +85,7 @@ const BasicBord = () => {
     const [selectedEdge, setSelectedEdge] = useState({});
     const [editMode, setEditMode] = useState(false);
     const [isLoading,setIsLoading]=useState(true);
+    const [showHelp,setShowHelp]=useState(false);
     const { getIntersectingNodes } = useReactFlow();
 
     const reactFlowWrapper = useRef(null);
@@ -380,6 +381,9 @@ const BasicBord = () => {
             // case "TitleNode":
             //     new_node.data.save_into_database=true;
             //     break;
+            case 'ShowHelp':
+                setShowHelp(true);
+                return false;
             case 'DirectoryNode':
                 new_node.data.node_data=[];
                 new_node.data.save_into_database=true;
@@ -697,6 +701,16 @@ const BasicBord = () => {
                             <h3>Data is loading...</h3>
                         </Col>
                     </Row>
+                </Modal>
+                <Modal
+                    open={showHelp}
+                    onCancel={()=>{
+                        setShowHelp(false)
+                    }}
+                    title={"帮助页面"}
+                    footer={null}
+                >
+                    <WhiteBoardHelp />
                 </Modal>
             </Hotkeys>
         </div>
