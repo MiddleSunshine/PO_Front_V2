@@ -11,7 +11,7 @@ const BASIC_NODE_DATA={
     save_into_database:false
 }
 
-const GetNodeStyle=(node,selected=false)=>{
+const GetNodeStyle=(node)=>{
     let style={
         ...node.data?.settings?.style,
         width:node.width,
@@ -21,7 +21,7 @@ const GetNodeStyle=(node,selected=false)=>{
         style.borderTop="4px solid #62DBC8";
         style.borderRadius="5px";
     }
-    if (selected){
+    if (node.selected){
         style.backgroundColor="#ff5722";
     }
     return style;
@@ -78,6 +78,45 @@ const UpdateNode=(instance,node)=>{
         return n;
     });
     instance.setNodes(newNodes)
+}
+
+const nextPosition=(preLocation,position)=>{
+    let nextLocation=preLocation;
+    switch (position){
+        case 'Left':
+            switch (preLocation){
+                case 'left':
+                    nextLocation='bottom';
+                    break;
+                case 'right':
+                    nextLocation='top';
+                    break;
+                case 'top':
+                    nextLocation='left';
+                    break;
+                case 'bottom':
+                    nextLocation='right';
+                    break;
+            }
+            break;
+        case 'Right':
+            switch (preLocation){
+                case 'left':
+                    nextLocation='top';
+                    break;
+                case 'right':
+                    nextLocation='bottom';
+                    break;
+                case 'top':
+                    nextLocation='right';
+                    break;
+                case 'bottom':
+                    nextLocation='bottom';
+                    break;
+            }
+            break;
+    }
+    return nextLocation;
 }
 
 export {

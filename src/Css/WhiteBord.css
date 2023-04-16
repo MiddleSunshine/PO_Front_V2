@@ -14,30 +14,6 @@
 
 }
 
-.WhiteBoard .ConnectionNode{
-    width: 20px;
-    height: 20px;
-    background-color: #F0F0F0;
-    border-radius: 50%;
-}
-
-.WhiteBoard .ConnectionNode .Content{
-
-}
-
-.WhiteBoard .react-flow__handle.connectionindicator{
-    width: 10px;
-    height: 10px;
-}
-
-.WhiteBoard .react-flow__handle-left{
-    background-color: cadetblue;
-}
-
-.WhiteBoard .react-flow__handle-right{
-    background-color: #f9a825;
-}
-
 .WhiteBoard .Menu{
     background-color: #F0F0F0;
     width: 280px;
@@ -158,13 +134,40 @@
 .WhiteBoard .WhiteBoardNode .Content{
     padding-left: 8px;
 }
+/**
+ * Connection 相关的 CSS
+ */
+.WhiteBoard .ConnectionNode{
+    width: 20px;
+    height: 20px;
+    background-color: #F0F0F0;
+    border-radius: 50%;
+}
+
+.WhiteBoard .ConnectionNode .Content{
+
+}
+
+.WhiteBoard .react-flow__handle.connectionindicator{
+    width: 8px;
+    height: 8px;
+}
+
 
 .WhiteBoard .OutputConnectionNode{
-    /*color:rgb(0, 188, 212);*/
+
+}
+
+.WhiteBoard .SourceConnection{
+    background-color: #ef5350;
 }
 
 .WhiteBoard .InputConnectionNode{
-    /*color: rgb(255, 87, 34);*/
+
+}
+
+.WhiteBoard .TargetConnection{
+    background-color: #43a047;
 }
 
 .WhiteBoard .DirectoryNode{
