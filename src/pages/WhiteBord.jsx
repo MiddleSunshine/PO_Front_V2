@@ -38,6 +38,7 @@ import {CompactPicker} from '@hello-pangea/color-picker'
 import Loading from '../Images/zannet.png';
 import dayjs from "dayjs";
 import WhiteBoardHelp from "../Components/WhiteBoardHelp";
+import {SearchHistoryWhiteBoard} from "../Components/SearchHistoryWhiteBoard";
 
 const defaultViewport = {x: 0, y: 0, zoom: 1.1};
 
@@ -86,6 +87,7 @@ const BasicBord = () => {
     const [editMode, setEditMode] = useState(false);
     const [isLoading,setIsLoading]=useState(true);
     const [showHelp,setShowHelp]=useState(false);
+    const [showGlobalSearch,setShowGlobalSearch]=useState(false);
     const { getIntersectingNodes } = useReactFlow();
 
     const reactFlowWrapper = useRef(null);
@@ -195,6 +197,10 @@ const BasicBord = () => {
                 {
                     label: "历史页面",
                     value: "HistoryWhiteBordNode"
+                },
+                {
+                    label: "全局搜索",
+                    value: "GlobalSearch"
                 },
                 {
                     label: "操作"
@@ -381,6 +387,9 @@ const BasicBord = () => {
             // case "TitleNode":
             //     new_node.data.save_into_database=true;
             //     break;
+            case 'GlobalSearch':
+                setShowGlobalSearch(true);
+                return false;
             case 'ShowHelp':
                 setShowHelp(true);
                 return false;
@@ -566,6 +575,10 @@ const BasicBord = () => {
         setEditMode(true);
     }
 
+    hotkeysHandler['shift+g']=()=>{
+        setShowGlobalSearch(true);
+    }
+
 
     return (
         <div ref={reactFlowWrapper} className="reactflow-wrapper WhiteBoard">
@@ -711,6 +724,21 @@ const BasicBord = () => {
                     footer={null}
                 >
                     <WhiteBoardHelp />
+                </Modal>
+                <Modal
+                    title={"全局搜索"}
+                    open={showGlobalSearch}
+                    onCancel={()=>{
+                        setShowGlobalSearch(false);
+                    }}
+                    width={1200}
+                    footer={null}
+                >
+                    <SearchHistoryWhiteBoard
+                        keywords={""}
+                        showCreateButton={false}
+                        OnCancel={()=>{}}
+                    />
                 </Modal>
             </Hotkeys>
         </div>

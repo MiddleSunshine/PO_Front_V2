@@ -75,7 +75,7 @@ const SearchHistoryWhiteBoard = ({keywords, Type = '', OnCancel, showCreateButto
                             : <Button
                                 type={"primary"}
                                 onClick={() => {
-                                    handleSearchKeywords();
+                                    handleSearchKeywords(searchKeywords, Type)
                                 }}
                             >
                                 Search
