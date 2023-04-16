@@ -21,9 +21,9 @@ const GetNodeStyle=(node)=>{
         style.borderTop="4px solid #62DBC8";
         style.borderRadius="5px";
     }
-    if (node.selected){
-        style.backgroundColor="#ff5722";
-    }
+    // if (node.selected){
+    //     style.backgroundColor="#ff5722";
+    // }
     return style;
 }
 

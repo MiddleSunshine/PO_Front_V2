@@ -12,7 +12,7 @@ import { getId } from "../config/WhiteBord";
 import '../Css/WhiteBord.css';
 import '@reactflow/node-resizer/dist/style.css';
 import 'reactflow/dist/style.css';
-import {Button, Col, Divider, Drawer, Form, Image, message, Modal, Radio, Row} from 'antd';
+import {Button, Col, Tooltip, Drawer, Form, Image, message, Modal, Radio, Row} from 'antd';
 import { requestAPI } from "../config/function";
 import { useParams } from "react-router-dom";
 import { HistoryNode } from '../Components/Nodes/HistoryNode'
@@ -37,6 +37,7 @@ import {LinkNode} from "../Components/Nodes/LinkNode";
 import {CompactPicker} from '@hello-pangea/color-picker'
 import Loading from '../Images/zannet.png';
 import dayjs from "dayjs";
+import WhiteBoardHelp from "../Components/WhiteBoardHelp";
 
 const defaultViewport = {x: 0, y: 0, zoom: 1.1};
 
@@ -127,87 +128,91 @@ const BasicBord = () => {
             [
 
                 {
-                    label: "Node"
+                    label: "节点"
                 },
                 {
-                    label: "History Node",
+                    label: "历史节点",
                     value: "HistoryNode"
                 },
                 {
-                    label: "Title",
+                    label: "标题",
                     value: "TitleNode"
                 },
                 {
-                    label: "Draw",
+                    label: "白板",
                     value: "DrawNode"
                 },
                 {
-                    label: "Code",
+                    label: "代码",
                     value: "CodeNode"
                 },
                 {
-                    label: "Text",
+                    label: "文档",
                     value: "MarkdownNode"
                 },
                 {
-                    label: "Image Node",
+                    label: "图片",
                     value: "ImageNode"
                 },
                 {
-                    label: "Label",
+                    label: "标签",
                     value: "LabelNode"
                 },
                 {
-                    label: "Todo List",
+                    label: "Todo列表",
                     value: "TodoListNode"
                 },
                 {
-                    label: "Calendar",
+                    label: "日历",
                     value: "CalendarNode"
                 },
                 {
-                    label: "Table",
+                    label: "表格",
                     value: "TableNode"
                 },
                 {
-                    label: "Link",
+                    label: "外部链接",
                     value: "LinkNode"
                 },
                 {
-                    label: "Start Connection",
+                    label: "起始链接节点",
                     value: "OutputConnectionNode"
                 },
                 {
-                    label: "End Connection",
+                    label: "终止链接节点",
                     value: "InputConnectionNode"
                 }
             ],
             [
                 {
-                    label: "Page"
+                    label: "页面"
                 },
                 {
-                    label: "New Page",
+                    label: "新的页面",
                     value: "NewWhiteBoardNode"
                 },
                 {
-                    label: "History Page",
+                    label: "历史页面",
                     value: "HistoryWhiteBordNode"
                 },
                 {
-                    label: "Option"
+                    label: "操作"
                 },
                 {
-                    label: "Save Page",
+                    label: "保存页面",
                     value: "SavePage"
                 },
                 {
-                    label: "Save Draft",
+                    label: "保存草稿",
                     value: "SaveDraft"
                 },
                 {
-                    label: "Page Setting",
+                    label: "页面设置",
                     value: "StartSettings"
+                },
+                {
+                    label: "帮助",
+                    value: "ShowHelp"
                 }
             ]
         ];
@@ -239,15 +244,20 @@ const BasicBord = () => {
                                                     className={"Item"}
                                                     key={menu.value}
                                                 >
-                                                    <Button
-                                                        size={"small"}
-                                                        type={"link"}
-                                                        onClick={(event)=>{ createNode(event,menu.value) }}
+                                                    <Tooltip
+                                                        placement={"right"}
+                                                        title={menu?.tooltip}
                                                     >
-                                                        {
-                                                            menu.label
-                                                        }
-                                                    </Button>
+                                                        <Button
+                                                            size={"small"}
+                                                            type={"link"}
+                                                            onClick={(event)=>{ createNode(event,menu.value) }}
+                                                        >
+                                                            {
+                                                                menu.label
+                                                            }
+                                                        </Button>
+                                                    </Tooltip>
                                                 </div>
                                             )
                                         })
