@@ -80,6 +80,29 @@ const UpdateNode=(instance,node)=>{
     instance.setNodes(newNodes)
 }
 
+const SaveWhiteBoard=(IsDraft,id,settings,nodes,edges)=>{
+    requestAPI("index.php?action=WhiteBordController&method=StoreWhiteBord&ID=" + id, {
+        method: "post",
+        body: JSON.stringify({
+            IsDraft: IsDraft,
+            Data: {
+                settings: settings,
+                data: {
+                    nodes: nodes,
+                    edges: edges
+                }
+            }
+        })
+    })
+        .then((res) => {
+            if(res.Status==1){
+                message.success("Save Success")
+            }else{
+                message.warning(res.Message);
+            }
+        })
+}
+
 const nextPosition=(preLocation,position)=>{
     let nextLocation=preLocation;
     switch (position){
@@ -126,5 +149,6 @@ export {
     UpdateNodeAsync,
     GetNodeDetailAsync,
     SearchHistoryNodeAsync,
-    GetNodeStyle
+    GetNodeStyle,
+    SaveWhiteBoard
 }

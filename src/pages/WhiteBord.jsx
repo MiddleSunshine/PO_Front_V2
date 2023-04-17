@@ -18,7 +18,7 @@ import { useParams } from "react-router-dom";
 import { HistoryNode } from '../Components/Nodes/HistoryNode'
 import Hotkeys from 'react-hot-keys'
 import {LabelNode} from "../Components/Nodes/LabelNode";
-import {BASIC_NODE_DATA} from "../Components/Nodes/BasicNode";
+import {BASIC_NODE_DATA, SaveWhiteBoard} from "../Components/Nodes/BasicNode";
 import {NewWhiteBoardNode,WhiteBoardNode,HistoryWhiteBordNode} from "../Components/Nodes/WhiteBoardNode";
 import {InputConnectionNode} from '../Components/Nodes/InputConnectionNode'
 import {OutputConnectionNode} from '../Components/Nodes/OutputConnectionNode'
@@ -493,26 +493,7 @@ const BasicBord = () => {
     }
 
     const saveWhiteBord = (IsDraft = true) => {
-        requestAPI("index.php?action=WhiteBordController&method=StoreWhiteBord&ID=" + id, {
-            method: "post",
-            body: JSON.stringify({
-                IsDraft: IsDraft,
-                Data: {
-                    settings: settings,
-                    data: {
-                        nodes: nodes,
-                        edges: edges
-                    }
-                }
-            })
-        })
-            .then((res) => {
-                if(res.Status==1){
-                    message.success("Save Success")
-                }else{
-                    message.warning(res.Message);
-                }
-            })
+        SaveWhiteBoard(IsDraft,id,settings,nodes,edges);
     }
 
     const handleOnNodeDrop = (event, node) => {
