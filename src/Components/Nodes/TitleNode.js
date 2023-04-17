@@ -11,31 +11,18 @@ const TitleNode = (nodeProps) => {
     const instance = useReactFlow();
 
     const SAVE_DATA = (data) => {
-        if (data.hasOwnProperty('ID')) {
-            let newNode = nodeProps;
-            newNode.data.data = data;
-            UpdateNode(instance, newNode);
-        }
+        let newNode = {...nodeProps};
+        newNode.data.data = data;
+        UpdateNode(instance, newNode);
     }
 
-    const finishInput = () => {
+    const finishInput = (data) => {
         if (!data?.Name) {
             message.warning("Please input the title");
             return false;
         }
-        if (!data.hasOwnProperty('ID')) {
-            CreateNodeAsync('TitleNode', nodeProps.id, data.Name)
-                .then((res) => {
-                    if (res.Data.data) {
-                        setData(res.Data.data)
-                        SAVE_DATA(res.Data.data);
-                    } else {
-                        message.warning(res.Message);
-                    }
-                })
-        } else {
-            SAVE_DATA(data);
-        }
+        setData(data);
+        SAVE_DATA(data);
     }
 
     return <div
@@ -55,13 +42,13 @@ const TitleNode = (nodeProps) => {
             <Input
                 value={data.Name}
                 onChange={(e) => {
-                    setData({
+                    finishInput({
                         ...data,
                         Name: e.target.value
-                    })
+                    });
                 }}
                 onPressEnter={() => {
-                    finishInput();
+                    finishInput(data);
                 }}
                 addonAfter={
                     <Button
@@ -69,7 +56,7 @@ const TitleNode = (nodeProps) => {
                         type={"link"}
                         icon={<SaveOutlined />}
                         onClick={() => {
-                            finishInput();
+                            finishInput(data);
                         }}
                     >
                     </Button>
