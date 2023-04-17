@@ -9,7 +9,7 @@ import {
     Timeline,
     InputNumber, message, Divider
 } from "antd";
-import { useEffect, useState } from "react";
+import {useCallback, useEffect, useState} from "react";
 import { GetNodeStyle, UpdateNode } from "./BasicNode";
 import { NodeResizer, NodeToolbar } from "reactflow";
 import dayjs from "dayjs";
@@ -78,6 +78,10 @@ const CalendarNode = (nodeProps) => {
         changeSelectedDate(() => dayjs(nodeProps.data.node_data.default_date))
     }, []);
 
+    useCallback(()=>{
+        SAVE_DATA();
+    },[nodeProps.selected])
+
     // 组件 Timeline 的数据xia
     const createListData = (nodeData) => {
         let label = "";
@@ -96,7 +100,18 @@ const CalendarNode = (nodeProps) => {
                             items.map((i) => {
                                 newList.push({
                                     label: label,
-                                    children: i.data.Name
+                                    children: <div>
+                                        <Button
+                                            type={"link"}
+                                            onClick={()=>{
+                                                startInput(i);
+                                            }}
+                                            size={"small"}
+                                        >{i.data.Name}</Button>
+                                        <span>
+                                            {i.data.Note}
+                                        </span>
+                                    </div>
                                 });
                                 if (label) {
                                     label = '';
@@ -117,7 +132,6 @@ const CalendarNode = (nodeProps) => {
             ...nodeProps
         }
         newNode.data.node_data = nodeData;
-        newNode.data.node_data.mode = MODE_LIST;
         newNode.data.node_data.default_date = selectedDate;
         newNode.data.data = data;
         UpdateNode(instance, newNode);
