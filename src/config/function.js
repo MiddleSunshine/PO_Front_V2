@@ -1,28 +1,29 @@
-import {message} from "antd";
+import { message } from "antd";
 
-const LOGIN_TOKEN_KEY='auth_token';
+const LOGIN_TOKEN_KEY = 'auth_token';
 
-const requestAPI=(api,init={},checkToken=true)=>{
-    let sign=localStorage.getItem(LOGIN_TOKEN_KEY);
-    if (!sign && checkToken){
-        window.location="/login";
-        return new Promise(resolve => {},reject=>{});
+const requestAPI = (api, init = {}, checkToken = true) => {
+    let sign = localStorage.getItem(LOGIN_TOKEN_KEY);
+    if (!sign && checkToken) {
+        window.location = "/login";
+        return new Promise(resolve => { }, reject => { });
     }
-    api+="&sign="+sign;
-    let requestUrl="";
-    if (process.env.NODE_ENV=='development'){
+    api += "&sign=" + sign;
+    let requestUrl = "";
+    if (process.env.NODE_ENV == 'development') {
         // 开发环境
-        requestUrl="http://127.0.0.1:8050/";
-    }else{
+        requestUrl = "http://127.0.0.1:8050/";
+    } else {
         // 正式环境
+        requestUrl = "http://127.0.0.1:8050/";
     }
-    return  fetch(requestUrl+api,{
+    return fetch(requestUrl + api, {
         ...init,
-        mode:"cors"
-    }).then((res)=>{
-        return res.json().then((json)=>{
-            if (json.NeedLogin==1){
-                window.location='/login';
+        mode: "cors"
+    }).then((res) => {
+        return res.json().then((json) => {
+            if (json.NeedLogin == 1) {
+                window.location = '/login';
                 return false;
             }
             return json;
@@ -30,34 +31,35 @@ const requestAPI=(api,init={},checkToken=true)=>{
     })
 }
 
-const Login=(userName,password)=>{
-    let requestUrl="";
-    if (process.env.NODE_ENV=='development'){
+const Login = (userName, password) => {
+    let requestUrl = "";
+    if (process.env.NODE_ENV == 'development') {
         // 开发环境
-        requestUrl="http://127.0.0.1:8050/";
-    }else{
+        requestUrl = "http://127.0.0.1:8050/";
+    } else {
         // 正式环境
+        requestUrl = "http://127.0.0.1:8050/";
     }
-    return  fetch(requestUrl+"index.php?action=LoginController&method=Login",{
-        mode:"cors",
-        method:"post",
-        body:JSON.stringify({
-            UserName:userName,
-            Password:password
+    return fetch(requestUrl + "index.php?action=LoginController&method=Login", {
+        mode: "cors",
+        method: "post",
+        body: JSON.stringify({
+            UserName: userName,
+            Password: password
         })
     })
-        .then((res)=>{
-            return res.json().then((json)=>{
-                if (json.Status==1){
-                    let token=json?.Data?.Token;
-                    if (!token){
+        .then((res) => {
+            return res.json().then((json) => {
+                if (json.Status == 1) {
+                    let token = json?.Data?.Token;
+                    if (!token) {
                         message.error("Login Error");
                         return false;
                     }
                     message.success("Login Success");
-                    localStorage.setItem(LOGIN_TOKEN_KEY,token);
+                    localStorage.setItem(LOGIN_TOKEN_KEY, token);
                     return true
-                }else{
+                } else {
                     message.warning(json.Message);
                     return false;
                 }
@@ -65,18 +67,18 @@ const Login=(userName,password)=>{
         })
 }
 
-const Now=()=>{
-   return  requestAPI("index.php?action=DateController&method=Now")
-       .then((json)=>{
-           return {
-               Year:"",
-               Month:"",
-               Day:"",
-               Hour:"",
-               Min:"",
-               ...json.Data
-           }
-       })
+const Now = () => {
+    return requestAPI("index.php?action=DateController&method=Now")
+        .then((json) => {
+            return {
+                Year: "",
+                Month: "",
+                Day: "",
+                Hour: "",
+                Min: "",
+                ...json.Data
+            }
+        })
 }
 
 export {

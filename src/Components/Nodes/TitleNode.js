@@ -1,15 +1,12 @@
 import { Button, Input, message } from "antd";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { CreateNodeAsync, GetNodeStyle } from "./BasicNode";
-import { Handle, useReactFlow } from 'reactflow';
+import { Handle, NodeToolbar, useReactFlow } from 'reactflow';
 import { UpdateNode } from "./BasicNode";
 import { NodeResizer } from "@reactflow/node-resizer";
 import { SaveOutlined } from "@ant-design/icons";
-const MODE_VIEW = 'View';
-const MODE_EDIT = 'Edit';
 
 const TitleNode = (nodeProps) => {
-    const [mode, setMode] = useState(nodeProps.data.data.hasOwnProperty('ID') ? MODE_VIEW : MODE_EDIT);
     const [data, setData] = useState(nodeProps.data.data);
     const instance = useReactFlow();
 
@@ -39,7 +36,6 @@ const TitleNode = (nodeProps) => {
         } else {
             SAVE_DATA(data);
         }
-        setMode(MODE_VIEW);
     }
 
     return <div
@@ -55,45 +51,40 @@ const TitleNode = (nodeProps) => {
             position={"right"}
         >
         </Handle>
+        <NodeToolbar>
+            <Input
+                value={data.Name}
+                onChange={(e) => {
+                    setData({
+                        ...data,
+                        Name: e.target.value
+                    })
+                }}
+                onPressEnter={() => {
+                    finishInput();
+                }}
+                addonAfter={
+                    <Button
+                        size={"small"}
+                        type={"link"}
+                        icon={<SaveOutlined />}
+                        onClick={() => {
+                            finishInput();
+                        }}
+                    >
+                    </Button>
+                }
+            />
+        </NodeToolbar>
         <Handle
             className={"TargetConnection"}
             type={"target"}
             position={"left"}
         />
         <div className={"Content"}>
-            {
-                mode == MODE_VIEW
-                    ? <h3
-                        onClick={() => {
-                            setMode(MODE_EDIT);
-                        }}
-                    >
-                        {data.Name}
-                    </h3>
-                    : <Input
-                        value={data.Name}
-                        onChange={(e) => {
-                            setData({
-                                ...data,
-                                Name: e.target.value
-                            })
-                        }}
-                        onPressEnter={() => {
-                            finishInput();
-                        }}
-                        addonAfter={
-                            <Button
-                                size={"small"}
-                                type={"link"}
-                                icon={<SaveOutlined />}
-                                onClick={() => {
-                                    finishInput();
-                                }}
-                            >
-                            </Button>
-                        }
-                    />
-            }
+            <h3>
+                {data.Name ? data.Name : "Click"}
+            </h3>
         </div>
     </div>
 }
