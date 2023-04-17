@@ -235,16 +235,12 @@ const TableNode = (nodeProps) => {
                                         <Button
                                             type={"primary"}
                                             onClick={()=>{
-                                                if (selected.ColumnIndex==index){
-                                                    deleteTable();
-                                                }else{
-                                                    switchSelected(-1,index);
-                                                }
+                                                switchSelected(-1,index);
                                             }}
                                             danger={selected.ColumnIndex==index}
                                         >
                                             {
-                                                selected.ColumnIndex==index?"Delete":(index + 1)
+                                                selected.ColumnIndex==index?"Selected":(index + 1)
                                             }
                                         </Button>
                                     </th>
