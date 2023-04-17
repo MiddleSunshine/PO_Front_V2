@@ -323,8 +323,8 @@ const CalendarNode = (nodeProps) => {
                 >
                     {
                         nodeData.mode == MODE_LIST
-                            ? "Settng Data"
-                            : "Save Change"
+                            ? "设置日期"
+                            : "保存"
                     }
                 </Button>
                 &nbsp;&nbsp;
@@ -334,7 +334,7 @@ const CalendarNode = (nodeProps) => {
                         startInput({ ...NODE_DATE_TEMPLATE });
                     }}
                 >
-                    Input
+                    新的事件
                 </Button>
                 {/*&nbsp;&nbsp;*/}
                 {/*<Button*/}
@@ -347,7 +347,7 @@ const CalendarNode = (nodeProps) => {
                 {/*</Button>*/}
             </NodeToolbar>
             <NodeResizer
-                isVisible={nodeProps.selected && nodeData.mode == MODE_LIST}
+                isVisible={nodeProps.selected}
             />
             {
                 nodeData.mode == MODE_LIST
