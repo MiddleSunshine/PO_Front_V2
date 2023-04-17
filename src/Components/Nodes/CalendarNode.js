@@ -68,9 +68,7 @@ const CalendarNode = (nodeProps) => {
     // { date=>[ NODE_DATE_TEMPLATE ] }
     const [calendarData, setCalendarData] = useState({});
     const [selectedDate, changeSelectedDate] = useState(() => dayjs(nodeProps.data.node_data.default_date))
-    const [editData, setEditData] = useState({
-        ...NODE_DATE_TEMPLATE
-    });
+    const [editData, setEditData] = useState({});
     // EDIT
     const [inputMode, setInputMode] = useState(INPUT_MODE_HIDDEN);
     const instance = useReactFlow();
@@ -155,13 +153,18 @@ const CalendarNode = (nodeProps) => {
     }
 
     // 开始输入数据
-    const startInput = (editData) => {
-        if (editData.data.ID) {
+    const startInput = (editDataProps) => {
+        if (editDataProps?.data?.ID) {
             // 编辑历史数据
-            setEditData(editData);
+            setEditData(editDataProps);
         } else {
             let newEditData = {
-                ...NODE_DATE_TEMPLATE
+                node_data:{
+                    ...NODE_DATE_TEMPLATE.node_data
+                },
+                data:{
+                    ...NODE_DATE_TEMPLATE.data
+                }
             };
             // 新建数据
             // 设置初始值
@@ -172,6 +175,7 @@ const CalendarNode = (nodeProps) => {
             newEditData.node_data.hour = date.hour();
             newEditData.node_data.min = date.minute();
             setEditData(newEditData);
+            newEditData={};
         }
         setInputMode(INPUT_MODE_EDIT);
     }
@@ -214,9 +218,7 @@ const CalendarNode = (nodeProps) => {
             newItem
         );
         setInputMode(INPUT_MODE_HIDDEN);
-        setEditData({
-            ...NODE_DATE_TEMPLATE
-        })
+        setEditData({})
     }
 
     // 将数据保存进 node_data 中
@@ -254,7 +256,6 @@ const CalendarNode = (nodeProps) => {
 
     // 删除事件
     const deleteItem = (deleteItem) => {
-        debugger
         let newNodeData = {
             ...nodeData
         }
@@ -323,28 +324,28 @@ const CalendarNode = (nodeProps) => {
                 >
                     {
                         nodeData.mode == MODE_LIST
-                            ? "设置日期"
-                            : "保存"
+                            ? "日历模式"
+                            : "列表模式"
                     }
                 </Button>
                 &nbsp;&nbsp;
                 <Button
                     type={"primary"}
                     onClick={() => {
-                        startInput({ ...NODE_DATE_TEMPLATE });
+                        startInput({});
                     }}
                 >
                     新的事件
                 </Button>
-                {/*&nbsp;&nbsp;*/}
-                {/*<Button*/}
-                {/*    type={"primary"}*/}
-                {/*    onClick={()=>{*/}
-                {/*        SAVE_DATA();*/}
-                {/*    }}*/}
-                {/*>*/}
-                {/*    Save Update*/}
-                {/*</Button>*/}
+                &nbsp;&nbsp;
+                <Button
+                    type={"primary"}
+                    onClick={()=>{
+                        SAVE_DATA();
+                    }}
+                >
+                    保存修改
+                </Button>
             </NodeToolbar>
             <NodeResizer
                 isVisible={nodeProps.selected}
@@ -430,7 +431,7 @@ const CalendarNode = (nodeProps) => {
                     layout={"vertical"}
                 >
                     {
-                        editData.data.ID
+                        editData?.data?.ID
                             ? <Form.Item
                                 label={"Options"}
                             >
@@ -455,7 +456,7 @@ const CalendarNode = (nodeProps) => {
                             <Col span={3}>
                                 <InputNumber
                                     addonBefore={"Year"}
-                                    value={editData.node_data.year}
+                                    value={editData?.node_data?.year}
                                     onChange={(newValue) => {
                                         updateInput('year', newValue)
                                     }}
@@ -464,7 +465,7 @@ const CalendarNode = (nodeProps) => {
                             <Col span={3} offset={1}>
                                 <InputNumber
                                     addonBefore={"Month"}
-                                    value={editData.node_data.month}
+                                    value={editData?.node_data?.month}
                                     onChange={(newValue) => {
                                         updateInput('month', newValue)
                                     }}
@@ -473,7 +474,7 @@ const CalendarNode = (nodeProps) => {
                             <Col span={3} offset={1}>
                                 <InputNumber
                                     addonBefore={"Day"}
-                                    value={editData.node_data.day}
+                                    value={editData?.node_data?.day}
                                     onChange={(newValue) => {
                                         updateInput('day', newValue)
                                     }}
@@ -482,7 +483,7 @@ const CalendarNode = (nodeProps) => {
                             <Col span={3} offset={1}>
                                 <InputNumber
                                     addonBefore={"Hour"}
-                                    value={editData.node_data.hour}
+                                    value={editData?.node_data?.hour}
                                     onChange={(newValue) => {
                                         updateInput('hour', newValue)
                                     }}
@@ -491,7 +492,7 @@ const CalendarNode = (nodeProps) => {
                             <Col span={3} offset={1}>
                                 <InputNumber
                                     addonBefore={"Min"}
-                                    value={editData.node_data.min}
+                                    value={editData?.node_data?.min}
                                     onChange={(newValue) => {
                                         updateInput('min', newValue)
                                     }}
@@ -503,7 +504,7 @@ const CalendarNode = (nodeProps) => {
                         label={"Title"}
                     >
                         <Input
-                            value={editData.data.Name}
+                            value={editData?.data?.Name}
                             onChange={(e) => {
                                 updateInput('Name', e.target.value)
                             }}
@@ -513,7 +514,7 @@ const CalendarNode = (nodeProps) => {
                         label={"Note"}
                     >
                         <Input.TextArea
-                            value={editData.data.Note}
+                            value={editData?.data?.Note}
                             onChange={(e) => {
                                 updateInput('Note', e.target.value)
                             }}
