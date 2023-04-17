@@ -15,7 +15,7 @@ const DrawNode = (nodeProps) => {
 
     const SAVE_INTO = () => {
         if (nodeData.hasOwnProperty('ID')) {
-            let newNode = nodeProps;
+            let newNode = {...nodeProps};
             newNode.data.data = nodeData;
             UpdateNode(instance, newNode);
         }
@@ -27,7 +27,7 @@ const DrawNode = (nodeProps) => {
                 message.warning("Please input the title");
                 return false;
             }
-            CreateNodeAsync('DrawNode', nodeProps.id, nodeData.Name)
+            CreateNodeAsync('DrawNode', nodeData.Name,nodeProps.id)
                 .then((res) => {
                     if (res.Data.data.ID) {
                         setNodeData(res.Data.data);
