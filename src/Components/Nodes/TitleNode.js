@@ -11,16 +11,12 @@ const TitleNode = (nodeProps) => {
     const instance = useReactFlow();
 
     const SAVE_DATA = (data) => {
-        let newNode = {...nodeProps};
+        let newNode = { ...nodeProps };
         newNode.data.data = data;
         UpdateNode(instance, newNode);
     }
 
     const finishInput = (data) => {
-        if (!data?.Name) {
-            message.warning("Please input the title");
-            return false;
-        }
         setData(data);
         SAVE_DATA(data);
     }
