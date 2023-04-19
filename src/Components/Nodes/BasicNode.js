@@ -1,25 +1,25 @@
 import { useReactFlow } from 'reactflow';
-import {requestAPI} from "../../config/function";
-import {message} from "antd";
+import { requestAPI } from "../../config/function";
+import { message } from "antd";
 
-const BASIC_NODE_DATA={
-    data:{},
-    node_data:{},
-    settings:{
-        style:{}
+const BASIC_NODE_DATA = {
+    data: {},
+    node_data: {},
+    settings: {
+        style: {}
     },
-    save_into_database:false
+    save_into_database: false
 }
 
-const GetNodeStyle=(node)=>{
-    let style={
+const GetNodeStyle = (node) => {
+    let style = {
         ...node.data?.settings?.style,
-        width:node.width,
-        height:node.height
+        width: node.width,
+        height: node.height
     };
-    if (node?.data?.save_into_database){
-        style.borderTop="4px solid #62DBC8";
-        style.borderRadius="5px";
+    if (node?.data?.save_into_database) {
+        style.borderTop = "4px solid #62DBC8";
+        style.borderRadius = "5px";
     }
     // if (node.selected){
     //     style.backgroundColor="#ff5722";
@@ -27,60 +27,61 @@ const GetNodeStyle=(node)=>{
     return style;
 }
 
-const SearchHistoryNodeAsync=(searchKeyword,type='')=>{
-    if (!searchKeyword){
+const SearchHistoryNodeAsync = (searchKeyword, type = '') => {
+    if (!searchKeyword) {
         message.warning("Please input the keyword");
         return "";
     }
-    return  requestAPI('index.php?action=NodeController&method=SearchNode',{
-        method:"post",
-        body:JSON.stringify({
-            keyword:searchKeyword,
-            type:type
+    return requestAPI('index.php?action=NodeController&method=SearchNode', {
+        method: "post",
+        body: JSON.stringify({
+            keyword: searchKeyword,
+            type: type
         })
     });
 }
 
-const CreateNodeAsync=(type,name,node_id,node_data={})=>{
-    return  requestAPI("index.php?action=NodeController&method=CreateNode",{
-        method:"post",
-        body:JSON.stringify({
-            data:{
-                Type:type,
-                Name:name,
-                node_id:node_id
+const CreateNodeAsync = (type, name, node_id, node_data = {}) => {
+    return requestAPI("index.php?action=NodeController&method=CreateNode", {
+        method: "post",
+        body: JSON.stringify({
+            data: {
+                Type: type,
+                Name: name,
+                node_id: node_id
             },
-            node_data:node_data
+            node_data: node_data
         })
     })
 }
 
-const GetNodeDetailAsync=(ID)=>{
+const GetNodeDetailAsync = (ID) => {
     return requestAPI(`index.php?action=NodeController&method=GetNodeDetail&ID=${ID}`);
 }
 
-const UpdateNodeAsync=(data,node_data)=>{
-    return  requestAPI("index.php?action=NodeController&method=UpdateNode",{
-        method:"post",
-        body:JSON.stringify({
-            data:data,
-            node_data:node_data
+const UpdateNodeAsync = (data, node_data) => {
+    return requestAPI("index.php?action=NodeController&method=UpdateNode", {
+        method: "post",
+        body: JSON.stringify({
+            data: data,
+            node_data: node_data
         })
     });
 }
 
-const UpdateNode=(instance,node)=>{
-    let newNodes=instance.getNodes();
-    newNodes.map((n)=>{
-        if (n.id==node.id){
-            return Object.assign(n,node);
+const UpdateNode = (instance, node) => {
+    let newNodes = instance.getNodes();
+    newNodes.map((n) => {
+        if (n.id == node.id) {
+            return Object.assign(n, node);
         }
         return n;
     });
     instance.setNodes(newNodes)
+    message.info("Synced");
 }
 
-const SaveWhiteBoard=(IsDraft,id,settings,nodes,edges)=>{
+const SaveWhiteBoard = (IsDraft, id, settings, nodes, edges) => {
     requestAPI("index.php?action=WhiteBordController&method=StoreWhiteBord&ID=" + id, {
         method: "post",
         body: JSON.stringify({
@@ -95,46 +96,46 @@ const SaveWhiteBoard=(IsDraft,id,settings,nodes,edges)=>{
         })
     })
         .then((res) => {
-            if(res.Status==1){
+            if (res.Status == 1) {
                 message.success("Save Success")
-            }else{
+            } else {
                 message.warning(res.Message);
             }
         })
 }
 
-const nextPosition=(preLocation,position)=>{
-    let nextLocation=preLocation;
-    switch (position){
+const nextPosition = (preLocation, position) => {
+    let nextLocation = preLocation;
+    switch (position) {
         case 'Left':
-            switch (preLocation){
+            switch (preLocation) {
                 case 'left':
-                    nextLocation='bottom';
+                    nextLocation = 'bottom';
                     break;
                 case 'right':
-                    nextLocation='top';
+                    nextLocation = 'top';
                     break;
                 case 'top':
-                    nextLocation='left';
+                    nextLocation = 'left';
                     break;
                 case 'bottom':
-                    nextLocation='right';
+                    nextLocation = 'right';
                     break;
             }
             break;
         case 'Right':
-            switch (preLocation){
+            switch (preLocation) {
                 case 'left':
-                    nextLocation='top';
+                    nextLocation = 'top';
                     break;
                 case 'right':
-                    nextLocation='bottom';
+                    nextLocation = 'bottom';
                     break;
                 case 'top':
-                    nextLocation='right';
+                    nextLocation = 'right';
                     break;
                 case 'bottom':
-                    nextLocation='bottom';
+                    nextLocation = 'bottom';
                     break;
             }
             break;

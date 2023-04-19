@@ -9,7 +9,7 @@ import {
     Timeline,
     InputNumber, message, Divider
 } from "antd";
-import {useCallback, useEffect, useState} from "react";
+import { useCallback, useEffect, useState } from "react";
 import { GetNodeStyle, UpdateNode } from "./BasicNode";
 import { NodeResizer, NodeToolbar } from "reactflow";
 import dayjs from "dayjs";
@@ -78,9 +78,9 @@ const CalendarNode = (nodeProps) => {
         changeSelectedDate(() => dayjs(nodeProps.data.node_data.default_date))
     }, []);
 
-    useCallback(()=>{
+    useCallback(() => {
         SAVE_DATA();
-    },[nodeProps.selected])
+    }, [nodeProps.selected])
 
     // 组件 Timeline 的数据xia
     const createListData = (nodeData) => {
@@ -103,7 +103,7 @@ const CalendarNode = (nodeProps) => {
                                     children: <div>
                                         <Button
                                             type={"link"}
-                                            onClick={()=>{
+                                            onClick={() => {
                                                 startInput(i);
                                             }}
                                             size={"small"}
@@ -135,7 +135,6 @@ const CalendarNode = (nodeProps) => {
         newNode.data.node_data.default_date = selectedDate;
         newNode.data.data = data;
         UpdateNode(instance, newNode);
-        message.info("Synced");
     }
 
     // 组件 Calendar 的数据
@@ -173,10 +172,10 @@ const CalendarNode = (nodeProps) => {
             setEditData(editDataProps);
         } else {
             let newEditData = {
-                node_data:{
+                node_data: {
                     ...NODE_DATE_TEMPLATE.node_data
                 },
-                data:{
+                data: {
                     ...NODE_DATE_TEMPLATE.data
                 }
             };
@@ -189,7 +188,7 @@ const CalendarNode = (nodeProps) => {
             newEditData.node_data.hour = date.hour();
             newEditData.node_data.min = date.minute();
             setEditData(newEditData);
-            newEditData={};
+            newEditData = {};
         }
         setInputMode(INPUT_MODE_EDIT);
     }
@@ -354,7 +353,7 @@ const CalendarNode = (nodeProps) => {
                 &nbsp;&nbsp;
                 <Button
                     type={"primary"}
-                    onClick={()=>{
+                    onClick={() => {
                         SAVE_DATA();
                     }}
                 >
