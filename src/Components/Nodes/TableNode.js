@@ -32,6 +32,9 @@ const TableNode = (nodeProps) => {
 
     useEffect(() => {
         setNodeData(nodeProps.data.node_data)
+        if (!nodeProps.data.data.hasOwnProperty('ID')){
+            updateTable(nodeProps.data.node_data.rows,nodeProps.data.node_data.columns);
+        }
     }, [])
 
     const instance = useReactFlow();
@@ -85,12 +88,14 @@ const TableNode = (nodeProps) => {
                     return i;
                 })
                 newNodeData.table.splice(index + 1, 0, newRow);
+                newNodeData.rows++;
                 break;
             case 'column':
                 newNodeData.titles.splice(index + 1, 0, {...TITLE_ITEM});
                 for (let rowIndex = 0; rowIndex < newNodeData.table.length; rowIndex++) {
                     newNodeData.table[rowIndex].splice(index+1,0,{...DATA_ITEM})
                 }
+                newNodeData.columns++;
                 break;
         }
         setNodeData(newNodeData);

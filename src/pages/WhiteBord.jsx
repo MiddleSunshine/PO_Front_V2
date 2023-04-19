@@ -447,8 +447,8 @@ const BasicBord = () => {
                 new_node.data.node_data={
                     table:[],
                     titles:[],
-                    rows:0,
-                    columns:0
+                    rows:1,
+                    columns:1
                 }
                 new_node.data.save_into_database=true;
                 break;
