@@ -64,7 +64,6 @@ const Index = () => {
                                     <Button
                                         type={"link"}
                                         href={"/login"}
-                                        target={"_blank"}
                                     >
                                         Login
                                     </Button>

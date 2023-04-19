@@ -15,7 +15,9 @@ const SheetNode = (nodeProps) => {
         let newData = { ...data };
         newData.Name = name;
         if (!newData.hasOwnProperty('ID')) {
-            CreateNodeAsync('SheetNode', name, nodeProps.id)
+            CreateNodeAsync('SheetNode', name, nodeProps.id,{
+                sheet: [{ name: "Sheet1" }]
+            })
                 .then((res) => {
                     if (res.Data.data.ID) {
                         setData(res.Data.data);

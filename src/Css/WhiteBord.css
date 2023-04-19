@@ -38,7 +38,7 @@
 
 .WhiteBoard .BasicNodeOutside {}
 
-.WhiteBoard .EditSheetNode {
+.PO .EditSheetNode {
     width: 100vw;
     height: 100vh;
 }

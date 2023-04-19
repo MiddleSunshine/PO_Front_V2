@@ -34,6 +34,7 @@ import {CalendarNode} from "../Components/Nodes/CalendarNode";
 import {TodoListNode} from "../Components/Nodes/TodoListNode";
 import {TableNode} from "../Components/Nodes/TableNode";
 import {LinkNode} from "../Components/Nodes/LinkNode";
+import {SheetNode} from "../Components/Nodes/SheetNode";
 import {CompactPicker} from '@hello-pangea/color-picker'
 import Loading from '../Images/zannet.png';
 import dayjs from "dayjs";
@@ -59,7 +60,8 @@ const AllNodeTypes = {
     TodoListNode,
     HistoryWhiteBordNode,
     TableNode,
-    LinkNode
+    LinkNode,
+    SheetNode
 }
 
 const DEFAULT_SETTINGS={
@@ -172,6 +174,10 @@ const BasicBord = () => {
                 {
                     label: "表格",
                     value: "TableNode"
+                },
+                {
+                    label: "excel",
+                    value: "SheetNode"
                 },
                 {
                     label: "外部链接",
