@@ -74,9 +74,6 @@ const TableNode = (nodeProps) => {
     }
 
     const AddRowOrColumn = (type, index) => {
-        if (index<0){
-            index=0;
-        }
         let newNodeData = {...nodeData};
         switch (type) {
             case 'row':
@@ -87,9 +84,13 @@ const TableNode = (nodeProps) => {
                     });
                     return i;
                 })
-                newNodeData.table.splice(index, 0 , newRow);
+                newNodeData.table.splice(index + 1, 0, newRow);
                 break;
             case 'column':
+                newNodeData.titles.splice(index + 1, 0, {...TITLE_ITEM});
+                for (let rowIndex = 0; rowIndex < newNodeData.table.length; rowIndex++) {
+                    newNodeData.table[rowIndex].splice(index+1,0,{...DATA_ITEM})
+                }
                 break;
         }
         setNodeData(newNodeData);
@@ -266,6 +267,9 @@ const TableNode = (nodeProps) => {
                                             ghost={true}
                                             type={"primary"}
                                             icon={<CaretLeftOutlined/>}
+                                            onClick={()=>{
+                                                AddRowOrColumn('column',index-1);
+                                            }}
                                         ></Button>
                                         <Button
                                             type={"primary"}
@@ -287,6 +291,9 @@ const TableNode = (nodeProps) => {
                                             ghost={true}
                                             type={"primary"}
                                             icon={<CaretRightOutlined/>}
+                                            onClick={()=>{
+                                                AddRowOrColumn('column',index);
+                                            }}
                                         ></Button>
                                     </th>
                                 )
@@ -341,8 +348,8 @@ const TableNode = (nodeProps) => {
                                                                     ghost={true}
                                                                     type={"primary"}
                                                                     icon={<CaretUpOutlined/>}
-                                                                    onClick={()=>{
-                                                                        AddRowOrColumn('row',rowIndex)
+                                                                    onClick={() => {
+                                                                        AddRowOrColumn('row', rowIndex - 1)
                                                                     }}
                                                                 ></Button>
                                                                 <Button
@@ -366,8 +373,8 @@ const TableNode = (nodeProps) => {
                                                                     ghost={true}
                                                                     type={"primary"}
                                                                     icon={<CaretDownOutlined/>}
-                                                                    onClick={()=>{
-                                                                        AddRowOrColumn('row',rowIndex+1)
+                                                                    onClick={() => {
+                                                                        AddRowOrColumn('row', rowIndex)
                                                                     }}
                                                                 ></Button>
                                                             </td>
