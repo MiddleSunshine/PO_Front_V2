@@ -1,57 +1,47 @@
 import { useParams } from "react-router-dom";
 import { Workbook } from "@fortune-sheet/react";
 import "@fortune-sheet/react/dist/index.css"
-import {useEffect, useState} from "react";
-import ReactDOM from 'react-dom/client';
-import {GetNodeDetailAsync, UpdateNodeAsync} from "../Components/Nodes/BasicNode";
-import {Row, Col, Button, message} from "antd";
-
+import { useEffect, useMemo, useState } from "react";
+import { GetNodeDetailAsync, UpdateNodeAsync } from "../Components/Nodes/BasicNode";
+import { Row, Col, Button, message } from "antd";
 // 编辑页面
 const EditSheetNode = () => {
     const { id } = useParams();
     const [data, setData] = useState({});
+    const [sheet, setSheet] = useState([]);
     const [nodeData, setNodeData] = useState({
         sheet: [{ name: "Sheet2" }]
     });
-    const GetNodeData=()=>{
+    const GetNodeData = () => {
         GetNodeDetailAsync(id)
-            .then((res)=>{
-                let newNodeData=JSON.parse(res.Data.node_data);
+            .then((res) => {
+                let newNodeData = JSON.parse(res.Data.node_data);
                 setData(res.Data.data);
                 setNodeData(newNodeData);
-                const sheet=ReactDOM.createRoot(document.getElementById('sheet'));
-                sheet.render(
-                    <Workbook
-                        data={newNodeData.sheet}
-                        onChange={(newSheet)=>{
-                            setNodeData({
-                                ...nodeData,
-                                sheet: newSheet
-                            })
-                        }}
-                    />
-                );
                 return res.Data.data;
             })
-            .then((returnData)=>{
-                document.title=returnData.Name;
+            .then((returnData) => {
+                document.title = returnData.Name;
             })
     }
 
-    const SaveChange=()=>{
-        UpdateNodeAsync(data,nodeData)
-            .then((res)=>{
-                if (res.Status==1){
+
+    const SaveChange = () => {
+        let newNodeData = { ...nodeData };
+        newNodeData.sheet = sheet;
+        UpdateNodeAsync(data, newNodeData)
+            .then((res) => {
+                if (res.Status == 1) {
                     message.success("保存成功")
-                }else{
+                } else {
                     message.error(res.Message);
                 }
             })
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         GetNodeData();
-    },[])
+    }, [])
 
 
     return (
@@ -59,7 +49,7 @@ const EditSheetNode = () => {
             className="EditSheetNode"
         >
             <Row
-                style={{height:"5vh"}}
+                style={{ height: "5vh" }}
                 align={"middle"}
                 justify={"center"}
             >
@@ -67,7 +57,7 @@ const EditSheetNode = () => {
                     <Button
                         type={"primary"}
                         size={"large"}
-                        onClick={()=>{
+                        onClick={() => {
                             SaveChange();
                         }}
                     >
@@ -75,7 +65,14 @@ const EditSheetNode = () => {
                     </Button>
                 </Col>
             </Row>
-            <div style={{width:"100vw",height:"95vh"}} id="sheet"></div>
+            <div style={{ width: "100vw", height: "95vh" }}>
+                <Workbook
+                    data={nodeData.sheet}
+                    onChange={(newSheet) => {
+                        setSheet(newSheet);
+                    }}
+                />
+            </div>
         </div>
     )
 }
