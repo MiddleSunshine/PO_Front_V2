@@ -1,21 +1,21 @@
-import {Input} from "antd";
-import {useState} from "react";
+import { Input } from "antd";
+import { useState } from "react";
 import React from "react";
 import { NodeResizer } from '@reactflow/node-resizer';
-import { useReactFlow,Handle } from 'reactflow';
-import {GetNodeStyle, UpdateNode} from "./BasicNode";
+import { useReactFlow, Handle } from 'reactflow';
+import { GetNodeStyle, UpdateNode } from "./BasicNode";
 
-const LabelNode=React.memo((node)=>{
+const LabelNode = React.memo((node) => {
 
-    const [label,setLabel]=useState(node.data.node_data?.label);
-    const instance=useReactFlow();
+    const [label, setLabel] = useState(node.data.node_data?.label);
+    const instance = useReactFlow();
 
-    const handleSaveNodeData=()=>{
-        let newNode=node;
-        newNode.data.node_data={
-            label:label
+    const handleSaveNodeData = () => {
+        let newNode = node;
+        newNode.data.node_data = {
+            label: label
         };
-        UpdateNode(instance,node);
+        UpdateNode(instance, node);
     }
 
     return (
@@ -54,13 +54,10 @@ const LabelNode=React.memo((node)=>{
             <div>
                 <Input
                     value={label}
-                    onChange={(e)=>{
+                    onChange={(e) => {
                         setLabel(e.target.value)
                     }}
-                    onBlur={()=>{
-                        handleSaveNodeData();
-                    }}
-                    onPressEnter={()=>{
+                    onPressEnter={() => {
                         handleSaveNodeData();
                     }}
                 />

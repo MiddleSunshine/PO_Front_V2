@@ -2,27 +2,32 @@ import Index from '../pages/index'
 import WhiteBord from '../pages/WhiteBord'
 import Login from '../pages/Login'
 import DrawPage from '../pages/Draw.js'
-type route={
-    path:string,
-    component:any
+import EditSheetNode from '../pages/Sheet'
+type route = {
+    path: string,
+    component: any
 }
 
-const routes:route[]=[
+const routes: route[] = [
     {
-        path:"/",
-        component:Index
+        path: "/",
+        component: Index
     },
     {
-        path:"/draw/:id",
-        component:DrawPage
+        path: "/sheet/:id",
+        component: EditSheetNode
     },
     {
-        path:"/whiteboard/:id",
-        component:WhiteBord
+        path: "/draw/:id",
+        component: DrawPage
     },
     {
-        path:"/login",
-        component:Login
+        path: "/whiteboard/:id",
+        component: WhiteBord
+    },
+    {
+        path: "/login",
+        component: Login
     }
 ]
 

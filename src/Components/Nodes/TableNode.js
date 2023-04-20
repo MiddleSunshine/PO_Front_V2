@@ -2,7 +2,12 @@ import {GetNodeStyle, UpdateNode} from "./BasicNode";
 import {useEffect, useState} from "react";
 import {NodeToolbar} from "reactflow";
 import {Button, Col, Form, Input, InputNumber, Row} from "antd";
-import {Table} from "react-bootstrap";
+import {
+    CaretLeftOutlined,
+    CaretRightOutlined,
+    CaretUpOutlined,
+    CaretDownOutlined
+} from '@ant-design/icons'
 import {useReactFlow} from "reactflow";
 import {NodeResizer} from "@reactflow/node-resizer";
 
@@ -14,49 +19,52 @@ const DATA_ITEM = {
     Value: ""
 }
 
-const SELECT_ITEM={
-    RowIndex:-1,
-    ColumnIndex:-1
+const SELECT_ITEM = {
+    RowIndex: -1,
+    ColumnIndex: -1
 }
 
 const TableNode = (nodeProps) => {
 
     const [nodeData, setNodeData] = useState(nodeProps.data.node_data);
     const [data, setData] = useState(nodeProps.data.data);
-    const [selected,setSelected]=useState({...SELECT_ITEM});
+    const [selected, setSelected] = useState({...SELECT_ITEM});
 
     useEffect(() => {
         setNodeData(nodeProps.data.node_data)
+        if (!nodeProps.data.data.hasOwnProperty('ID')){
+            updateTable(nodeProps.data.node_data.rows,nodeProps.data.node_data.columns);
+        }
     }, [])
 
     const instance = useReactFlow();
 
     // 切换选中项
-    const switchSelected=(rowIndex=-1,columnIndex=-1)=>{
-        let newSelect={...SELECT_ITEM};
-        if (rowIndex>-1){
-            if (rowIndex==newSelect.RowIndex){
-                newSelect.RowIndex=-1;
-            }else{
-                newSelect.RowIndex=rowIndex;
+    const switchSelected = (rowIndex = -1, columnIndex = -1) => {
+        let newSelect = {...SELECT_ITEM};
+        if (rowIndex > -1) {
+            if (rowIndex == newSelect.RowIndex) {
+                newSelect.RowIndex = -1;
+            } else {
+                newSelect.RowIndex = rowIndex;
             }
-            newSelect.ColumnIndex=-1;
+            newSelect.ColumnIndex = -1;
         }
-        if (columnIndex>-1){
-            if (newSelect.ColumnIndex==columnIndex){
-                newSelect.ColumnIndex=-1;
-            }else{
-                newSelect.ColumnIndex=columnIndex;
+        if (columnIndex > -1) {
+            if (newSelect.ColumnIndex == columnIndex) {
+                newSelect.ColumnIndex = -1;
+            } else {
+                newSelect.ColumnIndex = columnIndex;
             }
-            newSelect.RowIndex=-1;
+            newSelect.RowIndex = -1;
         }
         setSelected(newSelect);
     }
 
-    const getItemClass=(rowIndex,columnIndex)=>{
-        let returnData='';
-        if (selected.RowIndex==rowIndex || selected.ColumnIndex==columnIndex){
-            returnData='Selected';
+    const getItemClass = (rowIndex, columnIndex) => {
+        let returnData = '';
+        if (selected.RowIndex == rowIndex || selected.ColumnIndex == columnIndex) {
+            returnData = 'Selected';
         }
         return returnData;
     }
@@ -66,6 +74,31 @@ const TableNode = (nodeProps) => {
         node.data.node_data = nodeData;
         node.data.data = data;
         UpdateNode(instance, node);
+    }
+
+    const AddRowOrColumn = (type, index) => {
+        let newNodeData = {...nodeData};
+        switch (type) {
+            case 'row':
+                let newRow = [];
+                newNodeData.titles.map((i) => {
+                    newRow.push({
+                        ...DATA_ITEM
+                    });
+                    return i;
+                })
+                newNodeData.table.splice(index + 1, 0, newRow);
+                newNodeData.rows++;
+                break;
+            case 'column':
+                newNodeData.titles.splice(index + 1, 0, {...TITLE_ITEM});
+                for (let rowIndex = 0; rowIndex < newNodeData.table.length; rowIndex++) {
+                    newNodeData.table[rowIndex].splice(index+1,0,{...DATA_ITEM})
+                }
+                newNodeData.columns++;
+                break;
+        }
+        setNodeData(newNodeData);
     }
 
     const updateTable = (rowsLength, columnLength) => {
@@ -102,24 +135,24 @@ const TableNode = (nodeProps) => {
     }
 
     // 删除其中某一列或者某一行
-    const deleteTable=()=>{
-        let newNodeData={...nodeData};
-        if (selected.RowIndex>-1){
+    const deleteTable = () => {
+        let newNodeData = {...nodeData};
+        if (selected.RowIndex > -1) {
             // 删除某一行
-            newNodeData.table.splice(selected.RowIndex,1);
+            newNodeData.table.splice(selected.RowIndex, 1);
         }
-        if (selected.ColumnIndex>-1){
+        if (selected.ColumnIndex > -1) {
             // 删除某一列
             // 先删除某一 title
-            newNodeData.titles.splice(selected.ColumnIndex,1);
+            newNodeData.titles.splice(selected.ColumnIndex, 1);
             // 再删除具体列
-            newNodeData.table.map((row)=>{
-                row.splice(selected.ColumnIndex,1);
+            newNodeData.table.map((row) => {
+                row.splice(selected.ColumnIndex, 1);
                 return row;
             })
         }
         setNodeData(newNodeData);
-        switchSelected(-1,-1);
+        switchSelected(-1, -1);
     }
 
     const updateItem = (type, value, rowIndex, columnIndex = 0) => {
@@ -222,8 +255,11 @@ const TableNode = (nodeProps) => {
                 >
                     <thead>
                     <tr>
-                        <th>
-
+                        <th
+                            onClick={() => {
+                                switchSelected(-1, -1);
+                            }}
+                        >
                         </th>
                         {
                             nodeData.titles.map((title, index) => {
@@ -233,34 +269,54 @@ const TableNode = (nodeProps) => {
                                         className={"Option"}
                                     >
                                         <Button
+                                            ghost={true}
                                             type={"primary"}
+                                            icon={<CaretLeftOutlined/>}
                                             onClick={()=>{
-                                                if (selected.ColumnIndex==index){
-                                                    deleteTable();
-                                                }else{
-                                                    switchSelected(-1,index);
-                                                }
+                                                AddRowOrColumn('column',index-1);
                                             }}
-                                            danger={selected.ColumnIndex==index}
+                                        ></Button>
+                                        <Button
+                                            type={"primary"}
+                                            onClick={() => {
+                                                if (selected.ColumnIndex == index) {
+                                                    deleteTable();
+                                                } else {
+                                                    switchSelected(-1, index);
+                                                }
+                                                switchSelected(-1, index);
+                                            }}
+                                            danger={selected.ColumnIndex == index}
                                         >
                                             {
-                                                selected.ColumnIndex==index?"Delete":(index + 1)
+                                                selected.ColumnIndex == index ? "Delete" : (index + 1)
                                             }
                                         </Button>
+                                        <Button
+                                            ghost={true}
+                                            type={"primary"}
+                                            icon={<CaretRightOutlined/>}
+                                            onClick={()=>{
+                                                AddRowOrColumn('column',index);
+                                            }}
+                                        ></Button>
                                     </th>
                                 )
                             })
                         }
                     </tr>
                     <tr>
-                        <th>
-
+                        <th
+                            onClick={() => {
+                                switchSelected(-1, -1);
+                            }}
+                        >
                         </th>
                         {
                             nodeData.titles.map((title, index) => {
                                 return (
                                     <th
-                                        className={getItemClass(-2,index)}
+                                        className={getItemClass(-2, index)}
                                         key={index}
                                     >
                                         <input
@@ -289,32 +345,48 @@ const TableNode = (nodeProps) => {
                                             return (
                                                 <>
                                                     {
-                                                        columnIndex==0
-                                                            ?<td
-                                                            className={"Option"}
+                                                        columnIndex == 0
+                                                            ? <td
+                                                                className={"Option"}
                                                             >
                                                                 <Button
+                                                                    ghost={true}
                                                                     type={"primary"}
-                                                                    onClick={()=>{
-                                                                        if(selected.RowIndex==rowIndex){
+                                                                    icon={<CaretUpOutlined/>}
+                                                                    onClick={() => {
+                                                                        AddRowOrColumn('row', rowIndex - 1)
+                                                                    }}
+                                                                ></Button>
+                                                                <Button
+                                                                    type={"primary"}
+                                                                    onClick={() => {
+                                                                        if (selected.RowIndex == rowIndex) {
                                                                             deleteTable();
-                                                                        }else{
-                                                                            switchSelected(rowIndex,-1);
+                                                                        } else {
+                                                                            switchSelected(rowIndex, -1);
                                                                         }
                                                                     }}
-                                                                    danger={selected.RowIndex==rowIndex}
+                                                                    danger={selected.RowIndex == rowIndex}
                                                                 >
                                                                     {
-                                                                        selected.RowIndex==rowIndex
-                                                                            ?"Delete"
-                                                                            :(rowIndex+1)
+                                                                        selected.RowIndex == rowIndex
+                                                                            ? "Delete"
+                                                                            : (rowIndex + 1)
                                                                     }
                                                                 </Button>
+                                                                <Button
+                                                                    ghost={true}
+                                                                    type={"primary"}
+                                                                    icon={<CaretDownOutlined/>}
+                                                                    onClick={() => {
+                                                                        AddRowOrColumn('row', rowIndex)
+                                                                    }}
+                                                                ></Button>
                                                             </td>
-                                                            :''
+                                                            : ''
                                                     }
                                                     <td
-                                                        className={getItemClass(rowIndex,columnIndex)}
+                                                        className={getItemClass(rowIndex, columnIndex)}
                                                     >
                                                         <input
                                                             className="form-control input-sm"

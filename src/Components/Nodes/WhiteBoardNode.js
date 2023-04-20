@@ -1,28 +1,28 @@
-import {Button, Input, message, Modal} from "antd";
-import {useState} from "react";
-import {GetNodeStyle, UpdateNode} from "./BasicNode";
-import {Handle, useReactFlow} from 'reactflow';
+import { Button, Input, message, Modal } from "antd";
+import { useState } from "react";
+import { GetNodeStyle, UpdateNode } from "./BasicNode";
+import { Handle, useReactFlow } from 'reactflow';
 import {
     ExportOutlined,
     SaveOutlined,
     SearchOutlined,
     FileOutlined
 } from '@ant-design/icons'
-import {CreateNewWhiteBoardAsync} from "./BaseWhiteBoard";
-import {SearchHistoryWhiteBoard} from "../SearchHistoryWhiteBoard";
-import {NodeResizer} from "@reactflow/node-resizer";
+import { CreateNewWhiteBoardAsync } from "./BaseWhiteBoard";
+import { SearchHistoryWhiteBoard } from "../SearchHistoryWhiteBoard";
+import { NodeResizer } from "@reactflow/node-resizer";
 
-const HistoryWhiteBordNode=(nodeProps)=>{
+const HistoryWhiteBordNode = (nodeProps) => {
 
-    const [searchKeyword,setSearchKeyword]=useState("");
-    const [searchMode,switchSearchMode]=useState(false);
-    const instance=useReactFlow();
-    const finishSearch=(historyWhiteBoard)=>{
-        if (historyWhiteBoard?.ID){
-            let newNode={...nodeProps};
-            newNode.type='WhiteBoardNode';
-            newNode.data.node_data=historyWhiteBoard;
-            UpdateNode(instance,newNode);
+    const [searchKeyword, setSearchKeyword] = useState("");
+    const [searchMode, switchSearchMode] = useState(false);
+    const instance = useReactFlow();
+    const finishSearch = (historyWhiteBoard) => {
+        if (historyWhiteBoard?.ID) {
+            let newNode = { ...nodeProps };
+            newNode.type = 'WhiteBoardNode';
+            newNode.data.node_data = historyWhiteBoard;
+            UpdateNode(instance, newNode);
         }
         switchSearchMode(false);
     }
@@ -31,17 +31,17 @@ const HistoryWhiteBordNode=(nodeProps)=>{
         <div>
             <Input
                 value={searchKeyword}
-                onChange={(e)=>{
+                onChange={(e) => {
                     setSearchKeyword(e.target.value);
                 }}
-                onPressEnter={()=>{
+                onPressEnter={() => {
                     switchSearchMode(true);
                 }}
                 addonAfter={<Button
                     type={"link"}
                     size={"small"}
                     icon={<SearchOutlined />}
-                    onClick={()=>{
+                    onClick={() => {
                         switchSearchMode(true);
                     }}
                 ></Button>}
@@ -50,13 +50,13 @@ const HistoryWhiteBordNode=(nodeProps)=>{
                 open={searchMode}
                 width={"1200px"}
                 footer={null}
-                onCancel={()=>{
+                onCancel={() => {
                     switchSearchMode(false)
                 }}
             >
                 <SearchHistoryWhiteBoard
                     keywords={searchKeyword}
-                    OnCancel={(historyWhiteBoard)=>{
+                    OnCancel={(historyWhiteBoard) => {
                         finishSearch(historyWhiteBoard);
                     }}
                 />
@@ -65,24 +65,24 @@ const HistoryWhiteBordNode=(nodeProps)=>{
     )
 }
 
-const NewWhiteBoardNode=(nodeProps)=>{
+const NewWhiteBoardNode = (nodeProps) => {
 
-    const [title,setTitle]=useState('');
-    const instance=useReactFlow();
+    const [title, setTitle] = useState('');
+    const instance = useReactFlow();
 
-    const createNewWhiteBoard=(Title)=>{
-        if (!Title){
+    const createNewWhiteBoard = (Title) => {
+        if (!Title) {
             message.warning("请输入标题");
             return false;
         }
         CreateNewWhiteBoardAsync(Title)
-            .then((res)=>{
-                if (res.Data.data.ID){
-                    let newNode={...nodeProps};
-                    newNode.type='WhiteBoardNode';
-                    newNode.data.node_data=res.Data.data;
-                    UpdateNode(instance,newNode);
-                }else{
+            .then((res) => {
+                if (res.Data.data.ID) {
+                    let newNode = { ...nodeProps };
+                    newNode.type = 'WhiteBoardNode';
+                    newNode.data.node_data = res.Data.data;
+                    UpdateNode(instance, newNode);
+                } else {
                     message.warning(res.Message);
                 }
             })
@@ -94,10 +94,10 @@ const NewWhiteBoardNode=(nodeProps)=>{
         >
             <Input
                 value={title}
-                onChange={(e)=>{
+                onChange={(e) => {
                     setTitle(e.target.value)
                 }}
-                onPressEnter={()=>{
+                onPressEnter={() => {
                     createNewWhiteBoard(title);
                 }}
                 addonAfter={
@@ -105,7 +105,7 @@ const NewWhiteBoardNode=(nodeProps)=>{
                         size={"small"}
                         type={"link"}
                         icon={<SaveOutlined />}
-                        onClick={()=>{
+                        onClick={() => {
                             createNewWhiteBoard(title);
                         }}
                     >
@@ -116,15 +116,15 @@ const NewWhiteBoardNode=(nodeProps)=>{
     )
 }
 
-const WhiteBoardNode=(nodeProps)=>{
+const WhiteBoardNode = (nodeProps) => {
 
-    const [nodeData,setNodeData]=useState(nodeProps.data.node_data);
-    const instance=useReactFlow();
+    const [nodeData, setNodeData] = useState(nodeProps.data.node_data);
+    const instance = useReactFlow();
 
-    const finishInput=()=>{
-        let newNode=nodeProps;
-        newNode.data.node_data=nodeData;
-        UpdateNode(instance,newNode);
+    const finishInput = () => {
+        let newNode = nodeProps;
+        newNode.data.node_data = nodeData;
+        UpdateNode(instance, newNode);
     }
 
     return (
@@ -145,16 +145,13 @@ const WhiteBoardNode=(nodeProps)=>{
             >
                 <Input
                     value={nodeData.Title}
-                    onChange={(e)=>{
+                    onChange={(e) => {
                         setNodeData({
                             ...nodeData,
-                            Title:e.target.value
+                            Title: e.target.value
                         })
                     }}
-                    onPressEnter={()=>{
-                        finishInput();
-                    }}
-                    onBlur={()=>{
+                    onPressEnter={() => {
                         finishInput();
                     }}
                     addonBefore={

@@ -1,45 +1,45 @@
-import {Input, Button, message} from "antd";
-import {useState} from "react";
-import {CreateNodeAsync, GetNodeStyle, UpdateNode} from "./BasicNode";
+import { Input, Button, message } from "antd";
+import { useState } from "react";
+import { CreateNodeAsync, GetNodeStyle, UpdateNode } from "./BasicNode";
 import {
     ExportOutlined,
     SaveOutlined,
     FundViewOutlined
 } from '@ant-design/icons';
-import {Handle, useReactFlow} from 'reactflow';
-import {NodeResizer} from "@reactflow/node-resizer";
+import { Handle, useReactFlow } from 'reactflow';
+import { NodeResizer } from "@reactflow/node-resizer";
 
-const DrawNode=(nodeProps)=>{
-    const [nodeData,setNodeData]=useState(nodeProps.data.data);
-    const instance=useReactFlow();
+const DrawNode = (nodeProps) => {
+    const [nodeData, setNodeData] = useState(nodeProps.data.data);
+    const instance = useReactFlow();
 
-    const SAVE_INTO=()=>{
-        if (nodeData.hasOwnProperty('ID')){
-            let newNode=nodeProps;
-            newNode.data.data=nodeData;
-            UpdateNode(instance,newNode);
+    const SAVE_INTO = () => {
+        if (nodeData.hasOwnProperty('ID')) {
+            let newNode = {...nodeProps};
+            newNode.data.data = nodeData;
+            UpdateNode(instance, newNode);
         }
     }
 
-    const handleCreateNode=()=>{
-        if (!nodeData.hasOwnProperty('ID')){
-            if (!nodeData?.Name){
+    const handleCreateNode = () => {
+        if (!nodeData.hasOwnProperty('ID')) {
+            if (!nodeData?.Name) {
                 message.warning("Please input the title");
                 return false;
             }
-            CreateNodeAsync('DrawNode',nodeProps.id,nodeData.Name)
-                .then((res)=>{
-                    if (res.Data.data.ID){
+            CreateNodeAsync('DrawNode', nodeData.Name,nodeProps.id)
+                .then((res) => {
+                    if (res.Data.data.ID) {
                         setNodeData(res.Data.data);
                         message.success("Create Draw Success");
-                    }else{
+                    } else {
                         message.warning(res.Message);
                     }
                 })
-                .then(()=>{
+                .then(() => {
                     SAVE_INTO();
                 })
-        }else{
+        } else {
             SAVE_INTO();
         }
     }
@@ -62,32 +62,29 @@ const DrawNode=(nodeProps)=>{
             >
                 <Input
                     value={nodeData.Name}
-                    onChange={(e)=>{
+                    onChange={(e) => {
                         setNodeData({
                             ...nodeData,
-                            Name:e.target.value
+                            Name: e.target.value
                         })
                     }}
-                    onPressEnter={()=>{
-                        handleCreateNode();
-                    }}
-                    onBlur={()=>{
+                    onPressEnter={() => {
                         handleCreateNode();
                     }}
                     addonAfter={
                         nodeData.hasOwnProperty('ID')
-                            ?<Button
+                            ? <Button
                                 size={"small"}
                                 type={"link"}
                                 href={`/draw/${nodeData.ID}`}
                                 target={"_blank"}
                                 icon={<ExportOutlined />}
                             ></Button>
-                            :<Button
+                            : <Button
                                 size={"small"}
                                 type={"link"}
                                 icon={<SaveOutlined />}
-                                onClick={()=>{
+                                onClick={() => {
                                     handleCreateNode();
                                 }}
                             ></Button>

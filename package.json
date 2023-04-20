@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@fortune-sheet/react": "^0.16.1",
     "@fullcalendar/core": "^6.1.5",
     "@fullcalendar/daygrid": "^6.1.5",
     "@fullcalendar/google-calendar": "^6.1.5",
@@ -27,6 +28,7 @@
     "dayjs": "^1.11.7",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.3",
+    "react-datasheet": "^1.4.12",
     "react-dom": "^18.2.0",
     "react-hot-keys": "^2.7.2",
     "react-json-tree": "^0.18.0",

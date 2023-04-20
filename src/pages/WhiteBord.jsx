@@ -12,35 +12,36 @@ import { getId } from "../config/WhiteBord";
 import '../Css/WhiteBord.css';
 import '@reactflow/node-resizer/dist/style.css';
 import 'reactflow/dist/style.css';
-import {Button, Col, Tooltip, Drawer, Form, Image, message, Modal, Radio, Row} from 'antd';
+import { Button, Col, Tooltip, Drawer, Form, Image, message, Modal, Radio, Row } from 'antd';
 import { requestAPI } from "../config/function";
 import { useParams } from "react-router-dom";
 import { HistoryNode } from '../Components/Nodes/HistoryNode'
 import Hotkeys from 'react-hot-keys'
-import {LabelNode} from "../Components/Nodes/LabelNode";
-import {BASIC_NODE_DATA} from "../Components/Nodes/BasicNode";
-import {NewWhiteBoardNode,WhiteBoardNode,HistoryWhiteBordNode} from "../Components/Nodes/WhiteBoardNode";
-import {InputConnectionNode} from '../Components/Nodes/InputConnectionNode'
-import {OutputConnectionNode} from '../Components/Nodes/OutputConnectionNode'
-import {ImageNode} from "../Components/Nodes/ImageNode";
-import {EditEdge} from "../Components/Edges/EditEdge";
-import {DirectoryNode} from '../Components/Nodes/DirectoryNode'
-import {DrawNode} from "../Components/Nodes/DrawNode";
-import {CodeNode} from "../Components/Nodes/CodeNode";
-import {TitleNode} from '../Components/Nodes/TitleNode'
-import {EditNode} from "../Components/Nodes/EditNode";
-import {MarkdownNode} from "../Components/Nodes/MarkdownNode";
-import {CalendarNode} from "../Components/Nodes/CalendarNode";
-import {TodoListNode} from "../Components/Nodes/TodoListNode";
-import {TableNode} from "../Components/Nodes/TableNode";
-import {LinkNode} from "../Components/Nodes/LinkNode";
-import {CompactPicker} from '@hello-pangea/color-picker'
+import { LabelNode } from "../Components/Nodes/LabelNode";
+import { BASIC_NODE_DATA, SaveWhiteBoard } from "../Components/Nodes/BasicNode";
+import { NewWhiteBoardNode, WhiteBoardNode, HistoryWhiteBordNode } from "../Components/Nodes/WhiteBoardNode";
+import { InputConnectionNode } from '../Components/Nodes/InputConnectionNode'
+import { OutputConnectionNode } from '../Components/Nodes/OutputConnectionNode'
+import { ImageNode } from "../Components/Nodes/ImageNode";
+import { EditEdge } from "../Components/Edges/EditEdge";
+import { DirectoryNode } from '../Components/Nodes/DirectoryNode'
+import { DrawNode } from "../Components/Nodes/DrawNode";
+import { CodeNode } from "../Components/Nodes/CodeNode";
+import { TitleNode } from '../Components/Nodes/TitleNode'
+import { EditNode } from "../Components/Nodes/EditNode";
+import { MarkdownNode } from "../Components/Nodes/MarkdownNode";
+import { CalendarNode } from "../Components/Nodes/CalendarNode";
+import { TodoListNode } from "../Components/Nodes/TodoListNode";
+import { TableNode } from "../Components/Nodes/TableNode";
+import { LinkNode } from "../Components/Nodes/LinkNode";
+import { SheetNode } from "../Components/Nodes/SheetNode";
+import { CompactPicker } from '@hello-pangea/color-picker'
 import Loading from '../Images/zannet.png';
 import dayjs from "dayjs";
 import WhiteBoardHelp from "../Components/WhiteBoardHelp";
-import {SearchHistoryWhiteBoard} from "../Components/SearchHistoryWhiteBoard";
+import { SearchHistoryWhiteBoard } from "../Components/SearchHistoryWhiteBoard";
 
-const defaultViewport = {x: 0, y: 0, zoom: 1.1};
+const defaultViewport = { x: 0, y: 0, zoom: 1.1 };
 
 const AllNodeTypes = {
     HistoryNode,
@@ -59,35 +60,36 @@ const AllNodeTypes = {
     TodoListNode,
     HistoryWhiteBordNode,
     TableNode,
-    LinkNode
+    LinkNode,
+    SheetNode
 }
 
-const DEFAULT_SETTINGS={
-    background:{
-        variant:"lines",// dots,cross
-        color:"#f0f0f0"
+const DEFAULT_SETTINGS = {
+    background: {
+        variant: "lines",// dots,cross
+        color: "#f0f0f0"
     }
 }
 
 const BasicBord = () => {
     const [nodes, setNodes, onNodesChange] = useNodesState([]);
     const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-    const [settings,setSettings]=useState({
+    const [settings, setSettings] = useState({
         ...DEFAULT_SETTINGS
     });
-    const [editSettings,setEditSettings]=useState(false);
+    const [editSettings, setEditSettings] = useState(false);
 
     const [whiteboard, setWhiteBoard] = useState({});
     const [reactFlowInstance, setReactFlowInstance] = useState(null);
 
     const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
-    const [nodeMenuPosition,setNodeMenuPosition]=useState({x:0,y:0});
+    const [nodeMenuPosition, setNodeMenuPosition] = useState({ x: 0, y: 0 });
     const [selectedNode, setSelectedNode] = useState({});
     const [selectedEdge, setSelectedEdge] = useState({});
     const [editMode, setEditMode] = useState(false);
-    const [isLoading,setIsLoading]=useState(true);
-    const [showHelp,setShowHelp]=useState(false);
-    const [showGlobalSearch,setShowGlobalSearch]=useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [showHelp, setShowHelp] = useState(false);
+    const [showGlobalSearch, setShowGlobalSearch] = useState(false);
     const { getIntersectingNodes } = useReactFlow();
 
     const reactFlowWrapper = useRef(null);
@@ -110,6 +112,11 @@ const BasicBord = () => {
 
     useEffect(() => {
         getWhiteBord(id);
+        // const interval = setInterval(() => {
+        //     saveWhiteBord('自动保存成功');
+        // }, 10000);
+        // // 组件卸载时清除定时器
+        // return () => clearInterval(interval);
     }, [])
 
     const renderMenu = () => {
@@ -121,7 +128,7 @@ const BasicBord = () => {
             padding: '5px',
             borderRadius: '5px',
             boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.1)',
-            zIndex:10,
+            zIndex: 10,
             // height:"100px",
             // overflowY:"scroll",
             // overflowX:"auto"
@@ -172,6 +179,10 @@ const BasicBord = () => {
                 {
                     label: "表格",
                     value: "TableNode"
+                },
+                {
+                    label: "excel",
+                    value: "SheetNode"
                 },
                 {
                     label: "外部链接",
@@ -228,15 +239,15 @@ const BasicBord = () => {
             <div className={"Menu"} style={menuStyle}>
                 <Row>
                     {
-                        menuSetting.map((menus,menuIndex)=>{
+                        menuSetting.map((menus, menuIndex) => {
                             return (
                                 <Col
                                     span={12}
                                     key={menuIndex}
                                 >
                                     {
-                                        menus.map((menu)=>{
-                                            if (!menu?.value){
+                                        menus.map((menu) => {
+                                            if (!menu?.value) {
                                                 return (
                                                     <div
                                                         key={menu.label}
@@ -258,7 +269,7 @@ const BasicBord = () => {
                                                         <Button
                                                             size={"small"}
                                                             type={"link"}
-                                                            onClick={(event)=>{ createNode(event,menu.value) }}
+                                                            onClick={(event) => { createNode(event, menu.value) }}
                                                         >
                                                             {
                                                                 menu.label
@@ -278,7 +289,7 @@ const BasicBord = () => {
         )
     }
 
-    const renderNodeMenu=()=>{
+    const renderNodeMenu = () => {
         const menuStyle = {
             position: 'absolute',
             left: nodeMenuPosition.x,
@@ -287,7 +298,7 @@ const BasicBord = () => {
             padding: '5px',
             borderRadius: '5px',
             boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.1)',
-            zIndex:10
+            zIndex: 10
         }
 
         return (
@@ -297,7 +308,7 @@ const BasicBord = () => {
                         <Button
                             size={"small"}
                             type={"link"}
-                            onClick={()=>{
+                            onClick={() => {
                                 setEditMode(true)
                             }}
                         >
@@ -309,7 +320,7 @@ const BasicBord = () => {
                             danger={true}
                             size={"small"}
                             type={"link"}
-                            onClick={()=>{
+                            onClick={() => {
                                 deleteNode();
                             }}
                         >
@@ -332,12 +343,12 @@ const BasicBord = () => {
             y: event.clientY
         })
         setNodeMenuPosition({
-            x:0,
-            y:0
+            x: 0,
+            y: 0
         })
     }
 
-    const handleNodeContextMene=(event,node)=>{
+    const handleNodeContextMene = (event, node) => {
         event.preventDefault();
 
         // 这里会在 node 被右键点击的时候触发
@@ -348,8 +359,8 @@ const BasicBord = () => {
         setSelectedNode(node);
         setSelectedEdge({});
         setMenuPosition({
-            x:0,
-            y:0
+            x: 0,
+            y: 0
         })
     }
 
@@ -360,7 +371,7 @@ const BasicBord = () => {
             x: event.clientX - reactFlowBounds.left,
             y: event.clientY - reactFlowBounds.top,
         });
-        let id=getId(type);
+        let id = getId(type);
         let new_node = {
             id: id,
             type: type,
@@ -369,10 +380,10 @@ const BasicBord = () => {
             },
             position: position
         }
-        new_node.data.data={
-            Name:"",
-            Type:type,
-            node_id:id
+        new_node.data.data = {
+            Name: "",
+            Type: type,
+            node_id: id
         }
         switch (type) {
             case "StartSettings":
@@ -394,84 +405,84 @@ const BasicBord = () => {
                 setShowHelp(true);
                 return false;
             case 'DirectoryNode':
-                new_node.data.node_data=[];
-                new_node.data.save_into_database=true;
+                new_node.data.node_data = [];
+                new_node.data.save_into_database = true;
                 break;
             case 'DrawNode':
-                new_node.data.save_into_database=true;
+                new_node.data.save_into_database = true;
                 break;
             case 'CodeNode':
-                new_node.data.node_data={
-                    code:"",
-                    language:""
+                new_node.data.node_data = {
+                    code: "",
+                    language: ""
                 }
                 break;
             case "MarkdownNode":
-                new_node.data.node_data={
-                    markdown:""
+                new_node.data.node_data = {
+                    markdown: ""
                 }
-                new_node.data.save_into_database=true;
+                new_node.data.save_into_database = true;
                 break;
             case "CalendarNode":
-                new_node.data.save_into_database=true;
-                new_node.data.node_data={
-                    list:{},
-                    mode:"List",
-                    default_date:dayjs()
+                new_node.data.save_into_database = true;
+                new_node.data.node_data = {
+                    list: {},
+                    mode: "List",
+                    default_date: dayjs()
                 }
                 break;
             case "TodoListNode":
-                new_node.data.node_data={
-                    list:[
+                new_node.data.node_data = {
+                    list: [
                         {
-                            data:{
-                                Name:"",
-                                ID:getId('TodoListNode')
+                            data: {
+                                Name: "",
+                                ID: getId('TodoListNode')
                             },
-                            node_data:{
+                            node_data: {
                                 Offset: 0,
                                 Status: "Todo"
                             }
                         }
                     ],
-                    hiddenFinished:false
+                    hiddenFinished: false
                 }
                 break;
             case 'TableNode':
-                new_node.data.node_data={
-                    table:[],
-                    titles:[],
-                    rows:0,
-                    columns:0
+                new_node.data.node_data = {
+                    table: [],
+                    titles: [],
+                    rows: 1,
+                    columns: 1
                 }
-                new_node.data.save_into_database=true;
+                new_node.data.save_into_database = true;
                 break;
             case "LinkNode":
-                new_node.data.node_data={
-                    link:"#"
+                new_node.data.node_data = {
+                    link: "#"
                 }
-                new_node.data.save_into_database=true;
+                new_node.data.save_into_database = true;
                 break;
         }
-        new_node.data.settings={};
-        setNodes((n) =>n.concat([new_node]) );
-        setMenuPosition({x: 0, y: 0});
+        new_node.data.settings = {};
+        setNodes((n) => n.concat([new_node]));
+        setMenuPosition({ x: 0, y: 0 });
     }
 
-    const deleteNode=()=>{
-        let newNodes=nodes.filter((n)=>{
-            if (n.id==selectedNode?.id){
+    const deleteNode = () => {
+        let newNodes = nodes.filter((n) => {
+            if (n.id == selectedNode?.id) {
                 return false;
             }
-            if (n.parentNode==selectedNode?.id){
+            if (n.parentNode == selectedNode?.id) {
                 return false;
             }
             return true;
         });
         setNodes(newNodes);
         setNodeMenuPosition({
-            x:0,
-            y:0
+            x: 0,
+            y: 0
         })
     }
 
@@ -492,27 +503,8 @@ const BasicBord = () => {
         }
     }
 
-    const saveWhiteBord = (IsDraft = true) => {
-        requestAPI("index.php?action=WhiteBordController&method=StoreWhiteBord&ID=" + id, {
-            method: "post",
-            body: JSON.stringify({
-                IsDraft: IsDraft,
-                Data: {
-                    settings: settings,
-                    data: {
-                        nodes: nodes,
-                        edges: edges
-                    }
-                }
-            })
-        })
-            .then((res) => {
-                if(res.Status==1){
-                    message.success("Save Success")
-                }else{
-                    message.warning(res.Message);
-                }
-            })
+    const saveWhiteBord = (IsDraft = true, message = '保存成功') => {
+        SaveWhiteBoard(IsDraft, id, settings, nodes, edges, message);
     }
 
     const handleOnNodeDrop = (event, node) => {
@@ -571,11 +563,11 @@ const BasicBord = () => {
         saveWhiteBord(true);
     }
 
-    hotkeysHandler['shift+e']=()=>{
+    hotkeysHandler['shift+e'] = () => {
         setEditMode(true);
     }
 
-    hotkeysHandler['shift+g']=()=>{
+    hotkeysHandler['shift+g'] = () => {
         setShowGlobalSearch(true);
     }
 
@@ -611,9 +603,9 @@ const BasicBord = () => {
                             : ''
                     }
                     {
-                        nodeMenuPosition.x>0 && nodeMenuPosition.y>0
-                            ?renderNodeMenu()
-                            :''
+                        nodeMenuPosition.x > 0 && nodeMenuPosition.y > 0
+                            ? renderNodeMenu()
+                            : ''
                     }
                     <Background
                         variant={settings.background.variant}
@@ -637,7 +629,7 @@ const BasicBord = () => {
                 <Drawer
                     open={editSettings}
                     width={500}
-                    onClose={()=>{
+                    onClose={() => {
                         setEditSettings(false)
                     }}
                 >
@@ -649,7 +641,7 @@ const BasicBord = () => {
                         >
                             <Button
                                 type={"primary"}
-                                onClick={()=>{
+                                onClick={() => {
                                     setSettings({
                                         ...DEFAULT_SETTINGS
                                     })
@@ -664,9 +656,9 @@ const BasicBord = () => {
                         >
                             <Radio.Group
                                 value={settings.background.variant}
-                                onChange={(event)=>{
-                                    let newSettings=settings;
-                                    newSettings.background.variant=event.target.value;
+                                onChange={(event) => {
+                                    let newSettings = settings;
+                                    newSettings.background.variant = event.target.value;
                                     setSettings(newSettings);
                                 }}
                             >
@@ -686,9 +678,9 @@ const BasicBord = () => {
                         >
                             <CompactPicker
                                 color={settings.background.color}
-                                onChange={(color,event)=>{
-                                    let newSettings=settings;
-                                    newSettings.background.color=color.hex;
+                                onChange={(color, event) => {
+                                    let newSettings = settings;
+                                    newSettings.background.color = color.hex;
                                     setSettings(newSettings);
                                 }}
                             />
@@ -717,7 +709,7 @@ const BasicBord = () => {
                 </Modal>
                 <Modal
                     open={showHelp}
-                    onCancel={()=>{
+                    onCancel={() => {
                         setShowHelp(false)
                     }}
                     title={"帮助页面"}
@@ -728,7 +720,7 @@ const BasicBord = () => {
                 <Modal
                     title={"全局搜索"}
                     open={showGlobalSearch}
-                    onCancel={()=>{
+                    onCancel={() => {
                         setShowGlobalSearch(false);
                     }}
                     width={1200}
@@ -737,7 +729,7 @@ const BasicBord = () => {
                     <SearchHistoryWhiteBoard
                         keywords={""}
                         showCreateButton={false}
-                        OnCancel={()=>{}}
+                        OnCancel={() => { }}
                     />
                 </Modal>
             </Hotkeys>

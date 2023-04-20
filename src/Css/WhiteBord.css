@@ -10,25 +10,23 @@
     height: 100%;
 }
 
-.WhiteBoard{
+.WhiteBoard {}
 
-}
-
-.WhiteBoard .Menu{
+.WhiteBoard .Menu {
     background-color: #F0F0F0;
     width: 280px;
 }
 
-.WhiteBoard .Menu .Header{
+.WhiteBoard .Menu .Header {
     font-size: 14px;
     border-bottom: 1px solid black;
 }
 
-.WhiteBoard .Menu .Item{
+.WhiteBoard .Menu .Item {
     line-height: 20px;
 }
 
-.WhiteBoard .Menu .Item::before{
+.WhiteBoard .Menu .Item::before {
     content: " ";
     width: 3px;
     height: 3px;
@@ -38,167 +36,161 @@
     margin-bottom: 3px;
 }
 
-.WhiteBoard .BasicNodeOutside{
+.WhiteBoard .BasicNodeOutside {}
 
+.PO .EditSheetNode {
+    width: 100vw;
+    height: 100vh;
 }
 
-.WhiteBoard .TitleNode{
+.WhiteBoard .SheetNode {}
 
-}
+.WhiteBoard .TitleNode {}
 
-.WhiteBoard .TableNode{
+.WhiteBoard .TableNode {
     border: 2px solid gainsboro;
     padding: 5px;
     background-color: cornsilk;
 }
 
-.WhiteBoard .Option{
+.WhiteBoard .Option {
     min-width: 100px;
 }
 
-.WhiteBoard .TableNode .Selected{
+.WhiteBoard .TableNode .Selected {
     background-color: #f9a825;
 }
 
-.WhiteBoard .TableNode .TitlePart{
+.WhiteBoard .TableNode .TitlePart {
     padding-bottom: 5px;
 }
 
-.WhiteBoard .TableNode .TablePart{
+.WhiteBoard .TableNode .TablePart {
     border-top: 2px solid gainsboro;
 }
 
-.WhiteBoard .FullCalendarNode{
+.WhiteBoard .FullCalendarNode {
     min-height: 300px;
     min-width: 400px;
     background-color: #F0F0F0;
 }
 
-.WhiteBoard .TitleNode .Content{
+.WhiteBoard .TitleNode .Content {
     padding-left: 8px;
     padding-right: 8px;
 }
 
-.WhiteBoard .HistoryNode{
+.WhiteBoard .HistoryNode {
     padding: 10px;
     background-color: #c3f0b7;
     border-radius: 6px;
 }
 
-.WhiteBoard .DrawNode{
+.WhiteBoard .DrawNode {}
 
-}
-
-.WhiteBoard .DrawNode .Content{
+.WhiteBoard .DrawNode .Content {
     padding-left: 8px;
 }
 
-.WhiteBoard .MarkdownNode{
+.WhiteBoard .MarkdownNode {
     border: 3px solid #F0F0F0;
 }
 
-.WhiteBoard .MarkdownNode .Title{
+.WhiteBoard .MarkdownNode .Title {
     background-color: #303030;
     text-align: center;
     color: white;
 }
 
-.WhiteBoard .LabelNode{
+.WhiteBoard .LabelNode {
     padding: 5px;
     background-color: antiquewhite;
     border-radius: 6px;
 }
 
-.WhiteBoard .ImageNode{
+.WhiteBoard .ImageNode {
     padding: 10px;
     background-color: #b4dbf0;
 }
 
-.WhiteBoard .CalendarNode{
+.WhiteBoard .CalendarNode {
     background-color: aliceblue;
     padding: 10px;
 }
 
-.WhiteBoard .CalendarNode .Timeline{
+.WhiteBoard .CalendarNode .Timeline {
     padding: 10px;
 }
 
-.WhiteBoard .CalendarNode .Calendar{
+.WhiteBoard .CalendarNode .Calendar {
     width: 1500px;
 }
 
-.WhiteBoard .WhiteBoardNode{
+.WhiteBoard .WhiteBoardNode {}
 
-}
-
-.WhiteBoard .WhiteBoardNode .Content{
+.WhiteBoard .WhiteBoardNode .Content {
     padding-left: 8px;
 }
+
 /**
  * Connection 相关的 CSS
  */
-.WhiteBoard .ConnectionNode{
+.WhiteBoard .ConnectionNode {
     width: 20px;
     height: 20px;
     background-color: #F0F0F0;
     border-radius: 50%;
 }
 
-.WhiteBoard .ConnectionNode .Content{
+.WhiteBoard .ConnectionNode .Content {}
 
-}
-
-.WhiteBoard .react-flow__handle.connectionindicator{
+.WhiteBoard .react-flow__handle.connectionindicator {
     width: 8px;
     height: 8px;
 }
 
 
-.WhiteBoard .OutputConnectionNode{
+.WhiteBoard .OutputConnectionNode {}
 
-}
-
-.WhiteBoard .SourceConnection{
+.WhiteBoard .SourceConnection {
     background-color: #ef5350;
 }
 
-.WhiteBoard .InputConnectionNode{
+.WhiteBoard .InputConnectionNode {}
 
-}
-
-.WhiteBoard .TargetConnection{
+.WhiteBoard .TargetConnection {
     background-color: #43a047;
 }
 
-.WhiteBoard .DirectoryNode{
+.WhiteBoard .DirectoryNode {
     border: 1px solid #F0F0F0;
     padding: 10px;
 }
 
-.WhiteBoard .DirectoryNode .EachRow{
+.WhiteBoard .DirectoryNode .EachRow {
     border-bottom: 1px solid #F0F0F0;
     padding: 5px;
 }
 
-.WhiteBoard .DirectoryNode .EachRowSelected{
+.WhiteBoard .DirectoryNode .EachRowSelected {
     background-color: aliceblue;
 }
 
-.WhiteBoard .CodeNode{
+.WhiteBoard .CodeNode {
     min-width: 100px;
     min-height: 100px;
 }
 
-.WhiteBoard .TodoListNode{
+.WhiteBoard .TodoListNode {
     border: 3px solid antiquewhite;
     background-color: antiquewhite;
     min-width: 150px;
 }
 
-.WhiteBoard .TodoListNode .Content{
+.WhiteBoard .TodoListNode .Content {
     padding: 8px;
 }
 
-.WhiteBoard .TodoListNode .EachRow{
+.WhiteBoard .TodoListNode .EachRow {
     padding-top: 5px;
 }

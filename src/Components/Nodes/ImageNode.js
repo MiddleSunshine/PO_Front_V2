@@ -1,8 +1,8 @@
-import {Divider, Form, Image, Input} from "antd";
-import {NodeResizer} from '@reactflow/node-resizer';
-import React, {useEffect, useState} from "react";
-import {GetNodeStyle, UpdateNode} from "./BasicNode";
-import {useReactFlow, Handle, NodeToolbar} from 'reactflow';
+import { Divider, Form, Image, Input } from "antd";
+import { NodeResizer } from '@reactflow/node-resizer';
+import React, { useEffect, useState } from "react";
+import { GetNodeStyle, UpdateNode } from "./BasicNode";
+import { useReactFlow, Handle, NodeToolbar } from 'reactflow';
 
 const ImageNode = React.memo((nodeProps) => {
 
@@ -13,7 +13,7 @@ const ImageNode = React.memo((nodeProps) => {
     }, [nodeProps])
 
     const handleSaveNodeData = () => {
-        let newNode = {...nodeProps};
+        let newNode = { ...nodeProps };
         newNode.data.node_data = nodeData;
         UpdateNode(instance, newNode);
     }
@@ -48,12 +48,9 @@ const ImageNode = React.memo((nodeProps) => {
                         <Input
                             value={nodeData?.Title}
                             onChange={(e) => {
-                                let n = {...nodeData};
+                                let n = { ...nodeData };
                                 n.Title = e.target.value
                                 setNodeData(n);
-                            }}
-                            onBlur={() => {
-                                handleSaveNodeData();
                             }}
                             onPressEnter={() => {
                                 handleSaveNodeData();
@@ -66,12 +63,9 @@ const ImageNode = React.memo((nodeProps) => {
                         <Input
                             value={nodeData?.ImageSrc}
                             onChange={(e) => {
-                                let n = {...nodeData};
+                                let n = { ...nodeData };
                                 n.ImageSrc = e.target.value
                                 setNodeData(n);
-                            }}
-                            onBlur={() => {
-                                handleSaveNodeData();
                             }}
                             onPressEnter={() => {
                                 handleSaveNodeData();
@@ -83,13 +77,13 @@ const ImageNode = React.memo((nodeProps) => {
             <Divider>
                 {
                     nodeData?.Title
-                        ?<h4>{nodeData?.Title}</h4>
-                        :<h4>Image</h4>
+                        ? <h4>{nodeData?.Title}</h4>
+                        : <h4>Image</h4>
                 }
             </Divider>
             <Image
                 src={nodeData.ImageSrc}
-                // src={`${nodeData?.ImageSrc}?x-oss-process=image/resize,h_${nodeProps.height},w_${nodeProps.with}`}
+            // src={`${nodeData?.ImageSrc}?x-oss-process=image/resize,h_${nodeProps.height},w_${nodeProps.with}`}
             />
         </div>
     )
