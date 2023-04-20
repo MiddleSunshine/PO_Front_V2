@@ -9,15 +9,14 @@ const EditSheetNode = () => {
     const { id } = useParams();
     const [data, setData] = useState({});
     const [sheet, setSheet] = useState([]);
-    const [nodeData, setNodeData] = useState({
-        sheet: [{ name: "Sheet2" }]
-    });
+    const [nodeData, setNodeData] = useState({});
     const GetNodeData = () => {
         GetNodeDetailAsync(id)
             .then((res) => {
                 let newNodeData = JSON.parse(res.Data.node_data);
                 setData(res.Data.data);
                 setNodeData(newNodeData);
+                console.table(newNodeData.sheet);
                 return res.Data.data;
             })
             .then((returnData) => {
@@ -66,12 +65,17 @@ const EditSheetNode = () => {
                 </Col>
             </Row>
             <div style={{ width: "100vw", height: "95vh" }}>
-                <Workbook
-                    data={nodeData.sheet}
-                    onChange={(newSheet) => {
-                        setSheet(newSheet);
-                    }}
-                />
+                {
+                    nodeData?.sheet
+                        ? <Workbook
+                            data={nodeData.sheet}
+                            onChange={(newSheet) => {
+                                setSheet(newSheet);
+                            }}
+                        />
+                        : ""
+                }
+
             </div>
         </div>
     )
