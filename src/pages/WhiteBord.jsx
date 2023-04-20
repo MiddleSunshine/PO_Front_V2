@@ -182,7 +182,7 @@ const BasicBord = () => {
                     value: "TableNode"
                 },
                 {
-                    label: "excel",
+                    label: "Excel",
                     value: "SheetNode"
                 },
                 {
