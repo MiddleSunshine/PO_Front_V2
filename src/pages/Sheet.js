@@ -28,7 +28,6 @@ const EditSheetNode = () => {
 
     const SaveChange = () => {
         let newNodeData = { ...nodeData };
-        newNodeData.sheet = [];
         let newSheet = [];
         sheet.map((s) => {
             newSheet.push({
@@ -36,8 +35,8 @@ const EditSheetNode = () => {
                 celldata: sheetRef.current?.dataToCelldata(s.data)
             })
             return s;
-        })
-        debugger
+        });
+        newNodeData.sheet = newSheet;
         UpdateNodeAsync(data, newNodeData)
             .then((res) => {
                 if (res.Status == 1) {
