@@ -6,13 +6,14 @@ import ReactFlow, {
     addEdge,
     useReactFlow,
     Background,
-    Controls
+    Controls,
+    Panel
 } from 'reactflow';
 import { getId } from "../config/WhiteBord";
 import '../Css/WhiteBord.css';
 import '@reactflow/node-resizer/dist/style.css';
 import 'reactflow/dist/style.css';
-import { Button, Col, Tooltip, Drawer, Form, Image, message, Modal, Radio, Row } from 'antd';
+import { Button, Col, Tooltip, Drawer, Form, Image, message, Modal, Radio, Row, Breadcrumb } from 'antd';
 import { requestAPI } from "../config/function";
 import { useParams } from "react-router-dom";
 import { HistoryNode } from '../Components/Nodes/HistoryNode'
@@ -181,7 +182,7 @@ const BasicBord = () => {
                     value: "TableNode"
                 },
                 {
-                    label: "excel",
+                    label: "Excel",
                     value: "SheetNode"
                 },
                 {
@@ -580,6 +581,17 @@ const BasicBord = () => {
                     hotkeysHandler[keyname]();
                 }}
             >
+                <Panel
+                    position='top-left'
+                >
+                    <Breadcrumb>
+                        <Breadcrumb.Item>
+                            <a
+                                href='/whiteboard/1'
+                            >Index</a>
+                        </Breadcrumb.Item>
+                    </Breadcrumb>
+                </Panel>
                 <ReactFlow
                     nodeTypes={AllNodeTypes}
                     nodes={nodes}
