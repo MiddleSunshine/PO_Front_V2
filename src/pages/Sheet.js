@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { Workbook } from "@fortune-sheet/react";
 import "@fortune-sheet/react/dist/index.css"
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { GetNodeDetailAsync, UpdateNodeAsync } from "../Components/Nodes/BasicNode";
 import { Row, Col, Button, message } from "antd";
 // 编辑页面
@@ -10,6 +10,7 @@ const EditSheetNode = () => {
     const [data, setData] = useState({});
     const [sheet, setSheet] = useState([]);
     const [nodeData, setNodeData] = useState({});
+    const sheetRef = useRef(null);
     const GetNodeData = () => {
         GetNodeDetailAsync(id)
             .then((res) => {
@@ -27,7 +28,16 @@ const EditSheetNode = () => {
 
     const SaveChange = () => {
         let newNodeData = { ...nodeData };
-        newNodeData.sheet = sheet;
+        newNodeData.sheet = [];
+        let newSheet = [];
+        sheet.map((s) => {
+            newSheet.push({
+                ...s,
+                celldata: sheetRef.current?.dataToCelldata(s.data)
+            })
+            return s;
+        })
+        debugger
         UpdateNodeAsync(data, newNodeData)
             .then((res) => {
                 if (res.Status == 1) {
@@ -68,7 +78,10 @@ const EditSheetNode = () => {
                 {
                     nodeData?.sheet
                         ? <Workbook
+                            ref={sheetRef}
+                            // 这里我把 onchange 的结果重新输入到这里，为什么之前的数据不会重新渲染啊
                             data={nodeData.sheet}
+
                             onChange={(newSheet) => {
                                 setSheet(newSheet);
                             }}
