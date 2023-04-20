@@ -17,7 +17,6 @@ const EditSheetNode = () => {
                 let newNodeData = JSON.parse(res.Data.node_data);
                 setData(res.Data.data);
                 setNodeData(newNodeData);
-                console.table(newNodeData.sheet);
                 return res.Data.data;
             })
             .then((returnData) => {

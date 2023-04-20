@@ -81,7 +81,7 @@ const UpdateNode = (instance, node) => {
     message.info("Synced");
 }
 
-const SaveWhiteBoard = (IsDraft, id, settings, nodes, edges) => {
+const SaveWhiteBoard = (IsDraft, id, settings, nodes, edges, successMessage = 'Save Success') => {
     requestAPI("index.php?action=WhiteBordController&method=StoreWhiteBord&ID=" + id, {
         method: "post",
         body: JSON.stringify({
@@ -97,7 +97,7 @@ const SaveWhiteBoard = (IsDraft, id, settings, nodes, edges) => {
     })
         .then((res) => {
             if (res.Status == 1) {
-                message.success("Save Success")
+                message.success(successMessage)
             } else {
                 message.warning(res.Message);
             }
