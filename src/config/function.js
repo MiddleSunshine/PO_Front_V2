@@ -81,8 +81,25 @@ const Now = () => {
         })
 }
 
+const getPath = () => {
+    var queryString = window.location.search;
+    let returnData = '';
+    if (queryString) {
+        queryString = queryString.substring(1);
+        var paramPairs = queryString.split("&");
+        for (var i = 0; i < paramPairs.length; i++) {
+            var pair = paramPairs[i].split("=");
+            if (pair.length === 2 && pair[0] == 'path') {
+                returnData = pair[1];
+            }
+        }
+    }
+    return returnData;
+}
+
 export {
     requestAPI,
     Login,
-    Now
+    Now,
+    getPath
 }
