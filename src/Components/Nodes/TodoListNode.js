@@ -281,7 +281,8 @@ const TodoListNode = (nodeProps) => {
                                                     style={{ width: "100%", display: "inline" }}
                                                     disabled={todoItem.node_data.Status == STATUS_FINISHED}
                                                     size={"small"}
-                                                    value={todoItem.data.Name}
+                                                    defaultValue={todoItem.data.Name}
+                                                    // value={todoItem.data.Name}
                                                     onChange={(e) => {
                                                         // FIXME 这里不知道为什么，输入中文的时候速度就会变得很卡
                                                         let newTodoItem = todoItem;
