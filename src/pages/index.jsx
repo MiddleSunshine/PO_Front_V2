@@ -1,8 +1,8 @@
-import {Button, Col, Image, Input, Menu, message, Modal, Row} from "antd";
+import { Button, Col, Image, Input, Menu, message, Modal, Row } from "antd";
 import Rainbow from '../Images/rainbow.png'
-import {useEffect, useState} from "react";
-import {requestAPI} from "../config/function";
-import {SearchHistoryWhiteBoard} from "../Components/SearchHistoryWhiteBoard";
+import { useEffect, useState } from "react";
+import { requestAPI } from "../config/function";
+import { SearchHistoryWhiteBoard } from "../Components/SearchHistoryWhiteBoard";
 import {
     UserAddOutlined,
     ReadOutlined
@@ -10,28 +10,28 @@ import {
 
 const Index = () => {
 
-    const [settings,setSettings]=useState({
-        Title:""
+    const [settings, setSettings] = useState({
+        Title: ""
     });
-    const [searchKeyword,setSearchKeyword]=useState("")
-    const [startSearch,setStartSearch]=useState(false);
+    const [searchKeyword, setSearchKeyword] = useState("")
+    const [startSearch, setStartSearch] = useState(false);
 
-    useEffect(()=>{
+    useEffect(() => {
         GetIndex();
-    },[])
+    }, [])
 
-    const GetIndex=()=>{
-        requestAPI("index.php?action=IndexController&method=Index", {},false)
-            .then((res)=>{
-                if (res.Data){
+    const GetIndex = () => {
+        requestAPI("index.php?action=IndexController&method=Index", {}, false)
+            .then((res) => {
+                if (res.Data) {
                     setSettings(res.Data);
-                }else{
+                } else {
                     message.warning(res.Message);
                 }
             })
     }
 
-    const finishSearch=()=>{
+    const finishSearch = () => {
         setStartSearch(false)
     }
 
@@ -47,17 +47,17 @@ const Index = () => {
                         mode={"horizontal"}
                         items={[
                             {
-                                label:(
+                                label: (
                                     <Button
                                         type={"link"}
-                                        href={"/whiteboard/1"}
+                                        href={"/whiteboard/1?path=1"}
                                         target={"_blank"}
                                     >
                                         Note
                                     </Button>
                                 ),
-                                key:"Note",
-                                icon:<ReadOutlined />
+                                key: "Note",
+                                icon: <ReadOutlined />
                             },
                             {
                                 label: (
@@ -68,8 +68,8 @@ const Index = () => {
                                         Login
                                     </Button>
                                 ),
-                                key:"Login",
-                                icon:<UserAddOutlined />
+                                key: "Login",
+                                icon: <UserAddOutlined />
                             }
                         ]}
                     >
@@ -77,7 +77,7 @@ const Index = () => {
                 </Col>
             </Row>
             <Row
-                style={{height:"70vh"}}
+                style={{ height: "70vh" }}
                 justify={"center"}
                 align={"middle"}
             >
@@ -85,14 +85,14 @@ const Index = () => {
                     <Row
                         justify={"center"}
                         align={"middle"}
-                        style={{textAlign:"center"}}
+                        style={{ textAlign: "center" }}
                     >
                         <Col
                             span={6}
                             className={"rainbow-letters"}
                         >
                             <Image
-                                style={{width:"30px"}}
+                                style={{ width: "30px" }}
                                 src={Rainbow}
                             />
                             <span
@@ -104,7 +104,7 @@ const Index = () => {
                             </span>
                         </Col>
                     </Row>
-                    <br/>
+                    <br />
                     <Row
                         justify={"center"}
                         align={"middle"}
@@ -112,10 +112,10 @@ const Index = () => {
                         <Col span={6}>
                             <Input
                                 value={searchKeyword}
-                                onChange={(e)=>{
+                                onChange={(e) => {
                                     setSearchKeyword(e.target.value)
                                 }}
-                                onPressEnter={()=>{
+                                onPressEnter={() => {
                                     setStartSearch(true)
                                 }}
                                 addonAfter={
@@ -138,17 +138,17 @@ const Index = () => {
                 title={`Search '${searchKeyword}' Result"`}
                 open={startSearch}
                 width={"1200px"}
-                onOk={()=>{
+                onOk={() => {
                     finishSearch();
                 }}
-                onCancel={()=>{
+                onCancel={() => {
                     finishSearch();
                 }}
                 footer={null}
             >
                 <SearchHistoryWhiteBoard
                     keywords={searchKeyword}
-                    OnCancel={()=>{
+                    OnCancel={() => {
                         finishSearch();
                     }}
                     showCreateButton={false}
