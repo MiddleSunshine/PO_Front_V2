@@ -1,8 +1,8 @@
-import { Input } from "antd";
+import { Button, Form, Input } from "antd";
 import { useState } from "react";
 import React from "react";
 import { NodeResizer } from '@reactflow/node-resizer';
-import { useReactFlow, Handle } from 'reactflow';
+import { useReactFlow, Handle, NodeToolbar } from 'reactflow';
 import { GetNodeStyle, UpdateNode } from "./BasicNode";
 
 const LabelNode = React.memo((node) => {
@@ -51,16 +51,37 @@ const LabelNode = React.memo((node) => {
                 isVisible={node.selected}
                 color="#ff0071"
             />
+            <NodeToolbar>
+                <Form>
+                    <Form.Item
+                        label={"Label"}
+                    >
+                        <Input
+                            value={label}
+                            onChange={(e) => {
+                                setLabel(e.target.value)
+                            }}
+                            onPressEnter={() => {
+                                handleSaveNodeData();
+                            }}
+                        />
+                    </Form.Item>
+                    <Form.Item
+                        label={"Option"}
+                    >
+                        <Button
+                            type={"primary"}
+                            onClick={handleSaveNodeData}
+                        >
+                            Save
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </NodeToolbar>
             <div>
-                <Input
-                    value={label}
-                    onChange={(e) => {
-                        setLabel(e.target.value)
-                    }}
-                    onPressEnter={() => {
-                        handleSaveNodeData();
-                    }}
-                />
+                <p>
+                    {label ? label : "请输入标签"}
+                </p>
             </div>
         </div>
     )

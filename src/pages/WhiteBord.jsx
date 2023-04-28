@@ -14,7 +14,7 @@ import '../Css/WhiteBord.css';
 import '@reactflow/node-resizer/dist/style.css';
 import 'reactflow/dist/style.css';
 import { Button, Col, Tooltip, Drawer, Form, Image, message, Modal, Radio, Row, Breadcrumb } from 'antd';
-import { requestAPI } from "../config/function";
+import { getPath, requestAPI } from "../config/function";
 import { useParams } from "react-router-dom";
 import { HistoryNode } from '../Components/Nodes/HistoryNode'
 import Hotkeys from 'react-hot-keys'
@@ -91,6 +91,9 @@ const BasicBord = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [showHelp, setShowHelp] = useState(false);
     const [showGlobalSearch, setShowGlobalSearch] = useState(false);
+
+    const [paths, setPaths] = useState([]);
+
     const { getIntersectingNodes } = useReactFlow();
 
     const reactFlowWrapper = useRef(null);
@@ -113,6 +116,7 @@ const BasicBord = () => {
 
     useEffect(() => {
         getWhiteBord(id);
+        renderPath();
         // const interval = setInterval(() => {
         //     saveWhiteBord('自动保存成功');
         // }, 10000);
@@ -508,6 +512,18 @@ const BasicBord = () => {
         SaveWhiteBoard(IsDraft, id, settings, nodes, edges, message);
     }
 
+    const renderPath = () => {
+        let path = getPath();
+        requestAPI(`/index.php?action=WhiteBordController&method=WhiteBoardRoad`, {
+            method: "post",
+            body: JSON.stringify({
+                Ids: path
+            })
+        }).then((json) => {
+            setPaths(json.Data.roads);
+        })
+    }
+
     const handleOnNodeDrop = (event, node) => {
         if (node?.type == 'InputConnectionNode' || node?.type == 'OutputConnectionNode') {
             // 相互交叉的 node
@@ -585,11 +601,24 @@ const BasicBord = () => {
                     position='top-left'
                 >
                     <Breadcrumb>
-                        <Breadcrumb.Item>
+                        {/* <Breadcrumb.Item>
                             <a
                                 href='/whiteboard/1'
                             >Index</a>
-                        </Breadcrumb.Item>
+                        </Breadcrumb.Item> */}
+                        {
+                            paths.map((path) => {
+                                return (
+                                    <Breadcrumb.Item>
+                                        <a
+                                            href={`/whiteboard/${path.ID}?path=${path.path}`}
+                                        >
+                                            {path.Title}
+                                        </a>
+                                    </Breadcrumb.Item>
+                                )
+                            })
+                        }
                     </Breadcrumb>
                 </Panel>
                 <ReactFlow

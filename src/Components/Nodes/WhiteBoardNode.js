@@ -11,6 +11,8 @@ import {
 import { CreateNewWhiteBoardAsync } from "./BaseWhiteBoard";
 import { SearchHistoryWhiteBoard } from "../SearchHistoryWhiteBoard";
 import { NodeResizer } from "@reactflow/node-resizer";
+import { getPath } from "../../config/function";
+
 
 const HistoryWhiteBordNode = (nodeProps) => {
 
@@ -21,7 +23,10 @@ const HistoryWhiteBordNode = (nodeProps) => {
         if (historyWhiteBoard?.ID) {
             let newNode = { ...nodeProps };
             newNode.type = 'WhiteBoardNode';
-            newNode.data.node_data = historyWhiteBoard;
+            newNode.data.node_data = {
+                data: historyWhiteBoard,
+                path: getPath() + "," + historyWhiteBoard.ID
+            };
             UpdateNode(instance, newNode);
         }
         switchSearchMode(false);
@@ -70,6 +75,7 @@ const NewWhiteBoardNode = (nodeProps) => {
     const [title, setTitle] = useState('');
     const instance = useReactFlow();
 
+
     const createNewWhiteBoard = (Title) => {
         if (!Title) {
             message.warning("请输入标题");
@@ -80,7 +86,11 @@ const NewWhiteBoardNode = (nodeProps) => {
                 if (res.Data.data.ID) {
                     let newNode = { ...nodeProps };
                     newNode.type = 'WhiteBoardNode';
-                    newNode.data.node_data = res.Data.data;
+                    getPath();
+                    newNode.data.node_data = {
+                        data: res.Data.data,
+                        path: getPath() + "," + res.Data.data.ID
+                    };
                     UpdateNode(instance, newNode);
                 } else {
                     message.warning(res.Message);
@@ -144,12 +154,11 @@ const WhiteBoardNode = (nodeProps) => {
                 className={"Content"}
             >
                 <Input
-                    value={nodeData.Title}
+                    value={nodeData.data.Title}
                     onChange={(e) => {
-                        setNodeData({
-                            ...nodeData,
-                            Title: e.target.value
-                        })
+                        let newNodeData = { ...nodeData }
+                        newNodeData.node_data.data.Title = e.target.value
+                        setNodeData(newNodeData)
                     }}
                     onPressEnter={() => {
                         finishInput();
@@ -158,7 +167,7 @@ const WhiteBoardNode = (nodeProps) => {
                         <FileOutlined />
                     }
                     addonAfter={<a
-                        href={`/whiteboard/${nodeData?.ID}`}
+                        href={`/whiteboard/${nodeData?.data.ID}?path=${nodeData?.path}`}
                         target={"_blank"} rel="noreferrer"
                     >
                         <ExportOutlined />

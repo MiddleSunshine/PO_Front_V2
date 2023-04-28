@@ -38,10 +38,14 @@ const TitleNode = (nodeProps) => {
             <Input
                 value={data.Name}
                 onChange={(e) => {
-                    finishInput({
+                    setData({
                         ...data,
                         Name: e.target.value
-                    });
+                    })
+                    // finishInput({
+                    //     ...data,
+                    //     Name: e.target.value
+                    // });
                 }}
                 onPressEnter={() => {
                     finishInput(data);

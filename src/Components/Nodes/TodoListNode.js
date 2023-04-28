@@ -87,7 +87,6 @@ const TodoListNode = (nodeProps) => {
     }
 
     const runCmd = (outsideIndex, cmd) => {
-        debugger
         let newList = nodeData.list;
         let listAmount = newList.length;
         switch (cmd) {
@@ -266,28 +265,34 @@ const TodoListNode = (nodeProps) => {
                                                 span={LENGTH_AMOUNT - todoItem.node_data.Offset}
                                                 offset={todoItem.node_data.Offset}
                                             >
-                                                <Checkbox
-                                                    checked={todoItem.node_data.Status == STATUS_FINISHED}
-                                                    onChange={(event) => {
+                                                <Input
+                                                    addonBefore={
+                                                        <Checkbox
+                                                            style={{ width: "100%" }}
+                                                            checked={todoItem.node_data.Status == STATUS_FINISHED}
+                                                            onChange={(event) => {
+                                                                let newTodoItem = todoItem;
+                                                                newTodoItem.node_data.Status = (event.target.checked) ? STATUS_FINISHED : STATUS_TODO;
+                                                                updateItem(outsideIndex, newTodoItem);
+                                                            }}
+                                                        >
+                                                        </Checkbox>
+                                                    }
+                                                    style={{ width: "100%", display: "inline" }}
+                                                    disabled={todoItem.node_data.Status == STATUS_FINISHED}
+                                                    size={"small"}
+                                                    defaultValue={todoItem.data.Name}
+                                                    // value={todoItem.data.Name}
+                                                    onChange={(e) => {
+                                                        // FIXME 这里不知道为什么，输入中文的时候速度就会变得很卡
                                                         let newTodoItem = todoItem;
-                                                        newTodoItem.node_data.Status = (event.target.checked) ? STATUS_FINISHED : STATUS_TODO;
+                                                        newTodoItem.data.Name = e.target.value;
                                                         updateItem(outsideIndex, newTodoItem);
                                                     }}
-                                                >
-                                                    <Input
-                                                        disabled={todoItem.node_data.Status == STATUS_FINISHED}
-                                                        size={"small"}
-                                                        value={todoItem.data.Name}
-                                                        onChange={(e) => {
-                                                            let newTodoItem = todoItem;
-                                                            newTodoItem.data.Name = e.target.value;
-                                                            updateItem(outsideIndex, newTodoItem);
-                                                        }}
-                                                        onPressEnter={() => {
-                                                            newItem(outsideIndex + 1, todoItem.node_data.Offset);
-                                                        }}
-                                                    />
-                                                </Checkbox>
+                                                    onPressEnter={() => {
+                                                        newItem(outsideIndex + 1, todoItem.node_data.Offset);
+                                                    }}
+                                                />
                                             </Col>
                                         </Row>
                                         {
