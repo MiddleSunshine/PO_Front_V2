@@ -15,7 +15,7 @@ const requestAPI = (api, init = {}, checkToken = true) => {
         requestUrl = "http://127.0.0.1:8050/";
     } else {
         // 正式环境
-        requestUrl = "http://127.0.0.1:8050/";
+        requestUrl = "http://118.31.247.119/PO_Back_V2_pre/";
     }
     return fetch(requestUrl + api, {
         ...init,
@@ -38,7 +38,7 @@ const Login = (userName, password) => {
         requestUrl = "http://127.0.0.1:8050/";
     } else {
         // 正式环境
-        requestUrl = "http://127.0.0.1:8050/";
+        requestUrl = "http://118.31.247.119/PO_Back_V2_pre/";
     }
     return fetch(requestUrl + "index.php?action=LoginController&method=Login", {
         mode: "cors",
