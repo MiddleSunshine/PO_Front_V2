@@ -35,10 +35,10 @@ const TodoListNode = (nodeProps) => {
     const [editMode, setEditMode] = useState(false);
     const instance = useReactFlow();
 
-    const SAVE_DATA = () => {
+    const SAVE_DATA = (newNodeData, newData) => {
         let newNode = { ...nodeProps }
-        newNode.data.data = data;
-        newNode.data.node_data = nodeData;
+        newNode.data.data = newData;
+        newNode.data.node_data = newNodeData;
         UpdateNode(instance, newNode);
     }
 
@@ -79,11 +79,14 @@ const TodoListNode = (nodeProps) => {
         );
     }
 
-    const updateItem = (outsideIndex, newTodoItem) => {
+    const updateItem = (outsideIndex, newTodoItem, saveData = false) => {
         let newNodeData = nodeData;
         newNodeData.list[outsideIndex] = newTodoItem;
         setNodeData(newNodeData);
         setSelectedTodoItem(newNodeData);
+        if (saveData) {
+            SAVE_DATA(newNodeData);
+        }
     }
 
     const runCmd = (outsideIndex, cmd) => {
@@ -134,7 +137,7 @@ const TodoListNode = (nodeProps) => {
                     type={"primary"}
                     onClick={() => {
                         if (editMode) {
-                            SAVE_DATA();
+                            SAVE_DATA(nodeData, data);
                         }
                         setEditMode(!editMode);
                     }}
@@ -209,7 +212,7 @@ const TodoListNode = (nodeProps) => {
                                                     onChange={(event) => {
                                                         let newTodoItem = todoItem;
                                                         newTodoItem.node_data.Status = (event.target.checked) ? STATUS_FINISHED : STATUS_TODO;
-                                                        updateItem(outsideIndex, newTodoItem);
+                                                        updateItem(outsideIndex, newTodoItem, true);
                                                     }}
                                                 >
                                                     {todoItem.data.Name}
