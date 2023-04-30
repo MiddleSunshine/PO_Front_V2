@@ -35,10 +35,10 @@ const TodoListNode = (nodeProps) => {
     const [editMode, setEditMode] = useState(false);
     const instance = useReactFlow();
 
-    const SAVE_DATA = () => {
+    const SAVE_DATA = (newNodeData, newData) => {
         let newNode = { ...nodeProps }
-        newNode.data.data = data;
-        newNode.data.node_data = nodeData;
+        newNode.data.data = newData;
+        newNode.data.node_data = newNodeData;
         UpdateNode(instance, newNode);
     }
 
@@ -79,11 +79,14 @@ const TodoListNode = (nodeProps) => {
         );
     }
 
-    const updateItem = (outsideIndex, newTodoItem) => {
+    const updateItem = (outsideIndex, newTodoItem, saveData = false) => {
         let newNodeData = nodeData;
         newNodeData.list[outsideIndex] = newTodoItem;
         setNodeData(newNodeData);
         setSelectedTodoItem(newNodeData);
+        if (saveData) {
+            SAVE_DATA(newNodeData);
+        }
     }
 
     const runCmd = (outsideIndex, cmd) => {
@@ -114,6 +117,8 @@ const TodoListNode = (nodeProps) => {
                     newList[outsideIndex].node_data.Offset += OFFSET_STEP;
                 }
                 break;
+            default:
+                break;
         }
         setNodeData({
             ...nodeData,
@@ -134,7 +139,7 @@ const TodoListNode = (nodeProps) => {
                     type={"primary"}
                     onClick={() => {
                         if (editMode) {
-                            SAVE_DATA();
+                            SAVE_DATA(nodeData, data);
                         }
                         setEditMode(!editMode);
                     }}
@@ -181,7 +186,7 @@ const TodoListNode = (nodeProps) => {
                 !editMode
                     ? <div className={"Content"}>
                         {
-                            data.Name
+                            data?.Name
                                 ? <h3>{data.Name}</h3>
                                 : ""
                         }
@@ -206,6 +211,11 @@ const TodoListNode = (nodeProps) => {
                                             >
                                                 <Checkbox
                                                     checked={todoItem.node_data.Status == STATUS_FINISHED}
+                                                    onChange={(event) => {
+                                                        let newTodoItem = todoItem;
+                                                        newTodoItem.node_data.Status = (event.target.checked) ? STATUS_FINISHED : STATUS_TODO;
+                                                        updateItem(outsideIndex, newTodoItem, true);
+                                                    }}
                                                 >
                                                     {todoItem.data.Name}
                                                 </Checkbox>
@@ -284,7 +294,6 @@ const TodoListNode = (nodeProps) => {
                                                     defaultValue={todoItem.data.Name}
                                                     // value={todoItem.data.Name}
                                                     onChange={(e) => {
-                                                        // FIXME 这里不知道为什么，输入中文的时候速度就会变得很卡
                                                         let newTodoItem = todoItem;
                                                         newTodoItem.data.Name = e.target.value;
                                                         updateItem(outsideIndex, newTodoItem);

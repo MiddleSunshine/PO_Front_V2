@@ -468,6 +468,8 @@ const BasicBord = () => {
                 }
                 new_node.data.save_into_database = true;
                 break;
+            default:
+                break;
         }
         new_node.data.settings = {};
         setNodes((n) => n.concat([new_node]));
