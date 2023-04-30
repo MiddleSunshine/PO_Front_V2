@@ -117,6 +117,8 @@ const TodoListNode = (nodeProps) => {
                     newList[outsideIndex].node_data.Offset += OFFSET_STEP;
                 }
                 break;
+            default:
+                break;
         }
         setNodeData({
             ...nodeData,
@@ -184,7 +186,7 @@ const TodoListNode = (nodeProps) => {
                 !editMode
                     ? <div className={"Content"}>
                         {
-                            data.Name
+                            data?.Name
                                 ? <h3>{data.Name}</h3>
                                 : ""
                         }
