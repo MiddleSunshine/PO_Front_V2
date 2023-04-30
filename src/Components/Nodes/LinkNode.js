@@ -1,12 +1,22 @@
-import {GetNodeStyle} from "./BasicNode";
-import React, {useState} from "react";
-import {Button, Form, Input, List} from "antd";
-import {Handle, NodeToolbar} from "reactflow";
-import {NodeResizer} from "@reactflow/node-resizer";
+import { GetNodeStyle, UpdateNode } from "./BasicNode";
+import React, { useState } from "react";
+import { Button, Form, Input, List } from "antd";
+import { Handle, NodeToolbar, useReactFlow } from "reactflow";
+import { NodeResizer } from "@reactflow/node-resizer";
 
-const LinkNode=(nodeProps)=>{
-    const [nodeData,setNodeData]=useState(nodeProps.data.node_data);
-    const [data,setData]=useState(nodeProps.data.data);
+const LinkNode = (nodeProps) => {
+    const [nodeData, setNodeData] = useState(nodeProps.data.node_data);
+    const [data, setData] = useState(nodeProps.data.data);
+    const instance = useReactFlow();
+
+    const SAVE_DATA = () => {
+        let newNode = {
+            ...nodeProps
+        };
+        newNode.data.node_data = nodeData;
+        newNode.data.data = data;
+        UpdateNode(instance, newNode);
+    }
 
     return (
         <div
@@ -22,10 +32,10 @@ const LinkNode=(nodeProps)=>{
                     >
                         <Input
                             value={data?.Name}
-                            onChange={(e)=>{
+                            onChange={(e) => {
                                 setData({
                                     ...data,
-                                    Name:e.target.value
+                                    Name: e.target.value
                                 })
                             }}
                         />
@@ -35,10 +45,10 @@ const LinkNode=(nodeProps)=>{
                     >
                         <Input
                             value={nodeData.link}
-                            onChange={(e)=>{
+                            onChange={(e) => {
                                 setNodeData({
                                     ...nodeData,
-                                    link:e.target.value
+                                    link: e.target.value
                                 })
                             }}
                         />
@@ -46,7 +56,12 @@ const LinkNode=(nodeProps)=>{
                     <Form.Item
                         label={"Options"}
                     >
-                        <Button>Save</Button>
+                        <Button
+                            type="primary"
+                            onClick={() => {
+                                SAVE_DATA();
+                            }}
+                        >Save</Button>
                     </Form.Item>
                 </Form>
             </NodeToolbar>
@@ -82,7 +97,7 @@ const LinkNode=(nodeProps)=>{
                 href={nodeData.link}
                 target={"_blank"}
             >
-                {data?.Name?data.Name:"Link"}
+                {data?.Name ? data.Name : "Link"}
             </Button>
         </div>
     )
