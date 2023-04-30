@@ -206,6 +206,11 @@ const TodoListNode = (nodeProps) => {
                                             >
                                                 <Checkbox
                                                     checked={todoItem.node_data.Status == STATUS_FINISHED}
+                                                    onChange={(event) => {
+                                                        let newTodoItem = todoItem;
+                                                        newTodoItem.node_data.Status = (event.target.checked) ? STATUS_FINISHED : STATUS_TODO;
+                                                        updateItem(outsideIndex, newTodoItem);
+                                                    }}
                                                 >
                                                     {todoItem.data.Name}
                                                 </Checkbox>
@@ -284,7 +289,6 @@ const TodoListNode = (nodeProps) => {
                                                     defaultValue={todoItem.data.Name}
                                                     // value={todoItem.data.Name}
                                                     onChange={(e) => {
-                                                        // FIXME 这里不知道为什么，输入中文的时候速度就会变得很卡
                                                         let newTodoItem = todoItem;
                                                         newTodoItem.data.Name = e.target.value;
                                                         updateItem(outsideIndex, newTodoItem);
