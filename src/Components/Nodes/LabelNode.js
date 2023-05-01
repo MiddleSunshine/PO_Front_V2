@@ -1,19 +1,19 @@
-import { Button, Form, Input } from "antd";
+import { Input } from "antd";
 import { useState } from "react";
 import React from "react";
 import { NodeResizer } from '@reactflow/node-resizer';
 import { useReactFlow, Handle, NodeToolbar } from 'reactflow';
 import { GetNodeStyle, UpdateNode } from "./BasicNode";
 
-const LabelNode = React.memo((node) => {
+const LabelNode = (node) => {
 
     const [label, setLabel] = useState(node.data.node_data?.label);
     const instance = useReactFlow();
 
-    const handleSaveNodeData = () => {
+    const handleSaveNodeData = (newLabel) => {
         let newNode = node;
         newNode.data.node_data = {
-            label: label
+            label: newLabel
         };
         UpdateNode(instance, node);
     }
@@ -51,41 +51,47 @@ const LabelNode = React.memo((node) => {
                 isVisible={node.selected}
                 color="#ff0071"
             />
-            <NodeToolbar>
+            {/* <NodeToolbar>
                 <Form>
                     <Form.Item
                         label={"Label"}
                     >
-                        <Input
-                            value={label}
-                            onChange={(e) => {
-                                setLabel(e.target.value)
-                            }}
-                            onPressEnter={() => {
-                                handleSaveNodeData();
-                            }}
-                        />
+
                     </Form.Item>
                     <Form.Item
                         label={"Option"}
                     >
                         <Button
                             type={"primary"}
-                            onClick={handleSaveNodeData}
+                            onClick={() => {
+                                handleSaveNodeData(label);
+                            }}
                         >
                             Save
                         </Button>
                     </Form.Item>
                 </Form>
-            </NodeToolbar>
+            </NodeToolbar> */}
             <div>
-                <p>
-                    {label ? label : "请输入标签"}
-                </p>
+                {
+                    node.selected
+                        ? <Input
+                            value={label}
+                            onChange={(e) => {
+                                setLabel(e.target.value)
+                            }}
+                            onPressEnter={() => {
+                                handleSaveNodeData(label);
+                            }}
+                        />
+                        : <p>
+                            {label}
+                        </p>
+                }
             </div>
         </div>
     )
-})
+}
 
 export {
     LabelNode
