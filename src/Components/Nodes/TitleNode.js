@@ -44,9 +44,35 @@ const TitleNode = (nodeProps) => {
             position={"left"}
         />
         <div className={"Content"}>
-            {
+            <Input
+                className="InputLikeTitle"
+                defaultValue={data.Name}
+                onChange={(e) => {
+                    setData({
+                        ...data,
+                        Name: e.target.value
+                    });
+                    setUnSaveData(true)
+                }}
+                onPressEnter={() => {
+                    finishInput(data);
+                }}
+            // addonAfter={
+            //     <Button
+            //         size={"small"}
+            //         type={"link"}
+            //         icon={<SaveOutlined />}
+            //         onClick={() => {
+            //             finishInput(data);
+            //         }}
+            //     >
+            //     </Button>
+            // }
+            />
+            {/* {
                 nodeProps.selected
-                    ? <Input
+                    ? <input
+                        className="InputLikeTitle"
                         defaultValue={data.Name}
                         onChange={(e) => {
                             setData({
@@ -100,7 +126,7 @@ const TitleNode = (nodeProps) => {
                         }
                     </span>
 
-            }
+            } */}
 
         </div>
     </div>

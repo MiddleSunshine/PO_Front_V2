@@ -14,8 +14,8 @@ const BASIC_NODE_DATA = {
 const GetNodeStyle = (node, warningStyle = false) => {
     let style = {
         ...node.data?.settings?.style,
-        width: node.width,
-        height: node.height
+        // width: node.width,
+        // height: node.height
     };
     if (node?.data?.save_into_database) {
         style.borderTop = "4px solid #62DBC8";
@@ -23,7 +23,7 @@ const GetNodeStyle = (node, warningStyle = false) => {
     }
     if (warningStyle) {
         style.border = "2px solid red";
-        style.padding = "5px";
+        // style.padding = "5px";
     }
     // if (node.selected){
     //     style.backgroundColor="#ff5722";

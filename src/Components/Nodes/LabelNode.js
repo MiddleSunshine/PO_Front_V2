@@ -77,24 +77,18 @@ const LabelNode = (node) => {
                 </Form>
             </NodeToolbar> */}
             <div>
-                {
-                    node.selected
-                        ? <Input
-                            value={label}
-                            onChange={(e) => {
-                                setLabel(e.target.value);
-                                setUnSaveData(true);
+                <Input
+                    className="InputLikeTitle"
+                    value={label}
+                    onChange={(e) => {
+                        setLabel(e.target.value);
+                        setUnSaveData(true);
 
-                            }}
-                            onPressEnter={() => {
-                                handleSaveNodeData(label);
-                            }}
-                        />
-                        : <p
-                        >
-                            {label}
-                        </p>
-                }
+                    }}
+                    onPressEnter={() => {
+                        handleSaveNodeData(label);
+                    }}
+                />
             </div>
         </div>
     )

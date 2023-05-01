@@ -12,6 +12,10 @@
 
 .WhiteBoard {}
 
+.WhiteBoard .InputLikeTitle {
+    border: none !important;
+}
+
 .WhiteBoard .Menu {
     background-color: #F0F0F0;
     width: 280px;
