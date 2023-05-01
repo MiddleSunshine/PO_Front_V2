@@ -58,17 +58,17 @@ const TitleNode = (nodeProps) => {
                         onPressEnter={() => {
                             finishInput(data);
                         }}
-                        addonAfter={
-                            <Button
-                                size={"small"}
-                                type={"link"}
-                                icon={<SaveOutlined />}
-                                onClick={() => {
-                                    finishInput(data);
-                                }}
-                            >
-                            </Button>
-                        }
+                    // addonAfter={
+                    //     <Button
+                    //         size={"small"}
+                    //         type={"link"}
+                    //         icon={<SaveOutlined />}
+                    //         onClick={() => {
+                    //             finishInput(data);
+                    //         }}
+                    //     >
+                    //     </Button>
+                    // }
                     />
                     : <span
                     >
@@ -85,17 +85,17 @@ const TitleNode = (nodeProps) => {
                                 onPressEnter={() => {
                                     finishInput(data);
                                 }}
-                                addonAfter={
-                                    <Button
-                                        size={"small"}
-                                        type={"link"}
-                                        icon={<SaveOutlined />}
-                                        onClick={() => {
-                                            finishInput(data);
-                                        }}
-                                    >
-                                    </Button>
-                                }
+                            // addonAfter={
+                            //     <Button
+                            //         size={"small"}
+                            //         type={"link"}
+                            //         icon={<SaveOutlined />}
+                            //         onClick={() => {
+                            //             finishInput(data);
+                            //         }}
+                            //     >
+                            //     </Button>
+                            // }
                             />
                         }
                     </span>
