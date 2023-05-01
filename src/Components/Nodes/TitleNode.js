@@ -24,7 +24,9 @@ const TitleNode = (nodeProps) => {
     }
 
     return <div
-        style={GetNodeStyle(nodeProps)}
+        style={
+            GetNodeStyle(nodeProps, unsaveData)
+        }
         className={"TitleNode"}
     >
         <NodeResizer
@@ -69,16 +71,6 @@ const TitleNode = (nodeProps) => {
                         }
                     />
                     : <h4
-                        style={
-                            unsaveData
-                                ? {
-                                    border: '2px dashed orange',
-                                    borderRadius: "25px"
-                                }
-                                : {
-
-                                }
-                        }
                     >
                         {data.Name ? data.Name : "Click"}
                     </h4>
