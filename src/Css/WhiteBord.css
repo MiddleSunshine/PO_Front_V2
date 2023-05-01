@@ -12,6 +12,16 @@
 
 .WhiteBoard {}
 
+.WhiteBoard .react-flow__edge .react-flow__edge-text {
+    font-size: 14px;
+    font-weight: bolder;
+}
+
+.WhiteBoard .InputLikeTitle {
+    border: none !important;
+    width: 100%;
+}
+
 .WhiteBoard .Menu {
     background-color: #F0F0F0;
     width: 280px;
@@ -45,7 +55,15 @@
 
 .WhiteBoard .SheetNode {}
 
-.WhiteBoard .TitleNode {}
+.WhiteBoard .TitleNode {
+    background-color: #303030;
+}
+
+.WhiteBoard .TitleNode .Input {
+    color: white;
+    font-size: 16px;
+    font-weight: bolder;
+}
 
 .WhiteBoard .TableNode {
     border: 2px solid gainsboro;
@@ -104,7 +122,7 @@
 
 .WhiteBoard .LabelNode {
     padding: 5px;
-    background-color: antiquewhite;
+    background-color: yellowgreen;
     border-radius: 6px;
 }
 

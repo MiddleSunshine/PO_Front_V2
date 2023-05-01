@@ -8,6 +8,7 @@ import { GetNodeStyle, UpdateNode } from "./BasicNode";
 const LabelNode = (node) => {
 
     const [label, setLabel] = useState(node.data.node_data?.label);
+    const [unsaveData, setUnSaveData] = useState(false);
     const instance = useReactFlow();
 
     const handleSaveNodeData = (newLabel) => {
@@ -15,13 +16,16 @@ const LabelNode = (node) => {
         newNode.data.node_data = {
             label: newLabel
         };
+        setUnSaveData(false);
         UpdateNode(instance, node);
     }
 
     return (
         <div
             className={"LabelNode"}
-            style={GetNodeStyle(node)}
+            style={
+                GetNodeStyle(node, unsaveData)
+            }
         >
             <Handle
                 className={"TargetConnection"}
@@ -73,21 +77,19 @@ const LabelNode = (node) => {
                 </Form>
             </NodeToolbar> */}
             <div>
-                {
-                    node.selected
-                        ? <Input
-                            value={label}
-                            onChange={(e) => {
-                                setLabel(e.target.value)
-                            }}
-                            onPressEnter={() => {
-                                handleSaveNodeData(label);
-                            }}
-                        />
-                        : <p>
-                            {label}
-                        </p>
-                }
+                <Input
+                    style={{ backgroundColor: "inherit" }}
+                    className="InputLikeTitle"
+                    value={label}
+                    onChange={(e) => {
+                        setLabel(e.target.value);
+                        setUnSaveData(true);
+
+                    }}
+                    onPressEnter={() => {
+                        handleSaveNodeData(label);
+                    }}
+                />
             </div>
         </div>
     )

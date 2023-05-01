@@ -1,13 +1,14 @@
-import { Button, Input, message } from "antd";
+import { Badge, Button, Input, message } from "antd";
 import { useState } from "react";
-import { CreateNodeAsync, GetNodeStyle } from "./BasicNode";
-import { Handle, NodeToolbar, useReactFlow } from 'reactflow';
+import { GetNodeStyle } from "./BasicNode";
+import { Handle, useReactFlow } from 'reactflow';
 import { UpdateNode } from "./BasicNode";
 import { NodeResizer } from "@reactflow/node-resizer";
 import { SaveOutlined } from "@ant-design/icons";
 
 const TitleNode = (nodeProps) => {
     const [data, setData] = useState(nodeProps.data.data);
+    const [unsaveData, setUnSaveData] = useState(false);
     const instance = useReactFlow();
 
     const SAVE_DATA = (data) => {
@@ -19,10 +20,13 @@ const TitleNode = (nodeProps) => {
     const finishInput = (data) => {
         setData(data);
         SAVE_DATA(data);
+        setUnSaveData(false);
     }
 
     return <div
-        style={GetNodeStyle(nodeProps)}
+        style={
+            GetNodeStyle(nodeProps, unsaveData)
+        }
         className={"TitleNode"}
     >
         <NodeResizer
@@ -34,44 +38,97 @@ const TitleNode = (nodeProps) => {
             position={"right"}
         >
         </Handle>
-        <NodeToolbar>
-            <Input
-                value={data.Name}
-                onChange={(e) => {
-                    setData({
-                        ...data,
-                        Name: e.target.value
-                    })
-                    // finishInput({
-                    //     ...data,
-                    //     Name: e.target.value
-                    // });
-                }}
-                onPressEnter={() => {
-                    finishInput(data);
-                }}
-                addonAfter={
-                    <Button
-                        size={"small"}
-                        type={"link"}
-                        icon={<SaveOutlined />}
-                        onClick={() => {
-                            finishInput(data);
-                        }}
-                    >
-                    </Button>
-                }
-            />
-        </NodeToolbar>
         <Handle
             className={"TargetConnection"}
             type={"target"}
             position={"left"}
         />
         <div className={"Content"}>
-            <h3>
-                {data.Name ? data.Name : "Click"}
-            </h3>
+            <Input
+                style={{ backgroundColor: "inherit" }}
+                className="InputLikeTitle Input"
+                defaultValue={data.Name}
+                onChange={(e) => {
+                    setData({
+                        ...data,
+                        Name: e.target.value
+                    });
+                    setUnSaveData(true)
+                }}
+                onPressEnter={() => {
+                    finishInput(data);
+                }}
+            // addonAfter={
+            //     <Button
+            //         size={"small"}
+            //         type={"link"}
+            //         icon={<SaveOutlined />}
+            //         onClick={() => {
+            //             finishInput(data);
+            //         }}
+            //     >
+            //     </Button>
+            // }
+            />
+            {/* {
+                nodeProps.selected
+                    ? <input
+                        className="InputLikeTitle"
+                        defaultValue={data.Name}
+                        onChange={(e) => {
+                            setData({
+                                ...data,
+                                Name: e.target.value
+                            });
+                            setUnSaveData(true)
+                        }}
+                        onPressEnter={() => {
+                            finishInput(data);
+                        }}
+                    // addonAfter={
+                    //     <Button
+                    //         size={"small"}
+                    //         type={"link"}
+                    //         icon={<SaveOutlined />}
+                    //         onClick={() => {
+                    //             finishInput(data);
+                    //         }}
+                    //     >
+                    //     </Button>
+                    // }
+                    />
+                    : <span
+                    >
+                        {data.Name
+                            ? data.Name
+                            : <Input
+                                onChange={(e) => {
+                                    setData({
+                                        ...data,
+                                        Name: e.target.value
+                                    });
+                                    setUnSaveData(true)
+                                }}
+                                onPressEnter={() => {
+                                    finishInput(data);
+                                }}
+                            // addonAfter={
+                            //     <Button
+                            //         size={"small"}
+                            //         type={"link"}
+                            //         icon={<SaveOutlined />}
+                            //         onClick={() => {
+                            //             finishInput(data);
+                            //         }}
+                            //     >
+                            //     </Button>
+                            // }
+                            />
+                        }
+                    </span>
+
+            } */}
+
         </div>
     </div>
 }

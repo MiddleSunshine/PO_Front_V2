@@ -1,5 +1,5 @@
-import { Button, Form, InputNumber, Radio } from "antd";
-import { CirclePicker } from '@hello-pangea/color-picker'
+import { Button, Divider, Form, InputNumber, Radio } from "antd";
+import { CirclePicker, CompactPicker } from '@hello-pangea/color-picker'
 import { useEffect, useState } from "react";
 import { useReactFlow } from 'reactflow';
 import { UpdateNode } from "./BasicNode";
@@ -8,7 +8,9 @@ const BASIC_SETTING = {
     backgroundColor: "",
     padding: "",
     maxHeight: 0,
-    overflow: "auto"
+    overflow: "auto",
+    color: "black",
+    fontSize: ""
 }
 
 const EditNode = ({ nodeProps }) => {
@@ -46,9 +48,7 @@ const EditNode = ({ nodeProps }) => {
             <Form
                 layout={"vertical"}
             >
-                <Form.Item
-                    label={"Option"}
-                >
+                <Divider>
                     <Button
                         type={"primary"}
                         onClick={() => {
@@ -57,7 +57,7 @@ const EditNode = ({ nodeProps }) => {
                     >
                         Save
                     </Button>
-                </Form.Item>
+                </Divider>
                 <Form.Item
                     label={"Share Node"}
                 >
@@ -71,6 +71,39 @@ const EditNode = ({ nodeProps }) => {
                         <Radio value={'NO'}>NO</Radio>
                     </Radio.Group>
                 </Form.Item>
+                <Divider>
+                    <h5>Font</h5>
+                </Divider>
+                <Form.Item
+                    label={"Font Color"}
+                >
+                    <CompactPicker
+                        defaultColor={settingsStyle?.color}
+                        onChange={(newValue) => {
+                            setSettingsStyle({
+                                ...settingsStyle,
+                                color: newValue.hex
+                            })
+                        }}
+                    />
+                </Form.Item>
+                <Form.Item
+                    label={"Font Size"}
+                >
+                    <InputNumber
+                        defaultValue={setSettingsStyle?.fontSize}
+                        onChange={(newFontSize) => {
+                            setSettingsStyle({
+                                ...settingsStyle,
+                                fontSize: newFontSize
+                            })
+                        }}
+                        addonAfter="px"
+                    />
+                </Form.Item>
+                <Divider>
+                    <h5>Background</h5>
+                </Divider>
                 <Form.Item
                     label={"Background Color"}
                 >
@@ -95,6 +128,7 @@ const EditNode = ({ nodeProps }) => {
                                 padding: newPadding
                             })
                         }}
+                        addonAfter="px"
                     />
                 </Form.Item>
                 <Form.Item
