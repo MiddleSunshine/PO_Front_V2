@@ -1,7 +1,7 @@
 import { Button, Input, message } from "antd";
 import { useState } from "react";
-import { CreateNodeAsync, GetNodeStyle } from "./BasicNode";
-import { Handle, NodeToolbar, useReactFlow } from 'reactflow';
+import { GetNodeStyle } from "./BasicNode";
+import { Handle, useReactFlow } from 'reactflow';
 import { UpdateNode } from "./BasicNode";
 import { NodeResizer } from "@reactflow/node-resizer";
 import { SaveOutlined } from "@ant-design/icons";
@@ -34,44 +34,42 @@ const TitleNode = (nodeProps) => {
             position={"right"}
         >
         </Handle>
-        <NodeToolbar>
-            <Input
-                value={data.Name}
-                onChange={(e) => {
-                    setData({
-                        ...data,
-                        Name: e.target.value
-                    })
-                    // finishInput({
-                    //     ...data,
-                    //     Name: e.target.value
-                    // });
-                }}
-                onPressEnter={() => {
-                    finishInput(data);
-                }}
-                addonAfter={
-                    <Button
-                        size={"small"}
-                        type={"link"}
-                        icon={<SaveOutlined />}
-                        onClick={() => {
-                            finishInput(data);
-                        }}
-                    >
-                    </Button>
-                }
-            />
-        </NodeToolbar>
         <Handle
             className={"TargetConnection"}
             type={"target"}
             position={"left"}
         />
         <div className={"Content"}>
-            <h3>
-                {data.Name ? data.Name : "Click"}
-            </h3>
+            {
+                nodeProps.selected
+                    ? <Input
+                        defaultValue={data.Name}
+                        onChange={(e) => {
+                            setData({
+                                ...data,
+                                Name: e.target.value
+                            })
+                        }}
+                        onPressEnter={() => {
+                            finishInput(data);
+                        }}
+                        addonAfter={
+                            <Button
+                                size={"small"}
+                                type={"link"}
+                                icon={<SaveOutlined />}
+                                onClick={() => {
+                                    finishInput(data);
+                                }}
+                            >
+                            </Button>
+                        }
+                    />
+                    : <h4>
+                        {data.Name ? data.Name : "Click"}
+                    </h4>
+            }
+
         </div>
     </div>
 }
