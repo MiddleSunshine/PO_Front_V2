@@ -70,10 +70,35 @@ const TitleNode = (nodeProps) => {
                             </Button>
                         }
                     />
-                    : <h4
+                    : <span
                     >
-                        {data.Name ? data.Name : "Click"}
-                    </h4>
+                        {data.Name
+                            ? data.Name
+                            : <Input
+                                onChange={(e) => {
+                                    setData({
+                                        ...data,
+                                        Name: e.target.value
+                                    });
+                                    setUnSaveData(true)
+                                }}
+                                onPressEnter={() => {
+                                    finishInput(data);
+                                }}
+                                addonAfter={
+                                    <Button
+                                        size={"small"}
+                                        type={"link"}
+                                        icon={<SaveOutlined />}
+                                        onClick={() => {
+                                            finishInput(data);
+                                        }}
+                                    >
+                                    </Button>
+                                }
+                            />
+                        }
+                    </span>
 
             }
 
