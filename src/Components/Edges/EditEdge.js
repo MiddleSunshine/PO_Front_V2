@@ -1,32 +1,32 @@
-import {Button, Col, Form, Input, InputNumber, Radio, Row} from "antd";
-import {CirclePicker} from '@hello-pangea/color-picker'
+import { Button, Col, Form, Input, InputNumber, Radio, Row } from "antd";
+import { CirclePicker } from '@hello-pangea/color-picker'
 import { useReactFlow } from 'reactflow';
-import {useEffect, useState} from "react";
-const EditEdge=({edgeProps})=>{
-    const [edge,setEdge]=useState(edgeProps);
+import { useEffect, useState } from "react";
+const EditEdge = ({ edgeProps }) => {
+    const [edge, setEdge] = useState(edgeProps);
 
-    const instance=useReactFlow();
+    const instance = useReactFlow();
 
-    useEffect(()=>{
+    useEffect(() => {
         setEdge(edgeProps)
-    },[edgeProps])
+    }, [edgeProps])
 
-    const changeEdgeStyleProps=(key,value)=>{
-        let newEdge={...edge};
-        if (!newEdge.hasOwnProperty('style')){
-            newEdge.style={};
+    const changeEdgeStyleProps = (key, value) => {
+        let newEdge = { ...edge };
+        if (!newEdge.hasOwnProperty('style')) {
+            newEdge.style = {};
         }
-        let newStyle={...newEdge.style};
-        newStyle[key]=value;
-        newEdge.style=newStyle;
+        let newStyle = { ...newEdge.style };
+        newStyle[key] = value;
+        newEdge.style = newStyle;
         setEdge(newEdge);
     }
 
-    const saveEdge=()=>{
-        let edges=instance.getEdges();
-        edges.map((e)=>{
-            if (e.id==edgeProps.id){
-                let newEdge=Object.assign(e,edge);
+    const saveEdge = () => {
+        let edges = instance.getEdges();
+        edges.map((e) => {
+            if (e.id == edgeProps.id) {
+                let newEdge = Object.assign(e, edge);
                 return newEdge;
             }
             return e;
@@ -42,14 +42,16 @@ const EditEdge=({edgeProps})=>{
                 label={"Option"}
             >
                 <Button
-                    onClick={()=>{
+                    type="primary"
+                    onClick={() => {
                         saveEdge();
                     }}
                 >
                     Save
                 </Button>
+                &nbsp;&nbsp;
                 <Button
-                    onClick={()=>{
+                    onClick={() => {
                         setEdge(edgeProps);
                     }}
                 >
@@ -60,10 +62,10 @@ const EditEdge=({edgeProps})=>{
                 label={"Label"}
             >
                 <Input
-                    value={edge.label}
-                    onChange={(e)=>{
-                        let newEdge=edge;
-                        newEdge.label=e.target.value;
+                    defaultValue={edge.label}
+                    onChange={(e) => {
+                        let newEdge = edge;
+                        newEdge.label = e.target.value;
                         setEdge(newEdge)
                     }}
                 />
@@ -72,10 +74,10 @@ const EditEdge=({edgeProps})=>{
                 label={"Type"}
             >
                 <Radio.Group
-                    value={edge.type}
-                    onChange={(e)=>{
-                        let newEdge=edge;
-                        newEdge.type=e.target.value;
+                    defaultValue={edge.type}
+                    onChange={(e) => {
+                        let newEdge = edge;
+                        newEdge.type = e.target.value;
                         setEdge(newEdge);
                     }}
                 >
@@ -97,9 +99,9 @@ const EditEdge=({edgeProps})=>{
                 label={"Width"}
             >
                 <InputNumber
-                    value={edge?.style?.strokeWidth}
-                    onChange={(newValue)=>{
-                        changeEdgeStyleProps('strokeWidth',newValue)
+                    defaultValue={edge?.style?.strokeWidth}
+                    onChange={(newValue) => {
+                        changeEdgeStyleProps('strokeWidth', newValue)
                     }}
                 />
             </Form.Item>
@@ -108,8 +110,8 @@ const EditEdge=({edgeProps})=>{
             >
                 <CirclePicker
                     defaultColor={edge?.style?.stroke}
-                    onChange={(newValue)=>{
-                        changeEdgeStyleProps('stroke',newValue.hex);
+                    onChange={(newValue) => {
+                        changeEdgeStyleProps('stroke', newValue.hex);
                     }}
                 />
             </Form.Item>
