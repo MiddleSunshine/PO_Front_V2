@@ -1,4 +1,4 @@
-import { Button, Input, message } from "antd";
+import { Badge, Button, Input, message } from "antd";
 import { useState } from "react";
 import { GetNodeStyle } from "./BasicNode";
 import { Handle, useReactFlow } from 'reactflow';
@@ -8,6 +8,7 @@ import { SaveOutlined } from "@ant-design/icons";
 
 const TitleNode = (nodeProps) => {
     const [data, setData] = useState(nodeProps.data.data);
+    const [unsaveData, setUnSaveData] = useState(false);
     const instance = useReactFlow();
 
     const SAVE_DATA = (data) => {
@@ -19,6 +20,7 @@ const TitleNode = (nodeProps) => {
     const finishInput = (data) => {
         setData(data);
         SAVE_DATA(data);
+        setUnSaveData(false);
     }
 
     return <div
@@ -48,7 +50,8 @@ const TitleNode = (nodeProps) => {
                             setData({
                                 ...data,
                                 Name: e.target.value
-                            })
+                            });
+                            setUnSaveData(true)
                         }}
                         onPressEnter={() => {
                             finishInput(data);
@@ -65,9 +68,21 @@ const TitleNode = (nodeProps) => {
                             </Button>
                         }
                     />
-                    : <h4>
+                    : <h4
+                        style={
+                            unsaveData
+                                ? {
+                                    border: '2px dashed orange',
+                                    borderRadius: "25px"
+                                }
+                                : {
+
+                                }
+                        }
+                    >
                         {data.Name ? data.Name : "Click"}
                     </h4>
+
             }
 
         </div>
