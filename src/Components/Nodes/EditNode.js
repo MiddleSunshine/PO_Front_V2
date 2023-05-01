@@ -1,45 +1,45 @@
-import {Button, Form, InputNumber, Radio} from "antd";
-import {CirclePicker} from '@hello-pangea/color-picker'
-import {useEffect, useState} from "react";
+import { Button, Form, InputNumber, Radio } from "antd";
+import { CirclePicker } from '@hello-pangea/color-picker'
+import { useEffect, useState } from "react";
 import { useReactFlow } from 'reactflow';
-import {UpdateNode} from "./BasicNode";
+import { UpdateNode } from "./BasicNode";
 
-const BASIC_SETTING={
-    backgroundColor:"",
-    padding:"",
-    maxHeight:0,
-    overflow:"auto"
+const BASIC_SETTING = {
+    backgroundColor: "",
+    padding: "",
+    maxHeight: 0,
+    overflow: "auto"
 }
 
-const EditNode=({nodeProps})=>{
+const EditNode = ({ nodeProps }) => {
 
-    const [settingsStyle,setSettingsStyle]=useState({
+    const [settingsStyle, setSettingsStyle] = useState({
         ...BASIC_SETTING,
         ...nodeProps.data.settings?.style
     });
 
-    const [saveIntoDataBase,setSaveIntoDataBase]=useState(nodeProps.data.save_into_database?'YES':'NO');
-    const instance=useReactFlow();
-    const handleSave=()=>{
-        let newNode=nodeProps;
-        let newNodeSettingStyle=settingsStyle;
-        if ((newNodeSettingStyle.maxHeight-0)<=0){
+    const [saveIntoDataBase, setSaveIntoDataBase] = useState(nodeProps.data.save_into_database ? 'YES' : 'NO');
+    const instance = useReactFlow();
+    const handleSave = () => {
+        let newNode = nodeProps;
+        let newNodeSettingStyle = settingsStyle;
+        if ((newNodeSettingStyle.maxHeight - 0) <= 0) {
             delete newNodeSettingStyle.maxHeight;
         }
-        newNode.data.settings.style=newNodeSettingStyle;
-        newNode.data.save_into_database=(saveIntoDataBase=='YES');
-        UpdateNode(instance,newNode);
+        newNode.data.settings.style = newNodeSettingStyle;
+        newNode.data.save_into_database = (saveIntoDataBase == 'YES');
+        UpdateNode(instance, newNode);
         setSettingsStyle({})
         setSaveIntoDataBase('NO');
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         setSettingsStyle({
             ...BASIC_SETTING,
             ...nodeProps.data.settings?.style
         });
-        setSaveIntoDataBase(nodeProps.data.save_into_database?'YES':'NO');
-    },[nodeProps])
+        setSaveIntoDataBase(nodeProps.data.save_into_database ? 'YES' : 'NO');
+    }, [nodeProps])
 
     return (
         <div>
@@ -51,7 +51,7 @@ const EditNode=({nodeProps})=>{
                 >
                     <Button
                         type={"primary"}
-                        onClick={()=>{
+                        onClick={() => {
                             handleSave();
                         }}
                     >
@@ -63,7 +63,7 @@ const EditNode=({nodeProps})=>{
                 >
                     <Radio.Group
                         value={saveIntoDataBase}
-                        onChange={(event)=>{
+                        onChange={(event) => {
                             setSaveIntoDataBase(event.target.value);
                         }}
                     >
@@ -76,7 +76,7 @@ const EditNode=({nodeProps})=>{
                 >
                     <CirclePicker
                         defaultColor={settingsStyle.backgroundColor}
-                        onChange={(newValue)=>{
+                        onChange={(newValue) => {
                             setSettingsStyle({
                                 ...settingsStyle,
                                 backgroundColor: newValue.hex
@@ -89,7 +89,7 @@ const EditNode=({nodeProps})=>{
                 >
                     <InputNumber
                         value={settingsStyle.padding}
-                        onChange={(newPadding)=>{
+                        onChange={(newPadding) => {
                             setSettingsStyle({
                                 ...settingsStyle,
                                 padding: newPadding
@@ -102,9 +102,9 @@ const EditNode=({nodeProps})=>{
                 >
                     <InputNumber
                         value={settingsStyle.maxHeight}
-                        onChange={(newValue)=>{
-                            if (!newValue){
-                                newValue=0;
+                        onChange={(newValue) => {
+                            if (!newValue) {
+                                newValue = 0;
                             }
                             setSettingsStyle({
                                 ...settingsStyle,
@@ -119,7 +119,7 @@ const EditNode=({nodeProps})=>{
                 >
                     <Radio.Group
                         value={settingsStyle.overflow}
-                        onChange={(event)=>{
+                        onChange={(event) => {
                             setSettingsStyle({
                                 ...settingsStyle,
                                 overflow: event.target.value
@@ -137,4 +137,4 @@ const EditNode=({nodeProps})=>{
     )
 }
 
-export {EditNode}
+export { EditNode }
