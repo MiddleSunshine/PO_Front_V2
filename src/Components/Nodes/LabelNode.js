@@ -78,6 +78,7 @@ const LabelNode = (node) => {
             </NodeToolbar> */}
             <div>
                 <Input
+                    style={{ backgroundColor: "inherit" }}
                     className="InputLikeTitle"
                     value={label}
                     onChange={(e) => {

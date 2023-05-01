@@ -45,7 +45,8 @@ const TitleNode = (nodeProps) => {
         />
         <div className={"Content"}>
             <Input
-                className="InputLikeTitle"
+                style={{ backgroundColor: "inherit" }}
+                className="InputLikeTitle Input"
                 defaultValue={data.Name}
                 onChange={(e) => {
                     setData({
