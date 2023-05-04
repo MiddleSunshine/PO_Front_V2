@@ -54,6 +54,8 @@
     height: 100vh;
 }
 
+.WhiteBoard .NoteNode {}
+
 .WhiteBoard .SheetNode {}
 
 .WhiteBoard .TitleNode {
