@@ -37,7 +37,7 @@ const TableNode = (nodeProps) => {
         }
     }, [])
 
-    const instance = useReactFlow();
+    // const instance = useReactFlow();
 
     // 切换选中项
     const switchSelected = (rowIndex = -1, columnIndex = -1) => {
@@ -73,7 +73,8 @@ const TableNode = (nodeProps) => {
         let node = { ...nodeProps }
         node.data.node_data = nodeData;
         node.data.data = data;
-        UpdateNode(instance, node);
+        // UpdateNode(instance, node);
+        nodeProps.data.saveData(node);
     }
 
     const AddRowOrColumn = (type, index) => {

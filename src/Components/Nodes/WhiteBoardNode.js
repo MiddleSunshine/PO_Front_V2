@@ -129,12 +129,13 @@ const NewWhiteBoardNode = (nodeProps) => {
 const WhiteBoardNode = (nodeProps) => {
 
     const [nodeData, setNodeData] = useState(nodeProps.data.node_data);
-    const instance = useReactFlow();
+    // const instance = useReactFlow();
 
     const finishInput = () => {
         let newNode = nodeProps;
         newNode.data.node_data = nodeData;
-        UpdateNode(instance, newNode);
+        // UpdateNode(instance, newNode);
+        nodeProps.data.saveData(newNode);
     }
 
     return (
@@ -154,7 +155,7 @@ const WhiteBoardNode = (nodeProps) => {
                 className={"Content"}
             >
                 <Input
-                    value={nodeData.data.Title}
+                    defaultValue={nodeData.data.Title}
                     onChange={(e) => {
                         let newNodeData = { ...nodeData }
                         newNodeData.node_data.data.Title = e.target.value

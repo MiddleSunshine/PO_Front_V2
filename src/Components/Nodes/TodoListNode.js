@@ -34,13 +34,14 @@ const TodoListNode = (nodeProps) => {
     const [selectedTodoItem, setSelectedTodoItem] = useState({});
     const [editMode, setEditMode] = useState(false);
     const [unsaveData, setUnSaveData] = useState(false);
-    const instance = useReactFlow();
+    // const instance = useReactFlow();
 
     const SAVE_DATA = (newNodeData, newData) => {
         let newNode = { ...nodeProps }
         newNode.data.data = newData;
         newNode.data.node_data = newNodeData;
-        UpdateNode(instance, newNode);
+        // UpdateNode(instance, newNode);
+        nodeProps.data.saveData(nodeProps);
         setUnSaveData(false);
     }
 
