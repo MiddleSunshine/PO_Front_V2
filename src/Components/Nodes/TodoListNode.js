@@ -92,7 +92,7 @@ const TodoListNode = (nodeProps) => {
         setSelectedTodoItem(newNodeData);
         setUnSaveData(true);
         if (saveData) {
-            SAVE_DATA(newNodeData);
+            SAVE_DATA(newNodeData,data);
         }
     }
 
