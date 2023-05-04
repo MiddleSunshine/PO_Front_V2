@@ -7,7 +7,8 @@ import ReactFlow, {
     useReactFlow,
     Background,
     Controls,
-    Panel
+    Panel,
+    MiniMap
 } from 'reactflow';
 import { getId } from "../config/WhiteBord";
 import '../Css/WhiteBord.css';
@@ -164,15 +165,15 @@ const BasicBord = () => {
                     value: "TitleNode"
                 },
                 {
+                    label: "简易文本",
+                    value: "NoteNode"
+                },
+                {
                     label: "标签",
                     value: "LabelNode"
                 },
                 {
-                    label: "文本",
-                    value: "NoteNode"
-                },
-                {
-                    label: "文档",
+                    label: "文章",
                     value: "MarkdownNode"
                 },
                 {
@@ -187,17 +188,17 @@ const BasicBord = () => {
                     value: "DrawNode"
                 },
                 {
-                    label: "Todo List",
-                    value: "TodoListNode"
-                },
-                {
                     label: "Excel",
                     value: "SheetNode"
                 },
                 {
-                    label: "表格",
-                    value: "TableNode"
+                    label: "Todo List",
+                    value: "TodoListNode"
                 },
+                // {
+                //     label: "表格",
+                //     value: "TableNode"
+                // },
                 {
                     label: "图片",
                     value: "ImageNode"
@@ -717,9 +718,10 @@ const BasicBord = () => {
                         variant={settings.background.variant}
                         color={settings.background.color}
                     />
-                    <Controls
+                    {/* <Controls
 
-                    />
+                    /> */}
+                    <MiniMap />
                 </ReactFlow>
                 <Drawer
                     open={editMode}

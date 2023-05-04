@@ -264,6 +264,9 @@ const TableNode = (nodeProps) => {
                             </th>
                             {
                                 nodeData.titles.map((title, index) => {
+                                    if(!nodeProps.selected){
+                                        return <th></th>;
+                                    }
                                     return (
                                         <th
                                             key={index}
@@ -317,7 +320,7 @@ const TableNode = (nodeProps) => {
                             >
                             </th>
                             {
-                                nodeData.titles.map((title, index) => {
+                                nodeData.titles.map((title, index) => {    
                                     return (
                                         <th
                                             className={getItemClass(-2, index)}
@@ -350,46 +353,47 @@ const TableNode = (nodeProps) => {
                                                     <>
                                                         {
                                                             columnIndex == 0
-                                                                ? <td
-                                                                    className={"Option"}
-                                                                >
-                                                                    <Button
-                                                                        size="small"
-                                                                        ghost={true}
-                                                                        type={"primary"}
-                                                                        icon={<CaretUpOutlined />}
-                                                                        onClick={() => {
-                                                                            AddRowOrColumn('row', rowIndex - 1)
-                                                                        }}
-                                                                    ></Button>
-                                                                    <Button
-                                                                        size="small"
-                                                                        type={"primary"}
-                                                                        onClick={() => {
-                                                                            if (selected.RowIndex == rowIndex) {
-                                                                                deleteTable();
-                                                                            } else {
-                                                                                switchSelected(rowIndex, -1);
-                                                                            }
-                                                                        }}
-                                                                        danger={selected.RowIndex == rowIndex}
-                                                                    >
-                                                                        {
-                                                                            selected.RowIndex == rowIndex
-                                                                                ? "Delete"
-                                                                                : (rowIndex + 1)
+                                                                ? nodeProps.selected
+                                                                ?<td
+                                                                className={"Option"}
+                                                            >
+                                                                <Button
+                                                                    size="small"
+                                                                    ghost={true}
+                                                                    type={"primary"}
+                                                                    icon={<CaretUpOutlined />}
+                                                                    onClick={() => {
+                                                                        AddRowOrColumn('row', rowIndex - 1)
+                                                                    }}
+                                                                ></Button>
+                                                                <Button
+                                                                    size="small"
+                                                                    type={"primary"}
+                                                                    onClick={() => {
+                                                                        if (selected.RowIndex == rowIndex) {
+                                                                            deleteTable();
+                                                                        } else {
+                                                                            switchSelected(rowIndex, -1);
                                                                         }
-                                                                    </Button>
-                                                                    <Button
-                                                                        size="small"
-                                                                        ghost={true}
-                                                                        type={"primary"}
-                                                                        icon={<CaretDownOutlined />}
-                                                                        onClick={() => {
-                                                                            AddRowOrColumn('row', rowIndex)
-                                                                        }}
-                                                                    ></Button>
-                                                                </td>
+                                                                    }}
+                                                                    danger={selected.RowIndex == rowIndex}
+                                                                >
+                                                                    {
+                                                                        selected.RowIndex == rowIndex
+                                                                            ? "Delete"
+                                                                            : (rowIndex + 1)
+                                                                    }
+                                                                </Button>
+                                                                <Button
+                                                                    size="small"
+                                                                    ghost={true}
+                                                                    type={"primary"}
+                                                                    icon={<CaretDownOutlined />}
+                                                                    onClick={() => {
+                                                                        AddRowOrColumn('row', rowIndex)
+                                                                    }}
+                                                                ></Button>
+                                                            </td>:<td></td>
                                                                 : ''
                                                         }
                                                         <td
