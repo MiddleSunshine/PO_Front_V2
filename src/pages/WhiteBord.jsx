@@ -635,6 +635,10 @@ const BasicBord = () => {
                     minZoom={0.2}
                     maxZoom={4}
                     attributionPosition="bottom-left"
+                    onPaneClick={() => {
+                        setNodeMenuPosition({ x: 0, y: 0 });
+                        setMenuPosition({ x: 0, y: 0 })
+                    }}
                     onNodeContextMenu={handleNodeContextMene}
                     onPaneContextMenu={handleContextMenu}
                     onInit={setReactFlowInstance}
