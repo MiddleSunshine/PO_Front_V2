@@ -80,6 +80,7 @@ const BasicBord = () => {
     const [settings, setSettings] = useState({
         ...DEFAULT_SETTINGS
     });
+    const [unsavePage,setUnsavePage]=useState(false);
     const [editSettings, setEditSettings] = useState(false);
 
     const [whiteboard, setWhiteBoard] = useState({});
@@ -134,6 +135,7 @@ const BasicBord = () => {
             return n;
         });
         message.info("Synced");
+        setUnsavePage(true);
     }
 
     const renderMenu = () => {
@@ -494,6 +496,7 @@ const BasicBord = () => {
         new_node.data.settings = {};
         setNodes((n) => n.concat([new_node]));
         setMenuPosition({ x: 0, y: 0 });
+        setUnsavePage(true);
     }
 
     const deleteNode = () => {
@@ -510,7 +513,8 @@ const BasicBord = () => {
         setNodeMenuPosition({
             x: 0,
             y: 0
-        })
+        });
+        setUnsavePage(true);
     }
 
     const onConnect = useCallback((params) => {
@@ -526,7 +530,8 @@ const BasicBord = () => {
         };
         // params.markerStart.type='arrow';
         // params.markerEnd.type='arrow';
-        setEdges((eds) => addEdge(params, eds))
+        setEdges((eds) => addEdge(params, eds));
+        setUnsavePage(true);
     }, [setEdges]);
 
     const handleSelectionChange = ({ nodes, edges }) => {
@@ -546,6 +551,7 @@ const BasicBord = () => {
 
     const saveWhiteBord = (IsDraft = true, message = '保存成功') => {
         SaveWhiteBoard(IsDraft, id, settings, nodes, edges, message);
+        setUnsavePage(false);
     }
 
     const renderPath = () => {
@@ -637,6 +643,21 @@ const BasicBord = () => {
                     hotkeysHandler[keyname]();
                 }}
             >
+                <Panel position="top-right">
+                {
+                    unsavePage
+                    ?<Button
+                        danger={true}
+                        type="primary"
+                        onClick={()=>{
+                            saveWhiteBord(false);
+                        }}
+                    >
+                        页面未保存，请点击保存
+                    </Button>
+                    :''
+                }
+                </Panel>
                 <Panel
                     position='top-left'
                 >
