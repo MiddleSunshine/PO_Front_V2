@@ -43,7 +43,7 @@ import dayjs from "dayjs";
 import WhiteBoardHelp from "../Components/WhiteBoardHelp";
 import { SearchHistoryWhiteBoard } from "../Components/SearchHistoryWhiteBoard";
 
-const defaultViewport = { x: 0, y: 0, zoom: 1.1 };
+const defaultViewport = { x: 0, y: 0, zoom: 0.9 };
 
 const AllNodeTypes = {
     HistoryNode,
@@ -513,7 +513,21 @@ const BasicBord = () => {
         })
     }
 
-    const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), [setEdges]);
+    const onConnect = useCallback((params) => {
+        params.markerEnd={
+            type:'arrowclosed',
+            // strokeWidth:8,
+            // color:"#0d6efd",
+            markerUnits:'strokeWidth'
+        }
+        params.type='step';
+        params.style={
+            strokeWidth:2
+        };
+        // params.markerStart.type='arrow';
+        // params.markerEnd.type='arrow';
+        setEdges((eds) => addEdge(params, eds))
+    }, [setEdges]);
 
     const handleSelectionChange = ({ nodes, edges }) => {
         if (nodes.length == 1) {
