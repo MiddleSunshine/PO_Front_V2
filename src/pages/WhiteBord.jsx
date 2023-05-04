@@ -143,51 +143,54 @@ const BasicBord = () => {
             [
 
                 {
-                    label: "节点"
-                },
-                {
-                    label: "历史节点",
-                    value: "HistoryNode"
+                    label: "常用节点"
                 },
                 {
                     label: "标题",
                     value: "TitleNode"
                 },
                 {
-                    label: "白板",
-                    value: "DrawNode"
-                },
-                {
-                    label: "代码",
-                    value: "CodeNode"
+                    label: "标签",
+                    value: "LabelNode"
                 },
                 {
                     label: "文档",
                     value: "MarkdownNode"
                 },
                 {
-                    label: "图片",
-                    value: "ImageNode"
+                    label: "历史节点",
+                    value: "HistoryNode"
                 },
                 {
-                    label: "标签",
-                    value: "LabelNode"
+                    label: "特定节点"
                 },
                 {
-                    label: "Todo列表",
+                    label: "白板",
+                    value: "DrawNode"
+                },
+                {
+                    label: "Todo List",
                     value: "TodoListNode"
                 },
                 {
-                    label: "日历",
-                    value: "CalendarNode"
+                    label: "Excel",
+                    value: "SheetNode"
                 },
                 {
                     label: "表格",
                     value: "TableNode"
                 },
                 {
-                    label: "Excel",
-                    value: "SheetNode"
+                    label: "图片",
+                    value: "ImageNode"
+                },
+                {
+                    label: "日历",
+                    value: "CalendarNode"
+                },
+                {
+                    label: "代码",
+                    value: "CodeNode"
                 },
                 {
                     label: "外部链接",
