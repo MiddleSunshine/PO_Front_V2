@@ -411,7 +411,7 @@ const BasicBord = () => {
                 return false;
             case 'DirectoryNode':
                 new_node.data.node_data = [];
-                new_node.data.save_into_database = true;
+                // new_node.data.save_into_database = true;
                 break;
             case 'DrawNode':
                 new_node.data.save_into_database = true;
@@ -426,10 +426,10 @@ const BasicBord = () => {
                 new_node.data.node_data = {
                     markdown: ""
                 }
-                new_node.data.save_into_database = true;
+                // new_node.data.save_into_database = true;
                 break;
             case "CalendarNode":
-                new_node.data.save_into_database = true;
+                // new_node.data.save_into_database = true;
                 new_node.data.node_data = {
                     list: {},
                     mode: "List",
@@ -466,7 +466,7 @@ const BasicBord = () => {
                 new_node.data.node_data = {
                     link: "#"
                 }
-                new_node.data.save_into_database = true;
+                // new_node.data.save_into_database = true;
                 break;
             default:
                 break;
