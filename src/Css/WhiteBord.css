@@ -20,6 +20,7 @@
 .WhiteBoard .InputLikeTitle {
     border: none !important;
     width: 100%;
+    background-color: inherit;
 }
 
 .WhiteBoard .Menu {
@@ -68,7 +69,7 @@
 .WhiteBoard .TableNode {
     border: 2px solid gainsboro;
     padding: 5px;
-    background-color: cornsilk;
+    background-color: #F0F0F0;
 }
 
 .WhiteBoard .Option {
