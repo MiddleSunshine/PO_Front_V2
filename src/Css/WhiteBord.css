@@ -54,7 +54,9 @@
     height: 100vh;
 }
 
-.WhiteBoard .NoteNode {}
+.WhiteBoard .NoteNode {
+    background-color: darkgray;
+}
 
 .WhiteBoard .SheetNode {}
 

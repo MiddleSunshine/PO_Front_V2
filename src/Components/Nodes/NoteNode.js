@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { GetNodeStyle } from "./BasicNode";
 import { Button, Input } from "antd";
-import { NodeResizer, NodeToolbar } from "reactflow";
+import { Handle, NodeResizer, NodeToolbar } from "reactflow";
 
 const NoteNode = (nodeProps) => {
     const [ndoeData, setNodeData] = useState(nodeProps.data.node_data);
@@ -21,6 +21,30 @@ const NoteNode = (nodeProps) => {
                     Save
                 </Button>
             </NodeToolbar>
+            <Handle
+                className={"TargetConnection"}
+                id={`${nodeProps.id}_top`}
+                position={"top"}
+                type={"target"}
+            />
+            <Handle
+                className={"SourceConnection"}
+                id={`${nodeProps.id}_bottom`}
+                position={"bottom"}
+                type={"source"}
+            />
+            <Handle
+                className={"TargetConnection"}
+                id={`${nodeProps.id}_left`}
+                position={"left"}
+                type={"target"}
+            />
+            <Handle
+                className={"SourceConnection"}
+                id={`${nodeProps.id}_right`}
+                position={"right"}
+                type={"source"}
+            />
             <div>
                 <Input.TextArea
                     className="InputLikeTitle"
