@@ -11,13 +11,14 @@ const MarkdownNode = (nodeProps) => {
     const [data, setData] = useState(nodeProps.data.data);
     const [editMode, setEditMode] = useState(nodeProps.data.node_data.markdown == '');
 
-    const instance = useReactFlow();
+    // const instance = useReactFlow();
 
     const handleSave = () => {
-        let newNode = nodeProps;
+        let newNode = { ...nodeProps };
         newNode.data.node_data = nodeData;
         newNode.data.data = data;
-        UpdateNode(instance, newNode);
+        // UpdateNode(instance, newNode);
+        nodeProps.data.saveData(newNode);
     }
 
     return (
