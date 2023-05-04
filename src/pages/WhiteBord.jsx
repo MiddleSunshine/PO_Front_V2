@@ -36,6 +36,7 @@ import { TodoListNode } from "../Components/Nodes/TodoListNode";
 import { TableNode } from "../Components/Nodes/TableNode";
 import { LinkNode } from "../Components/Nodes/LinkNode";
 import { SheetNode } from "../Components/Nodes/SheetNode";
+import { NoteNode } from '../Components/Nodes/NoteNode'
 import { CompactPicker } from '@hello-pangea/color-picker'
 import Loading from '../Images/zannet.png';
 import dayjs from "dayjs";
@@ -62,7 +63,8 @@ const AllNodeTypes = {
     HistoryWhiteBordNode,
     TableNode,
     LinkNode,
-    SheetNode
+    SheetNode,
+    NoteNode
 }
 
 const DEFAULT_SETTINGS = {
@@ -124,6 +126,18 @@ const BasicBord = () => {
         // return () => clearInterval(interval);
     }, [])
 
+    const saveNodeChange = (thisNode) => {
+        let newNodes = nodes;
+        newNodes.map((n) => {
+            if (n.id == thisNode.id) {
+                return Object.assign(n, thisNode);
+            }
+            return n;
+        });
+        setNodes(newNodes);
+        message.info("Synced");
+    }
+
     const renderMenu = () => {
         const menuStyle = {
             position: 'absolute',
@@ -152,6 +166,10 @@ const BasicBord = () => {
                 {
                     label: "标签",
                     value: "LabelNode"
+                },
+                {
+                    label: "文本",
+                    value: "NoteNode"
                 },
                 {
                     label: "文档",
@@ -474,6 +492,7 @@ const BasicBord = () => {
             default:
                 break;
         }
+        new_node.data.saveData = saveNodeChange;
         new_node.data.settings = {};
         setNodes((n) => n.concat([new_node]));
         setMenuPosition({ x: 0, y: 0 });
@@ -560,7 +579,11 @@ const BasicBord = () => {
     const getWhiteBord = (whiteBordId) => {
         requestAPI(`index.php?action=WhiteBordController&method=GetWhiteBord&ID=${whiteBordId}`)
             .then((json) => {
-                setNodes(json.Data.WhiteBordContent.data?.nodes);
+                let nodes = json.Data.WhiteBordContent.data?.nodes.map((n) => {
+                    n.data.saveData = saveNodeChange;
+                    return n;
+                });
+                setNodes(nodes);
                 setEdges(json.Data.WhiteBordContent.data?.edges);
                 setSettings({
                     ...DEFAULT_SETTINGS,
