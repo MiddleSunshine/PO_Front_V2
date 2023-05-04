@@ -42,10 +42,10 @@ const TodoListNode = (nodeProps) => {
         UpdateNode(instance, newNode);
     }
 
-    const newItem = (outsideIndex, offset) => {
+    const newItem = (outsideIndex, offset, defaultData = {}) => {
         let newList = nodeData.list;
         let newItem = {
-            data: { ...DATA_ITEM },
+            data: { ...DATA_ITEM, ...defaultData },
             node_data: { ...NODE_DATA_ITEM }
         }
         newItem.data.ID = getId('TodoListNode');
