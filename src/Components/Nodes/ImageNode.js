@@ -7,7 +7,7 @@ import { useReactFlow, Handle, NodeToolbar } from 'reactflow';
 const ImageNode = React.memo((nodeProps) => {
 
     const [nodeData, setNodeData] = useState(nodeProps.data.node_data)
-    const instance = useReactFlow();
+    // const instance = useReactFlow();
     useEffect(() => {
         setNodeData(nodeProps?.data?.node_data);
     }, [nodeProps])
@@ -15,7 +15,8 @@ const ImageNode = React.memo((nodeProps) => {
     const handleSaveNodeData = () => {
         let newNode = { ...nodeProps };
         newNode.data.node_data = nodeData;
-        UpdateNode(instance, newNode);
+        // UpdateNode(instance, newNode);
+        nodeProps.data.saveData(newNode);
     }
 
     return (
