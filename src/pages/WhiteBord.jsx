@@ -127,14 +127,12 @@ const BasicBord = () => {
     }, [])
 
     const saveNodeChange = (thisNode) => {
-        let newNodes = nodes;
-        newNodes.map((n) => {
+        setNodes((n) => {
             if (n.id == thisNode.id) {
                 return Object.assign(n, thisNode);
             }
             return n;
         });
-        setNodes(newNodes);
         message.info("Synced");
     }
 

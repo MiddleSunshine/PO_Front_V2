@@ -5,11 +5,21 @@ import { Handle, NodeResizer, NodeToolbar } from "reactflow";
 
 const NoteNode = (nodeProps) => {
     const [ndoeData, setNodeData] = useState(nodeProps.data.node_data);
+    const [unSaveData, setUnSaveData] = useState(false);
+
+    const SAVE_DATA = () => {
+        let newNode = {
+            ...nodeProps
+        };
+        newNode.data.node_data = ndoeData;
+        nodeProps.data?.saveData(newNode);
+        setUnSaveData(false);
+    }
 
     return (
         <div
             className="NoteNode"
-            style={GetNodeStyle(nodeProps)}
+            style={GetNodeStyle(nodeProps, unSaveData)}
         >
             <NodeResizer
                 isVisible={nodeProps.selected}
@@ -17,6 +27,9 @@ const NoteNode = (nodeProps) => {
             <NodeToolbar>
                 <Button
                     type="primary"
+                    onClick={() => {
+                        SAVE_DATA();
+                    }}
                 >
                     Save
                 </Button>
@@ -53,7 +66,8 @@ const NoteNode = (nodeProps) => {
                         setNodeData({
                             ...ndoeData,
                             Name: e.target.value
-                        })
+                        });
+                        setUnSaveData(true);
                     }}
                 />
             </div>
