@@ -7,7 +7,7 @@ import { NodeResizer } from "@reactflow/node-resizer";
 const LinkNode = (nodeProps) => {
     const [nodeData, setNodeData] = useState(nodeProps.data.node_data);
     const [data, setData] = useState(nodeProps.data.data);
-    const instance = useReactFlow();
+    // const instance = useReactFlow();
 
     const SAVE_DATA = () => {
         let newNode = {
@@ -15,7 +15,8 @@ const LinkNode = (nodeProps) => {
         };
         newNode.data.node_data = nodeData;
         newNode.data.data = data;
-        UpdateNode(instance, newNode);
+        // UpdateNode(instance, newNode);
+        nodeProps.data.saveData(newNode);
     }
 
     return (
