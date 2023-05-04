@@ -9,15 +9,16 @@ const LabelNode = (node) => {
 
     const [label, setLabel] = useState(node.data.node_data?.label);
     const [unsaveData, setUnSaveData] = useState(false);
-    const instance = useReactFlow();
+    // const instance = useReactFlow();
 
     const handleSaveNodeData = (newLabel) => {
-        let newNode = node;
+        let newNode = { ...node };
         newNode.data.node_data = {
             label: newLabel
         };
         setUnSaveData(false);
-        UpdateNode(instance, node);
+        node.data.saveData(newNode);
+        // UpdateNode(instance, node);
     }
 
     return (
