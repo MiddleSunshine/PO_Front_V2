@@ -71,7 +71,7 @@ const CalendarNode = (nodeProps) => {
     const [editData, setEditData] = useState({});
     // EDIT
     const [inputMode, setInputMode] = useState(INPUT_MODE_HIDDEN);
-    const instance = useReactFlow();
+    // const instance = useReactFlow();
     useEffect(() => {
         createListData(nodeProps.data.node_data);
         createCalendarData(nodeProps.data.node_data);
@@ -134,7 +134,8 @@ const CalendarNode = (nodeProps) => {
         newNode.data.node_data = nodeData;
         newNode.data.node_data.default_date = selectedDate;
         newNode.data.data = data;
-        UpdateNode(instance, newNode);
+        // UpdateNode(instance, newNode);
+        nodeProps.data.saveData(newNode);
     }
 
     // 组件 Calendar 的数据
