@@ -20,6 +20,7 @@
 .WhiteBoard .InputLikeTitle {
     border: none !important;
     width: 100%;
+    height: 100%;
     background-color: inherit;
 }
 
@@ -56,6 +57,7 @@
 
 .WhiteBoard .NoteNode {
     background-color: lightgray;
+    height: 100%;
 }
 
 .WhiteBoard .SheetNode {}

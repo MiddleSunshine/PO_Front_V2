@@ -58,19 +58,17 @@ const NoteNode = (nodeProps) => {
                 position={"right"}
                 type={"source"}
             />
-            <div>
-                <Input.TextArea
-                    className="InputLikeTitle"
-                    defaultValue={ndoeData?.Name}
-                    onChange={(e) => {
-                        setNodeData({
-                            ...ndoeData,
-                            Name: e.target.value
-                        });
-                        setUnSaveData(true);
-                    }}
-                />
-            </div>
+            <Input.TextArea
+                className="InputLikeTitle"
+                defaultValue={ndoeData?.Name}
+                onChange={(e) => {
+                    setNodeData({
+                        ...ndoeData,
+                        Name: e.target.value
+                    });
+                    setUnSaveData(true);
+                }}
+            />
         </div >
     )
 
