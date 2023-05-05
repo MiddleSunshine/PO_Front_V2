@@ -129,17 +129,20 @@ const NewWhiteBoardNode = (nodeProps) => {
 const WhiteBoardNode = (nodeProps) => {
 
     const [nodeData, setNodeData] = useState(nodeProps.data.node_data);
-    const instance = useReactFlow();
+    const [unsaveData,setUnsaveData]=useState(false);
+    // const instance = useReactFlow();
 
     const finishInput = () => {
         let newNode = nodeProps;
         newNode.data.node_data = nodeData;
-        UpdateNode(instance, newNode);
+        // UpdateNode(instance, newNode);
+        nodeProps.data.saveData(newNode);
+        setUnsaveData(false);
     }
 
     return (
         <div
-            style={GetNodeStyle(nodeProps)}
+            style={GetNodeStyle(nodeProps,unsaveData)}
             className={"WhiteBoardNode"}
         >
             <Handle
@@ -154,11 +157,12 @@ const WhiteBoardNode = (nodeProps) => {
                 className={"Content"}
             >
                 <Input
-                    value={nodeData.data.Title}
+                    defaultValue={nodeData.data.Title}
                     onChange={(e) => {
                         let newNodeData = { ...nodeData }
-                        newNodeData.node_data.data.Title = e.target.value
-                        setNodeData(newNodeData)
+                        newNodeData.data.Title = e.target.value
+                        setNodeData(newNodeData);
+                        setUnsaveData(true);
                     }}
                     onPressEnter={() => {
                         finishInput();

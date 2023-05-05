@@ -7,7 +7,8 @@ import ReactFlow, {
     useReactFlow,
     Background,
     Controls,
-    Panel
+    Panel,
+    MiniMap
 } from 'reactflow';
 import { getId } from "../config/WhiteBord";
 import '../Css/WhiteBord.css';
@@ -36,13 +37,14 @@ import { TodoListNode } from "../Components/Nodes/TodoListNode";
 import { TableNode } from "../Components/Nodes/TableNode";
 import { LinkNode } from "../Components/Nodes/LinkNode";
 import { SheetNode } from "../Components/Nodes/SheetNode";
+import { NoteNode } from '../Components/Nodes/NoteNode'
 import { CompactPicker } from '@hello-pangea/color-picker'
 import Loading from '../Images/zannet.png';
 import dayjs from "dayjs";
 import WhiteBoardHelp from "../Components/WhiteBoardHelp";
 import { SearchHistoryWhiteBoard } from "../Components/SearchHistoryWhiteBoard";
 
-const defaultViewport = { x: 0, y: 0, zoom: 1.1 };
+const defaultViewport = { x: 0, y: 0, zoom: 0.9 };
 
 const AllNodeTypes = {
     HistoryNode,
@@ -62,7 +64,8 @@ const AllNodeTypes = {
     HistoryWhiteBordNode,
     TableNode,
     LinkNode,
-    SheetNode
+    SheetNode,
+    NoteNode
 }
 
 const DEFAULT_SETTINGS = {
@@ -78,6 +81,7 @@ const BasicBord = () => {
     const [settings, setSettings] = useState({
         ...DEFAULT_SETTINGS
     });
+    const [unsavePage,setUnsavePage]=useState(false);
     const [editSettings, setEditSettings] = useState(false);
 
     const [whiteboard, setWhiteBoard] = useState({});
@@ -124,6 +128,17 @@ const BasicBord = () => {
         // return () => clearInterval(interval);
     }, [])
 
+    const saveNodeChange = (thisNode) => {
+        setNodes((n) => {
+            if (n.id == thisNode.id) {
+                return Object.assign(n, thisNode);
+            }
+            return n;
+        });
+        message.info("Synced");
+        setUnsavePage(true);
+    }
+
     const renderMenu = () => {
         const menuStyle = {
             position: 'absolute',
@@ -143,51 +158,58 @@ const BasicBord = () => {
             [
 
                 {
-                    label: "节点"
-                },
-                {
-                    label: "历史节点",
-                    value: "HistoryNode"
+                    label: "常用节点"
                 },
                 {
                     label: "标题",
                     value: "TitleNode"
                 },
                 {
-                    label: "白板",
-                    value: "DrawNode"
-                },
-                {
-                    label: "代码",
-                    value: "CodeNode"
-                },
-                {
-                    label: "文档",
-                    value: "MarkdownNode"
-                },
-                {
-                    label: "图片",
-                    value: "ImageNode"
+                    label: "简易文本",
+                    value: "NoteNode"
                 },
                 {
                     label: "标签",
                     value: "LabelNode"
                 },
                 {
-                    label: "Todo列表",
+                    label: "文章",
+                    value: "MarkdownNode"
+                },
+                {
+                    label: "历史节点",
+                    value: "HistoryNode"
+                },
+                {
+                    label: "特定节点"
+                },
+                {
+                    label: "白板",
+                    value: "DrawNode"
+                },
+                {
+                    label: "Excel",
+                    value: "SheetNode"
+                },
+                {
+                    label: "Todo List",
                     value: "TodoListNode"
+                },
+                // {
+                //     label: "表格",
+                //     value: "TableNode"
+                // },
+                {
+                    label: "图片",
+                    value: "ImageNode"
                 },
                 {
                     label: "日历",
                     value: "CalendarNode"
                 },
                 {
-                    label: "表格",
-                    value: "TableNode"
-                },
-                {
-                    label: "Excel",
-                    value: "SheetNode"
+                    label: "代码",
+                    value: "CodeNode"
                 },
                 {
                     label: "外部链接",
@@ -411,7 +433,7 @@ const BasicBord = () => {
                 return false;
             case 'DirectoryNode':
                 new_node.data.node_data = [];
-                new_node.data.save_into_database = true;
+                // new_node.data.save_into_database = true;
                 break;
             case 'DrawNode':
                 new_node.data.save_into_database = true;
@@ -426,10 +448,10 @@ const BasicBord = () => {
                 new_node.data.node_data = {
                     markdown: ""
                 }
-                new_node.data.save_into_database = true;
+                // new_node.data.save_into_database = true;
                 break;
             case "CalendarNode":
-                new_node.data.save_into_database = true;
+                // new_node.data.save_into_database = true;
                 new_node.data.node_data = {
                     list: {},
                     mode: "List",
@@ -466,14 +488,16 @@ const BasicBord = () => {
                 new_node.data.node_data = {
                     link: "#"
                 }
-                new_node.data.save_into_database = true;
+                // new_node.data.save_into_database = true;
                 break;
             default:
                 break;
         }
+        new_node.data.saveData = saveNodeChange;
         new_node.data.settings = {};
         setNodes((n) => n.concat([new_node]));
         setMenuPosition({ x: 0, y: 0 });
+        setUnsavePage(true);
     }
 
     const deleteNode = () => {
@@ -490,10 +514,26 @@ const BasicBord = () => {
         setNodeMenuPosition({
             x: 0,
             y: 0
-        })
+        });
+        setUnsavePage(true);
     }
 
-    const onConnect = useCallback((params) => setEdges((eds) => addEdge(params, eds)), [setEdges]);
+    const onConnect = useCallback((params) => {
+        params.markerEnd={
+            type:'arrowclosed',
+            // strokeWidth:8,
+            // color:"#0d6efd",
+            markerUnits:'strokeWidth'
+        }
+        params.type='step';
+        params.style={
+            strokeWidth:2
+        };
+        // params.markerStart.type='arrow';
+        // params.markerEnd.type='arrow';
+        setEdges((eds) => addEdge(params, eds));
+        setUnsavePage(true);
+    }, [setEdges]);
 
     const handleSelectionChange = ({ nodes, edges }) => {
         if (nodes.length == 1) {
@@ -512,6 +552,7 @@ const BasicBord = () => {
 
     const saveWhiteBord = (IsDraft = true, message = '保存成功') => {
         SaveWhiteBoard(IsDraft, id, settings, nodes, edges, message);
+        setUnsavePage(false);
     }
 
     const renderPath = () => {
@@ -557,7 +598,11 @@ const BasicBord = () => {
     const getWhiteBord = (whiteBordId) => {
         requestAPI(`index.php?action=WhiteBordController&method=GetWhiteBord&ID=${whiteBordId}`)
             .then((json) => {
-                setNodes(json.Data.WhiteBordContent.data?.nodes);
+                let nodes = json.Data.WhiteBordContent.data?.nodes.map((n) => {
+                    n.data.saveData = saveNodeChange;
+                    return n;
+                });
+                setNodes(nodes);
                 setEdges(json.Data.WhiteBordContent.data?.edges);
                 setSettings({
                     ...DEFAULT_SETTINGS,
@@ -599,6 +644,21 @@ const BasicBord = () => {
                     hotkeysHandler[keyname]();
                 }}
             >
+                <Panel position="top-right">
+                {
+                    unsavePage
+                    ?<Button
+                        danger={true}
+                        type="primary"
+                        onClick={()=>{
+                            saveWhiteBord(false);
+                        }}
+                    >
+                        页面未保存，请点击保存
+                    </Button>
+                    :''
+                }
+                </Panel>
                 <Panel
                     position='top-left'
                 >
@@ -635,6 +695,10 @@ const BasicBord = () => {
                     minZoom={0.2}
                     maxZoom={4}
                     attributionPosition="bottom-left"
+                    onPaneClick={() => {
+                        setNodeMenuPosition({ x: 0, y: 0 });
+                        setMenuPosition({ x: 0, y: 0 })
+                    }}
                     onNodeContextMenu={handleNodeContextMene}
                     onPaneContextMenu={handleContextMenu}
                     onInit={setReactFlowInstance}
@@ -654,9 +718,10 @@ const BasicBord = () => {
                         variant={settings.background.variant}
                         color={settings.background.color}
                     />
-                    <Controls
+                    {/* <Controls
 
-                    />
+                    /> */}
+                    <MiniMap />
                 </ReactFlow>
                 <Drawer
                     open={editMode}

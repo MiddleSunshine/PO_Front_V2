@@ -33,19 +33,22 @@ const TodoListNode = (nodeProps) => {
     const [data, setData] = useState(nodeProps.data.data);
     const [selectedTodoItem, setSelectedTodoItem] = useState({});
     const [editMode, setEditMode] = useState(false);
-    const instance = useReactFlow();
+    const [unsaveData, setUnSaveData] = useState(false);
+    // const instance = useReactFlow();
 
     const SAVE_DATA = (newNodeData, newData) => {
         let newNode = { ...nodeProps }
         newNode.data.data = newData;
         newNode.data.node_data = newNodeData;
-        UpdateNode(instance, newNode);
+        // UpdateNode(instance, newNode);
+        nodeProps.data.saveData(nodeProps);
+        setUnSaveData(false);
     }
 
-    const newItem = (outsideIndex, offset) => {
+    const newItem = (outsideIndex, offset, defaultData = {}) => {
         let newList = nodeData.list;
         let newItem = {
-            data: { ...DATA_ITEM },
+            data: { ...DATA_ITEM, ...defaultData },
             node_data: { ...NODE_DATA_ITEM }
         }
         newItem.data.ID = getId('TodoListNode');
@@ -56,6 +59,7 @@ const TodoListNode = (nodeProps) => {
             ...nodeData,
             list: newList
         });
+        setUnSaveData(true);
     }
 
     const deleteItem = (outsideIndex) => {
@@ -64,7 +68,8 @@ const TodoListNode = (nodeProps) => {
         setNodeData({
             ...nodeData,
             list: newList
-        })
+        });
+        setUnSaveData(true);
     }
 
     const cleanFinishedItem = () => {
@@ -77,6 +82,7 @@ const TodoListNode = (nodeProps) => {
                 list: newList
             }
         );
+        setUnSaveData(true);
     }
 
     const updateItem = (outsideIndex, newTodoItem, saveData = false) => {
@@ -84,8 +90,9 @@ const TodoListNode = (nodeProps) => {
         newNodeData.list[outsideIndex] = newTodoItem;
         setNodeData(newNodeData);
         setSelectedTodoItem(newNodeData);
+        setUnSaveData(true);
         if (saveData) {
-            SAVE_DATA(newNodeData);
+            SAVE_DATA(newNodeData,data);
         }
     }
 
@@ -123,12 +130,13 @@ const TodoListNode = (nodeProps) => {
         setNodeData({
             ...nodeData,
             list: newList
-        })
+        });
+        setUnSaveData(true);
     }
 
     return (
         <div
-            style={GetNodeStyle(nodeProps)}
+            style={GetNodeStyle(nodeProps, unsaveData)}
             className={"TodoListNode"}
         >
             <NodeResizer
@@ -236,6 +244,7 @@ const TodoListNode = (nodeProps) => {
                                     ...data,
                                     Name: e.target.value
                                 });
+                                setUnSaveData(true);
                             }}
                             size={"small"}
                         // addonAfter={

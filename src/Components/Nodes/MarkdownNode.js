@@ -1,26 +1,27 @@
-import {useState} from "react";
-import {GetNodeStyle,UpdateNode} from "./BasicNode";
+import { useState } from "react";
+import { GetNodeStyle, UpdateNode } from "./BasicNode";
 import MarkdownPreview from '@uiw/react-markdown-preview';
-import {Handle, NodeToolbar} from "reactflow";
-import {Button, Divider, Form, Input, Modal} from "antd";
+import { Handle, NodeToolbar } from "reactflow";
+import { Button, Divider, Form, Input, Modal } from "antd";
 import ReactCodeMirror from "@uiw/react-codemirror";
-import {useReactFlow} from 'reactflow';
-import {NodeResizer} from "@reactflow/node-resizer";
-const MarkdownNode=(nodeProps)=>{
-    const [nodeData,setNodeData]=useState(nodeProps.data.node_data);
-    const [data,setData]=useState(nodeProps.data.data);
-    const [editMode,setEditMode]=useState(nodeProps.data.node_data.markdown=='');
+import { useReactFlow } from 'reactflow';
+import { NodeResizer } from "@reactflow/node-resizer";
+const MarkdownNode = (nodeProps) => {
+    const [nodeData, setNodeData] = useState(nodeProps.data.node_data);
+    const [data, setData] = useState(nodeProps.data.data);
+    const [editMode, setEditMode] = useState(nodeProps.data.node_data.markdown == '');
 
-    const instance=useReactFlow();
+    // const instance = useReactFlow();
 
-    const handleSave=()=>{
-        let newNode=nodeProps;
-        newNode.data.node_data=nodeData;
-        newNode.data.data=data;
-        UpdateNode(instance,newNode);
+    const handleSave = () => {
+        let newNode = { ...nodeProps };
+        newNode.data.node_data = nodeData;
+        newNode.data.data = data;
+        // UpdateNode(instance, newNode);
+        nodeProps.data.saveData(newNode);
     }
 
-    return(
+    return (
         <div
             style={GetNodeStyle(nodeProps)}
             className={"MarkdownNode"}
@@ -31,7 +32,7 @@ const MarkdownNode=(nodeProps)=>{
             <NodeToolbar>
                 <Button
                     type={"primary"}
-                    onClick={()=>{
+                    onClick={() => {
                         setEditMode(true);
                     }}
                 >
@@ -48,8 +49,8 @@ const MarkdownNode=(nodeProps)=>{
             >
                 {
                     data.Name
-                        ?<h4>{data.Name}</h4>
-                        :""
+                        ? <span>{data.Name}</span>
+                        : ""
                 }
             </div>
             <div
@@ -57,24 +58,24 @@ const MarkdownNode=(nodeProps)=>{
             >
                 {
                     nodeData.markdown
-                        ?<MarkdownPreview
+                        ? <MarkdownPreview
                             source={nodeData.markdown}
                         />
-                        :"......"
+                        : "......"
                 }
             </div>
             <div>
                 <Modal
                     title={
                         <div
-                         style={{width:"90%"}}
+                            style={{ width: "90%" }}
                         >
                             <Input
                                 value={data?.Name}
-                                onChange={(e)=>{
+                                onChange={(e) => {
                                     setData({
                                         ...data,
-                                        Name:e.target.value
+                                        Name: e.target.value
                                     })
                                 }}
                             />
@@ -82,10 +83,10 @@ const MarkdownNode=(nodeProps)=>{
                     }
                     open={editMode}
                     width={1200}
-                    onCancel={()=>{
+                    onCancel={() => {
                         setEditMode(false);
                     }}
-                    onOk={()=>{
+                    onOk={() => {
                         handleSave();
                         setEditMode(false);
                     }}
@@ -93,10 +94,10 @@ const MarkdownNode=(nodeProps)=>{
                     <ReactCodeMirror
                         theme={"dark"}
                         value={nodeData.markdown}
-                        onChange={(newMarkdown)=>{
+                        onChange={(newMarkdown) => {
                             setNodeData({
                                 ...nodeData,
-                                markdown:newMarkdown
+                                markdown: newMarkdown
                             })
                         }}
                     />

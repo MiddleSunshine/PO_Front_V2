@@ -9,12 +9,13 @@ import { SaveOutlined } from "@ant-design/icons";
 const TitleNode = (nodeProps) => {
     const [data, setData] = useState(nodeProps.data.data);
     const [unsaveData, setUnSaveData] = useState(false);
-    const instance = useReactFlow();
+    // const instance = useReactFlow();
 
     const SAVE_DATA = (data) => {
         let newNode = { ...nodeProps };
         newNode.data.data = data;
-        UpdateNode(instance, newNode);
+        // UpdateNode(instance, newNode);
+        nodeProps.data.saveData(newNode);
     }
 
     const finishInput = (data) => {

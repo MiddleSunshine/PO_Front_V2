@@ -1,15 +1,15 @@
-import {GetNodeStyle, UpdateNode} from "./BasicNode";
-import {useEffect, useState} from "react";
-import {NodeToolbar} from "reactflow";
-import {Button, Col, Form, Input, InputNumber, Row} from "antd";
+import { GetNodeStyle, UpdateNode } from "./BasicNode";
+import { useEffect, useState } from "react";
+import { NodeToolbar } from "reactflow";
+import { Button, Col, Form, Input, InputNumber, Row } from "antd";
 import {
     CaretLeftOutlined,
     CaretRightOutlined,
     CaretUpOutlined,
     CaretDownOutlined
 } from '@ant-design/icons'
-import {useReactFlow} from "reactflow";
-import {NodeResizer} from "@reactflow/node-resizer";
+import { useReactFlow } from "reactflow";
+import { NodeResizer } from "@reactflow/node-resizer";
 
 const TITLE_ITEM = {
     Name: ""
@@ -28,20 +28,20 @@ const TableNode = (nodeProps) => {
 
     const [nodeData, setNodeData] = useState(nodeProps.data.node_data);
     const [data, setData] = useState(nodeProps.data.data);
-    const [selected, setSelected] = useState({...SELECT_ITEM});
+    const [selected, setSelected] = useState({ ...SELECT_ITEM });
 
     useEffect(() => {
         setNodeData(nodeProps.data.node_data)
-        if (!nodeProps.data.data.hasOwnProperty('ID')){
-            updateTable(nodeProps.data.node_data.rows,nodeProps.data.node_data.columns);
+        if (!nodeProps.data.data.hasOwnProperty('ID')) {
+            updateTable(nodeProps.data.node_data.rows, nodeProps.data.node_data.columns);
         }
     }, [])
 
-    const instance = useReactFlow();
+    // const instance = useReactFlow();
 
     // 切换选中项
     const switchSelected = (rowIndex = -1, columnIndex = -1) => {
-        let newSelect = {...SELECT_ITEM};
+        let newSelect = { ...SELECT_ITEM };
         if (rowIndex > -1) {
             if (rowIndex == newSelect.RowIndex) {
                 newSelect.RowIndex = -1;
@@ -70,14 +70,15 @@ const TableNode = (nodeProps) => {
     }
 
     const SAVE_DATA = () => {
-        let node = {...nodeProps}
+        let node = { ...nodeProps }
         node.data.node_data = nodeData;
         node.data.data = data;
-        UpdateNode(instance, node);
+        // UpdateNode(instance, node);
+        nodeProps.data.saveData(node);
     }
 
     const AddRowOrColumn = (type, index) => {
-        let newNodeData = {...nodeData};
+        let newNodeData = { ...nodeData };
         switch (type) {
             case 'row':
                 let newRow = [];
@@ -91,9 +92,9 @@ const TableNode = (nodeProps) => {
                 newNodeData.rows++;
                 break;
             case 'column':
-                newNodeData.titles.splice(index + 1, 0, {...TITLE_ITEM});
+                newNodeData.titles.splice(index + 1, 0, { ...TITLE_ITEM });
                 for (let rowIndex = 0; rowIndex < newNodeData.table.length; rowIndex++) {
-                    newNodeData.table[rowIndex].splice(index+1,0,{...DATA_ITEM})
+                    newNodeData.table[rowIndex].splice(index + 1, 0, { ...DATA_ITEM })
                 }
                 newNodeData.columns++;
                 break;
@@ -102,7 +103,7 @@ const TableNode = (nodeProps) => {
     }
 
     const updateTable = (rowsLength, columnLength) => {
-        let newNodeData = {...nodeData};
+        let newNodeData = { ...nodeData };
         // 保证长度
         newNodeData.titles = newNodeData.titles.slice(0, columnLength);
         // 开始组件数据
@@ -136,7 +137,7 @@ const TableNode = (nodeProps) => {
 
     // 删除其中某一列或者某一行
     const deleteTable = () => {
-        let newNodeData = {...nodeData};
+        let newNodeData = { ...nodeData };
         if (selected.RowIndex > -1) {
             // 删除某一行
             newNodeData.table.splice(selected.RowIndex, 1);
@@ -156,7 +157,7 @@ const TableNode = (nodeProps) => {
     }
 
     const updateItem = (type, value, rowIndex, columnIndex = 0) => {
-        let newNodeData = {...nodeData};
+        let newNodeData = { ...nodeData };
         switch (type) {
             case 'Title':
                 newNodeData.titles[columnIndex].Name = value;
@@ -254,110 +255,119 @@ const TableNode = (nodeProps) => {
                     className={"table table-condensed"}
                 >
                     <thead>
-                    <tr>
-                        <th
-                            onClick={() => {
-                                switchSelected(-1, -1);
-                            }}
-                        >
-                        </th>
-                        {
-                            nodeData.titles.map((title, index) => {
-                                return (
-                                    <th
-                                        key={index}
-                                        className={"Option"}
-                                    >
-                                        <Button
-                                            ghost={true}
-                                            type={"primary"}
-                                            icon={<CaretLeftOutlined/>}
-                                            onClick={()=>{
-                                                AddRowOrColumn('column',index-1);
-                                            }}
-                                        ></Button>
-                                        <Button
-                                            type={"primary"}
-                                            onClick={() => {
-                                                if (selected.ColumnIndex == index) {
-                                                    deleteTable();
-                                                } else {
-                                                    switchSelected(-1, index);
-                                                }
-                                                switchSelected(-1, index);
-                                            }}
-                                            danger={selected.ColumnIndex == index}
+                        <tr>
+                            <th
+                                onClick={() => {
+                                    switchSelected(-1, -1);
+                                }}
+                            >
+                            </th>
+                            {
+                                nodeData.titles.map((title, index) => {
+                                    if(!nodeProps.selected){
+                                        return <th></th>;
+                                    }
+                                    return (
+                                        <th
+                                            key={index}
+                                            className={"Option"}
                                         >
-                                            {
-                                                selected.ColumnIndex == index ? "Delete" : (index + 1)
-                                            }
-                                        </Button>
-                                        <Button
-                                            ghost={true}
-                                            type={"primary"}
-                                            icon={<CaretRightOutlined/>}
-                                            onClick={()=>{
-                                                AddRowOrColumn('column',index);
-                                            }}
-                                        ></Button>
-                                    </th>
-                                )
-                            })
-                        }
-                    </tr>
-                    <tr>
-                        <th
-                            onClick={() => {
-                                switchSelected(-1, -1);
-                            }}
-                        >
-                        </th>
-                        {
-                            nodeData.titles.map((title, index) => {
-                                return (
-                                    <th
-                                        className={getItemClass(-2, index)}
-                                        key={index}
-                                    >
-                                        <input
-                                            className="form-control"
-                                            placeholder={"Title..."}
-                                            value={title?.Name}
-                                            onChange={(e) => {
-                                                updateItem('Title', e.target.value, 0, index);
-                                            }}
-                                        />
-                                    </th>
-                                )
-                            })
-                        }
-                    </tr>
+                                            <Button
+                                                size="small"
+                                                ghost={true}
+                                                type={"primary"}
+                                                icon={<CaretLeftOutlined />}
+                                                onClick={() => {
+                                                    AddRowOrColumn('column', index - 1);
+                                                }}
+                                            ></Button>
+                                            <Button
+                                                size="small"
+                                                type={"primary"}
+                                                onClick={() => {
+                                                    if (selected.ColumnIndex == index) {
+                                                        deleteTable();
+                                                    } else {
+                                                        switchSelected(-1, index);
+                                                    }
+                                                    switchSelected(-1, index);
+                                                }}
+                                                danger={selected.ColumnIndex == index}
+                                            >
+                                                {
+                                                    selected.ColumnIndex == index ? "Delete" : (index + 1)
+                                                }
+                                            </Button>
+                                            <Button
+                                                size="small"
+                                                ghost={true}
+                                                type={"primary"}
+                                                icon={<CaretRightOutlined />}
+                                                onClick={() => {
+                                                    AddRowOrColumn('column', index);
+                                                }}
+                                            ></Button>
+                                        </th>
+                                    )
+                                })
+                            }
+                        </tr>
+                        <tr>
+                            <th
+                                onClick={() => {
+                                    switchSelected(-1, -1);
+                                }}
+                            >
+                            </th>
+                            {
+                                nodeData.titles.map((title, index) => {    
+                                    return (
+                                        <th
+                                            className={getItemClass(-2, index)}
+                                            key={index}
+                                        >
+                                            <input
+                                                className="InputLikeTitle"
+                                                placeholder={"Title..."}
+                                                value={title?.Name}
+                                                onChange={(e) => {
+                                                    updateItem('Title', e.target.value, 0, index);
+                                                }}
+                                            />
+                                        </th>
+                                    )
+                                })
+                            }
+                        </tr>
                     </thead>
                     <tbody>
-                    {
-                        nodeData.table.map((row, rowIndex) => {
-                            return (
-                                <tr
-                                    key={rowIndex}
-                                >
-                                    {
-                                        row.map((column, columnIndex) => {
-                                            return (
-                                                <>
-                                                    {
-                                                        columnIndex == 0
-                                                            ? <td
+                        {
+                            nodeData.table.map((row, rowIndex) => {
+                                return (
+                                    <tr
+                                        key={rowIndex}
+                                    >
+                                        {
+                                            row.map((column, columnIndex) => {
+                                                return (
+                                                    <>
+                                                        {
+                                                            columnIndex == 0
+                                                                ? nodeProps.selected
+                                                                ?<td
                                                                 className={"Option"}
                                                             >
                                                                 <Button
+                                                                    size="small"
                                                                     ghost={true}
                                                                     type={"primary"}
-                                                                    icon={<CaretUpOutlined/>}
+                                                                    icon={<CaretUpOutlined />}
                                                                     onClick={() => {
                                                                         AddRowOrColumn('row', rowIndex - 1)
                                                                     }}
                                                                 ></Button>
                                                                 <Button
+                                                                    size="small"
                                                                     type={"primary"}
                                                                     onClick={() => {
                                                                         if (selected.RowIndex == rowIndex) {
@@ -375,36 +385,37 @@ const TableNode = (nodeProps) => {
                                                                     }
                                                                 </Button>
                                                                 <Button
+                                                                    size="small"
                                                                     ghost={true}
                                                                     type={"primary"}
-                                                                    icon={<CaretDownOutlined/>}
+                                                                    icon={<CaretDownOutlined />}
                                                                     onClick={() => {
                                                                         AddRowOrColumn('row', rowIndex)
                                                                     }}
                                                                 ></Button>
-                                                            </td>
-                                                            : ''
-                                                    }
-                                                    <td
-                                                        className={getItemClass(rowIndex, columnIndex)}
-                                                    >
-                                                        <input
-                                                            className="form-control input-sm"
-                                                            placeholder={"Content"}
-                                                            value={column?.Value}
-                                                            onChange={(e) => {
-                                                                updateItem('Table', e.target.value, rowIndex, columnIndex)
-                                                            }}
-                                                        />
-                                                    </td>
-                                                </>
-                                            )
-                                        })
-                                    }
-                                </tr>
-                            )
-                        })
-                    }
+                                                            </td>:<td></td>
+                                                                : ''
+                                                        }
+                                                        <td
+                                                            className={getItemClass(rowIndex, columnIndex)}
+                                                        >
+                                                            <input
+                                                                className="InputLikeTitle input-sm"
+                                                                placeholder={"Content"}
+                                                                value={column?.Value}
+                                                                onChange={(e) => {
+                                                                    updateItem('Table', e.target.value, rowIndex, columnIndex)
+                                                                }}
+                                                            />
+                                                        </td>
+                                                    </>
+                                                )
+                                            })
+                                        }
+                                    </tr>
+                                )
+                            })
+                        }
                     </tbody>
                 </table>
             </div>

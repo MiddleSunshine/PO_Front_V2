@@ -1,14 +1,14 @@
-import {useState} from "react";
-import {NodeResizer} from "@reactflow/node-resizer";
+import { useState } from "react";
+import { NodeResizer } from "@reactflow/node-resizer";
 import SyntaxHighlighter from 'react-syntax-highlighter';
-import {Handle, NodeToolbar} from "reactflow";
-import {Button, Form, Modal, Select} from "antd";
+import { Handle, NodeToolbar } from "reactflow";
+import { Button, Form, Modal, Select } from "antd";
 import ReactCodeMirror from "@uiw/react-codemirror";
-import {useReactFlow} from 'reactflow';
-import {GetNodeStyle, UpdateNode} from "./BasicNode";
+import { useReactFlow } from 'reactflow';
+import { GetNodeStyle, UpdateNode } from "./BasicNode";
 import { monokaiSublime } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
-const SUPPORT_LANUAGE=[
+const SUPPORT_LANUAGE = [
     { value: 'oneC (1c)', label: 'ONEC (1C)' },
     { value: 'abnf', label: 'ABNF' },
     { value: 'accesslog', label: 'ACCESSLOG' },
@@ -202,17 +202,18 @@ const SUPPORT_LANUAGE=[
     { value: 'zephir', label: 'ZEPHIR' }
 ];
 
-const CodeNode=(nodeProps)=>{
+const CodeNode = (nodeProps) => {
 
-    const [nodeData,setNodeData]=useState(nodeProps.data.node_data);
-    const [editCode,setEditCode]=useState(nodeProps.data.node_data.code=='');
+    const [nodeData, setNodeData] = useState(nodeProps.data.node_data);
+    const [editCode, setEditCode] = useState(nodeProps.data.node_data.code == '');
 
-    const instance=useReactFlow();
+    // const instance=useReactFlow();
 
-    const handleSave=()=>{
-        let newNode=nodeProps;
-        newNode.data.node_data=nodeData;
-        UpdateNode(instance,newNode);
+    const handleSave = () => {
+        let newNode = { ...nodeProps };
+        newNode.data.node_data = nodeData;
+        // UpdateNode(instance, newNode);
+        nodeProps.data.saveData(newNode);
     }
 
 
@@ -228,7 +229,7 @@ const CodeNode=(nodeProps)=>{
             <NodeToolbar>
                 <Button
                     type={"primary"}
-                    onClick={()=>{
+                    onClick={() => {
                         setEditCode(true);
                     }}
                 >
@@ -248,7 +249,7 @@ const CodeNode=(nodeProps)=>{
             />
             {
                 nodeData.language
-                    ?<SyntaxHighlighter
+                    ? <SyntaxHighlighter
                         language={nodeData.language}
                         showLineNumbers={true}
                         wrapLongLines={true}
@@ -256,17 +257,17 @@ const CodeNode=(nodeProps)=>{
                     >
                         {nodeData.code}
                     </SyntaxHighlighter>
-                    :<div>
+                    : <div>
                         <h3>Coding</h3>
                     </div>
             }
             <Modal
                 width={1200}
                 open={editCode}
-                onCancel={()=>{
+                onCancel={() => {
                     setEditCode(false);
                 }}
-                onOk={()=>{
+                onOk={() => {
                     setEditCode(false);
                     handleSave();
                 }}
@@ -281,10 +282,10 @@ const CodeNode=(nodeProps)=>{
                             options={SUPPORT_LANUAGE}
                             showSearch={true}
                             value={nodeData.language}
-                            onChange={(newValue)=>{
+                            onChange={(newValue) => {
                                 setNodeData({
                                     ...nodeData,
-                                    language:newValue
+                                    language: newValue
                                 })
                             }}
                             allowClear={true}
@@ -296,10 +297,10 @@ const CodeNode=(nodeProps)=>{
                         <ReactCodeMirror
                             theme={"dark"}
                             value={nodeData.code}
-                            onChange={(newCode)=>{
+                            onChange={(newCode) => {
                                 setNodeData({
                                     ...nodeData,
-                                    code:newCode
+                                    code: newCode
                                 })
                             }}
                         />

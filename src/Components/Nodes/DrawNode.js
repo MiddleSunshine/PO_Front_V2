@@ -11,13 +11,14 @@ import { NodeResizer } from "@reactflow/node-resizer";
 
 const DrawNode = (nodeProps) => {
     const [nodeData, setNodeData] = useState(nodeProps.data.data);
-    const instance = useReactFlow();
+    // const instance = useReactFlow();
 
     const SAVE_INTO = () => {
         if (nodeData.hasOwnProperty('ID')) {
-            let newNode = {...nodeProps};
+            let newNode = { ...nodeProps };
             newNode.data.data = nodeData;
-            UpdateNode(instance, newNode);
+            // UpdateNode(instance, newNode);
+            nodeProps.data.saveData(newNode);
         }
     }
 
@@ -27,7 +28,7 @@ const DrawNode = (nodeProps) => {
                 message.warning("Please input the title");
                 return false;
             }
-            CreateNodeAsync('DrawNode', nodeData.Name,nodeProps.id)
+            CreateNodeAsync('DrawNode', nodeData.Name, nodeProps.id)
                 .then((res) => {
                     if (res.Data.data.ID) {
                         setNodeData(res.Data.data);

@@ -20,6 +20,8 @@
 .WhiteBoard .InputLikeTitle {
     border: none !important;
     width: 100%;
+    height: 100%;
+    background-color: inherit;
 }
 
 .WhiteBoard .Menu {
@@ -53,10 +55,18 @@
     height: 100vh;
 }
 
+.WhiteBoard .NoteNode {
+    background-color: lightgray;
+    height: 100%;
+}
+
 .WhiteBoard .SheetNode {}
 
 .WhiteBoard .TitleNode {
     background-color: #303030;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 16px;
 }
 
 .WhiteBoard .TitleNode .Input {
@@ -68,7 +78,7 @@
 .WhiteBoard .TableNode {
     border: 2px solid gainsboro;
     padding: 5px;
-    background-color: cornsilk;
+    background-color: #F0F0F0;
 }
 
 .WhiteBoard .Option {
@@ -118,6 +128,8 @@
     background-color: #303030;
     text-align: center;
     color: white;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 .WhiteBoard .LabelNode {
@@ -200,8 +212,8 @@
 }
 
 .WhiteBoard .TodoListNode {
-    border: 3px solid antiquewhite;
-    background-color: antiquewhite;
+    /* border: 3px solid #c3f0b7; */
+    background-color: #c3f0b7;
     min-width: 150px;
 }
 
