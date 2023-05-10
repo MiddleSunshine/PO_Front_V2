@@ -3,6 +3,7 @@ import WhiteBord from '../pages/WhiteBord'
 import Login from '../pages/Login'
 import DrawPage from '../pages/Draw.js'
 import EditSheetNode from '../pages/Sheet'
+import  CalendarPage from '../pages/CalendarPage'
 type route = {
     path: string,
     component: any
@@ -12,6 +13,10 @@ const routes: route[] = [
     {
         path: "/",
         component: Index
+    },
+    {
+        path:"/calendar/:id",
+        component:CalendarPage
     },
     {
         path: "/sheet/:id",
