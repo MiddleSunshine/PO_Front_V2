@@ -4,12 +4,20 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import listPlugin from '@fullcalendar/list';
 import cnLocales from '@fullcalendar/core/locales/zh-cn'
 import timeGridPlugin from '@fullcalendar/timegrid'
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Divider } from "antd";
 
 const MODE_LIST = 'listWeek';
 const MODE_MONTH = 'dayGridMonth';
 const MODE_WEEK = 'timeGridWeek';
+
+const EVENT_TEMPLATE = {
+    title: "",
+    content: "",
+    start: '',
+    end: '',
+    background: ""
+}
 
 const CalendarComponent = () => {
     const { id } = useParams();
