@@ -1,24 +1,24 @@
 import FullCalendar from '@fullcalendar/react'
+import { useParams } from "react-router-dom";
 import dayGridPlugin from '@fullcalendar/daygrid'
 import listPlugin from '@fullcalendar/list';
 import cnLocales from '@fullcalendar/core/locales/zh-cn'
 import timeGridPlugin from '@fullcalendar/timegrid'
-import {useState} from 'react';
-import {Button, Divider, message, Radio} from "antd";
+import { useEffect, useRef, useState } from 'react';
+import { Button, Divider } from "antd";
 
 const MODE_LIST = 'listWeek';
 const MODE_MONTH = 'dayGridMonth';
 const MODE_WEEK = 'timeGridWeek';
 
 const CalendarComponent = () => {
-    const [mode, setMode] = useState(MODE_MONTH);
-    const [events,setEvents]=useState([]);
+    const { id } = useParams();
+    const [events, setEvents] = useState([]);
     const renderEvent = (eventInfo) => {
-        console.log(eventInfo)
         return (
             <div
-                onClick={()=>{
-
+                onClick={() => {
+                    // todo 这里进行编辑效果
                 }}
             >
                 <b>{eventInfo.timeText}</b>
@@ -26,31 +26,32 @@ const CalendarComponent = () => {
             </div>
         )
     }
+
+    const renderDayCellContent = (dayCell) => {
+        return (
+            <Button
+                type='link'
+                onClick={() => {
+                    // todo 这里进行新增效果
+                }}
+            >
+                {dayCell.dayNumberText}
+            </Button>
+        )
+    }
+
+    useEffect(() => {
+
+
+    }, []);
+
+
     return (
         <div>
             <Divider>
-                <Radio.Group
-                    value={mode}
-                    onChange={(e)=>{
-                        setMode(e.target.value)
-                    }}
-                >
-                    <Radio
-                        value={MODE_LIST}
-                    >
-                        List
-                    </Radio>
-                    <Radio
-                        value={MODE_MONTH}
-                    >
-                        Month
-                    </Radio>
-                    <Radio
-                        value={MODE_WEEK}
-                    >
-                        Week
-                    </Radio>
-                </Radio.Group>
+                <Button>
+                    保存修改
+                </Button>
             </Divider>
             <FullCalendar
                 locale={cnLocales}
@@ -62,10 +63,10 @@ const CalendarComponent = () => {
                     listPlugin,
                     timeGridPlugin
                 ]}
-                initialView={mode}
+                initialView={MODE_MONTH}
                 events={events}
                 eventContent={renderEvent}
-                dateClick={()=>{}}
+                dayCellContent={renderDayCellContent}
             />
         </div>
     )
