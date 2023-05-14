@@ -55,6 +55,46 @@ const CalendarComponent = () => {
     });
     const [editMode, setEditMode] = useState(false);
 
+    // 开启编辑模式
+    const startEditEvent=(event)=>{
+        let id=event.event._def.publicId;
+        // 进入编辑模式
+        let databaseEventData={};
+        databaseEvent.map((d)=>{
+            if (d.id==id){
+                databaseEventData=d;
+            }
+            return d;
+        });
+        setEditEvent(databaseEventData);
+        setEditMode(true);
+    }
+
+    const updateEvent=()=>{
+        // events
+        let editEventData={};
+        for (let e in events){
+            if (e.id==editEvent.id){
+                editEventData=editEvent;
+            }
+        }
+        editEventData=changeDatabaseEventIntoEvent(editEventData,editEvent);
+        setEvents((events)=>events.map((e)=>{
+            if (e.id==editEventData.id){
+                return editEventData;
+            }
+            return e;
+        }));
+        setDatabaseEvent((databaseEvents)=>databaseEvents.map((e)=>{
+            if (e.id==editEvent.id){
+                return editEvent;
+            }
+            return e;
+        }));
+        setEditMode(false);
+    }
+
+    // 构建新的 Event
     const createEvent = () => {
         if (!editEvent.start_date || !editEvent.end_date) {
             message.warning("请输入日期");
@@ -88,9 +128,11 @@ const CalendarComponent = () => {
         let startTime, endTime, format;
         format = `${DATE_FORMAT} ${TIME_FORMAT}:00`;
         if (databaseEvent.fullDay) {
+            event.timeText='A:';
             startTime = `${databaseEvent.start_date} 00:00`
             endTime = `${databaseEvent.end_date} 23:59`
         } else {
+            event.timeText=dayjs(databaseEvent.start_time,'HH:').toString();
             startTime = `${databaseEvent.start_date} ${databaseEvent.start_time}`
             endTime = `${databaseEvent.end_date} ${databaseEvent.end_time}`
         }
@@ -101,7 +143,6 @@ const CalendarComponent = () => {
         event.backgroundColor = databaseEvent.background;
         event.textColor = databaseEvent.fontColor;
         event.allDay = databaseEvent.fullDay;
-        debugger
         return event;
     }
 
@@ -109,7 +150,7 @@ const CalendarComponent = () => {
         return (
             <div
                 onClick={() => {
-
+                    startEditEvent(eventInfo);
                 }}
             >
                 <b>{eventInfo.timeText}</b>
@@ -203,6 +244,7 @@ const CalendarComponent = () => {
                 onOk={() => {
                     if (editEvent.id) {
                         // 编辑
+                        updateEvent();
                     } else {
                         // 新增
                         createEvent();
