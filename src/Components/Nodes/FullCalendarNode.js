@@ -49,6 +49,9 @@ const FullCalendarNode=(nodeProps)=>{
                 >Month</Button>
             </NodeToolbar>
             <FullCalendar
+                selectMirror={true}
+                selectable={true}
+                editable={true}
                 firstDay={1}
                 contentHeight="auto"
                 aspectRatio={1}

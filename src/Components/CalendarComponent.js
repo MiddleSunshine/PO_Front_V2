@@ -4,7 +4,7 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import listPlugin from '@fullcalendar/list';
 import cnLocales from '@fullcalendar/core/locales/zh-cn'
 import timeGridPlugin from '@fullcalendar/timegrid'
-import {useEffect, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {Button, Checkbox, DatePicker, Divider, Form, Input, message, Modal, TimePicker} from "antd";
 import locale from 'antd/es/date-picker/locale/zh_CN';
 import dayjs from "dayjs";
@@ -22,10 +22,10 @@ const EDIT_EVENT_TEMPLATE = {
     id: "",
     title: "",
     content: "",
-    start_date: dayjs(),
-    end_date: dayjs(),
-    start_time: dayjs(),
-    end_time: dayjs(),
+    start_date: dayjs().format(DATE_FORMAT).toString(),
+    end_date: dayjs().format(DATE_FORMAT).toString(),
+    start_time: dayjs().format(TIME_FORMAT).toString(),
+    end_time: dayjs().format(TIME_FORMAT).toString(),
     background: "",
     fontColor: "",
     fullDay: true
@@ -43,6 +43,7 @@ const EVENT_TEMPLATE = {
 }
 
 const CalendarComponent = () => {
+    const calRef = useRef(null);
     const {id} = useParams();
     // 所有事件
     const [events, setEvents] = useState([]);
@@ -66,40 +67,41 @@ const CalendarComponent = () => {
                 return false;
             }
         }
-        let newEvent={
+        let newEvent = {
             ...EVENT_TEMPLATE
         }
-        let newDatabaseEvent={
+        let newDatabaseEvent = {
             ...editEvent,
-            id:getId('full_calendar')
+            id: getId('full_calendar')
         }
-        newEvent=changeDatabaseEventIntoEvent(newEvent,newDatabaseEvent);
+        newEvent = changeDatabaseEventIntoEvent(newEvent, newDatabaseEvent);
         // 保存数据
         setEvents(events => events.concat(newEvent));
         setDatabaseEvent(databaseEvents => databaseEvents.concat(newDatabaseEvent));
         // 结束编辑
         setEditMode(false);
-        let historyEvent=events;
-        debugger
     }
 
-    const changeDatabaseEventIntoEvent=(event,databaseEvent)=>{
+    const changeDatabaseEventIntoEvent = (event, databaseEvent) => {
         event.id = databaseEvent.id;
         event.title = databaseEvent.title;
-        let startTime, endTime,format;
-        format=`${DATE_FORMAT} ${TIME_FORMAT}`
-        if (event.fullDay) {
+        let startTime, endTime, format;
+        format = `${DATE_FORMAT} ${TIME_FORMAT}:00`;
+        if (databaseEvent.fullDay) {
             startTime = `${databaseEvent.start_date} 00:00`
             endTime = `${databaseEvent.end_date} 23:59`
         } else {
             startTime = `${databaseEvent.start_date} ${databaseEvent.start_time}`
             endTime = `${databaseEvent.end_date} ${databaseEvent.end_time}`
         }
-        event.start = dayjs(startTime,format).toISOString();
-        event.end = dayjs(endTime,format).toISOString();
+        event.start = dayjs(startTime, format).toISOString();
+        event.start = event.start.substring(0, event.start.length - 1);
+        event.end = dayjs(endTime, format).toISOString();
+        event.end = event.end.substring(0, event.end.length - 1);
         event.backgroundColor = databaseEvent.background;
         event.textColor = databaseEvent.fontColor;
         event.allDay = databaseEvent.fullDay;
+        debugger
         return event;
     }
 
@@ -177,6 +179,7 @@ const CalendarComponent = () => {
                 </Button>
             </Divider>
             <FullCalendar
+                ref={calRef}
                 locale={cnLocales}
                 firstDay={1}
                 contentHeight="auto"
