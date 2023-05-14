@@ -5,7 +5,7 @@ import listPlugin from '@fullcalendar/list';
 import cnLocales from '@fullcalendar/core/locales/zh-cn'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import {useEffect, useRef, useState} from 'react';
-import {Button, Checkbox, DatePicker, Divider, Form, Input, message, Modal, TimePicker} from "antd";
+import {Button, Checkbox, Col, DatePicker, Divider, Form, Input, message, Modal, Row, TimePicker} from "antd";
 import locale from 'antd/es/date-picker/locale/zh_CN';
 import dayjs from "dayjs";
 import {CirclePicker,CompactPicker} from '@hello-pangea/color-picker'
@@ -38,7 +38,6 @@ const EVENT_TEMPLATE = {
     end: "",
     backgroundColor: "",
     textColor: "",
-    timeText: "",
     allDay: true
 }
 
@@ -134,17 +133,15 @@ const CalendarComponent = () => {
         let startTime, endTime, format;
         format = `${DATE_FORMAT} ${TIME_FORMAT}:00`;
         if (databaseEvent.fullDay) {
-            event.timeText='A:';
             startTime = `${databaseEvent.start_date} 00:00`
             endTime = `${databaseEvent.end_date} 23:59`
         } else {
-            event.timeText=dayjs(databaseEvent.start_time,'HH:').toString();
             startTime = `${databaseEvent.start_date} ${databaseEvent.start_time}`
             endTime = `${databaseEvent.end_date} ${databaseEvent.end_time}`
         }
-        event.start = dayjs(startTime, format).toISOString();
+        event.start = dayjs(startTime, format).add(1,'day').toISOString();
         event.start = event.start.substring(0, event.start.length - 1);
-        event.end = dayjs(endTime, format).toISOString();
+        event.end = dayjs(endTime, format).add(1,'day').toISOString();
         event.end = event.end.substring(0, event.end.length - 1);
         event.backgroundColor = databaseEvent.background;
         event.textColor = databaseEvent.fontColor;
@@ -159,8 +156,7 @@ const CalendarComponent = () => {
                     startEditEvent(eventInfo);
                 }}
             >
-                <b>{eventInfo.timeText}</b>
-                <i>{eventInfo.event.title}</i>
+                {eventInfo.event.title}
             </div>
         )
     }
@@ -317,31 +313,41 @@ const CalendarComponent = () => {
                         label={"内容"}
                     >
                         <Input.TextArea
+                            rows={7}
                             value={editEvent.content}
                             onChange={(e) => {
                                 updateEditEvent('content', e.target.value)
                             }}
                         />
                     </Form.Item>
-                    <Form.Item
-                        label={"背景色"}
-                    >
-                        <CirclePicker
-                            defaultColor={editEvent.background}
-                            onChange={(color) => {
-                                updateEditEvent('background', color.hex)
-                            }}
-                        />
-                    </Form.Item>
-                    <Form.Item
-                        label={"字体色"}
-                    >
-                        <CompactPicker
-                            defaultColor={editEvent.fontColor}
-                            onChange={(color) => {
-                                updateEditEvent('fontColor', color.hex)
-                            }}
-                        />
+                    <Form.Item>
+                        <Divider>
+                            颜色
+                        </Divider>
+                        <Row>
+                            <Col span={2}>
+                                <span>背景色：</span>
+                            </Col>
+                            <Col span={10}>
+                                <CirclePicker
+                                    defaultColor={editEvent.background}
+                                    onChange={(color) => {
+                                        updateEditEvent('background', color.hex)
+                                    }}
+                                />
+                            </Col>
+                            <Col span={2}>
+                                <span>字体颜色：</span>
+                            </Col>
+                            <Col span={10}>
+                                <CompactPicker
+                                    defaultColor={editEvent.fontColor}
+                                    onChange={(color) => {
+                                        updateEditEvent('fontColor', color.hex)
+                                    }}
+                                />
+                            </Col>
+                        </Row>
                     </Form.Item>
                 </Form>
             </Modal>
