@@ -8,8 +8,9 @@ import {useEffect, useRef, useState} from 'react';
 import {Button, Checkbox, Col, DatePicker, Divider, Form, Input, message, Modal, Row, TimePicker} from "antd";
 import locale from 'antd/es/date-picker/locale/zh_CN';
 import dayjs from "dayjs";
-import {CirclePicker,CompactPicker} from '@hello-pangea/color-picker'
+import {CirclePicker, CompactPicker} from '@hello-pangea/color-picker'
 import {getId} from "../config/WhiteBord";
+import {GetNodeDetailAsync, UpdateNodeAsync} from "./Nodes/BasicNode";
 
 const MODE_LIST = 'listWeek';
 const MODE_MONTH = 'dayGridMonth';
@@ -42,10 +43,12 @@ const EVENT_TEMPLATE = {
 }
 
 
-
 const CalendarComponent = () => {
-    const calRef = useRef(null);
-    const {id,mode} = useParams();
+
+    const {id, mode} = useParams();
+    const [nodeData, setNodeData] = useState({});
+    const [data, setData] = useState({});
+
     // 所有事件
     const [events, setEvents] = useState([]);
     //
@@ -56,14 +59,52 @@ const CalendarComponent = () => {
     });
     const [editMode, setEditMode] = useState(false);
 
+    // 初始化日历数据
+    const InitCalendar = () => {
+        GetNodeDetailAsync(id)
+            .then((res) => {
+                setData(res.Data.data);
+                let jsonNodeData = JSON.parse(res.Data.node_data);
+                setNodeData(jsonNodeData);
+                if (jsonNodeData?.events){
+                    setEvents(jsonNodeData?.events);
+                }
+                if (jsonNodeData?.databaseEvents){
+                    setDatabaseEvent(jsonNodeData?.databaseEvents);
+                }
+                return res.Data.data?.Name;
+            }).then((Name) => {
+            document.title = Name;
+        })
+    }
+
+    const SaveCalendar=()=>{
+        UpdateNodeAsync(data,{
+            ...nodeData,
+            events,
+            databaseEvents:databaseEvent
+        })
+            .then((res)=>{
+                if (res.Status==1){
+                    message.success("保存成功");
+                }else{
+                    message.warning(res.Message);
+                }
+            })
+    }
+
+    useEffect(() => {
+        InitCalendar();
+    }, []);
+
     // 开启编辑模式
-    const startEditEvent=(event)=>{
-        let id=event.event._def.publicId;
+    const startEditEvent = (event) => {
+        let id = event.event._def.publicId;
         // 进入编辑模式
-        let databaseEventData={};
-        databaseEvent.map((d)=>{
-            if (d.id==id){
-                databaseEventData=d;
+        let databaseEventData = {};
+        databaseEvent.map((d) => {
+            if (d.id == id) {
+                databaseEventData = d;
             }
             return d;
         });
@@ -71,23 +112,23 @@ const CalendarComponent = () => {
         setEditMode(true);
     }
 
-    const updateEvent=()=>{
+    const updateEvent = () => {
         // events
-        let editEventData={};
-        for (let e in events){
-            if (e.id==editEvent.id){
-                editEventData=editEvent;
+        let editEventData = {};
+        for (let e in events) {
+            if (e.id == editEvent.id) {
+                editEventData = editEvent;
             }
         }
-        editEventData=changeDatabaseEventIntoEvent(editEventData,editEvent);
-        setEvents((events)=>events.map((e)=>{
-            if (e.id==editEventData.id){
+        editEventData = changeDatabaseEventIntoEvent(editEventData, editEvent);
+        setEvents((events) => events.map((e) => {
+            if (e.id == editEventData.id) {
                 return editEventData;
             }
             return e;
         }));
-        setDatabaseEvent((databaseEvents)=>databaseEvents.map((e)=>{
-            if (e.id==editEvent.id){
+        setDatabaseEvent((databaseEvents) => databaseEvents.map((e) => {
+            if (e.id == editEvent.id) {
                 return editEvent;
             }
             return e;
@@ -108,7 +149,7 @@ const CalendarComponent = () => {
                 return false;
             }
         }
-        if (!editEvent.title){
+        if (!editEvent.title) {
             message.warning("请输入标题");
             return false;
         }
@@ -139,9 +180,9 @@ const CalendarComponent = () => {
             startTime = `${databaseEvent.start_date} ${databaseEvent.start_time}`
             endTime = `${databaseEvent.end_date} ${databaseEvent.end_time}`
         }
-        event.start = dayjs(startTime, format).add(1,'day').toISOString();
+        event.start = dayjs(startTime, format).add(1, 'day').toISOString();
         event.start = event.start.substring(0, event.start.length - 1);
-        event.end = dayjs(endTime, format).add(1,'day').toISOString();
+        event.end = dayjs(endTime, format).add(1, 'day').toISOString();
         event.end = event.end.substring(0, event.end.length - 1);
         event.backgroundColor = databaseEvent.background;
         event.textColor = databaseEvent.fontColor;
@@ -186,9 +227,9 @@ const CalendarComponent = () => {
                 type='link'
                 onClick={() => {
                     console.log(dayjs(dayCell.date).format(DATE_FORMAT).toString())
-                    let editEventData={...EDIT_EVENT_TEMPLATE}
-                    editEventData.start_date=dayjs(dayCell.date).format(DATE_FORMAT).toString();
-                    editEventData.end_date=dayjs(dayCell.date).format(DATE_FORMAT).toString();
+                    let editEventData = {...EDIT_EVENT_TEMPLATE}
+                    editEventData.start_date = dayjs(dayCell.date).format(DATE_FORMAT).toString();
+                    editEventData.end_date = dayjs(dayCell.date).format(DATE_FORMAT).toString();
                     setEditEvent(editEventData);
                     setEditMode(true);
                 }}
@@ -209,6 +250,9 @@ const CalendarComponent = () => {
             <Divider>
                 <Button
                     type={"primary"}
+                    onClick={()=>{
+                        SaveCalendar();
+                    }}
                 >
                     保存修改
                 </Button>
@@ -227,7 +271,6 @@ const CalendarComponent = () => {
                 </Button>
             </Divider>
             <FullCalendar
-                ref={calRef}
                 locale={cnLocales}
                 firstDay={1}
                 contentHeight="auto"

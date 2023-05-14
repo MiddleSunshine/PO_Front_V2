@@ -26,7 +26,7 @@ const FullCalendarNode=(nodeProps)=>{
             message.warning("请输入日历名称");
             return false;
         }
-        CreateNodeAsync('FullCalendarNode',data.Name,nodeProps.id)
+        CreateNodeAsync('FullCalendarNode',data.Name,nodeProps.id,nodeData)
             .then((res) => {
                 if (res.Data.data.ID) {
                     setData(res.Data.data);
