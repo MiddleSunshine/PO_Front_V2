@@ -14,8 +14,8 @@ const BASIC_NODE_DATA = {
 const GetNodeStyle = (node, warningStyle = false) => {
     let style = {
         ...node.data?.settings?.style,
-        width: node.width,
-        height: node.height
+        // width: node.width,
+        // height: node.height
     };
     if (node?.data?.save_into_database) {
         style.borderTop = "4px solid #62DBC8";

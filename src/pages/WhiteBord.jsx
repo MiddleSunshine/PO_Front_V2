@@ -38,6 +38,7 @@ import { TableNode } from "../Components/Nodes/TableNode";
 import { LinkNode } from "../Components/Nodes/LinkNode";
 import { SheetNode } from "../Components/Nodes/SheetNode";
 import { NoteNode } from '../Components/Nodes/NoteNode'
+import {FullCalendarNode} from "../Components/Nodes/FullCalendarNode";
 import { CompactPicker } from '@hello-pangea/color-picker'
 import Loading from '../Images/zannet.png';
 import dayjs from "dayjs";
@@ -65,7 +66,8 @@ const AllNodeTypes = {
     TableNode,
     LinkNode,
     SheetNode,
-    NoteNode
+    NoteNode,
+    FullCalendarNode
 }
 
 const DEFAULT_SETTINGS = {
@@ -195,6 +197,10 @@ const BasicBord = () => {
                     label: "Todo List",
                     value: "TodoListNode"
                 },
+                {
+                    label: "日历",
+                    value: "FullCalendarNode"
+                },
                 // {
                 //     label: "表格",
                 //     value: "TableNode"
@@ -203,10 +209,10 @@ const BasicBord = () => {
                     label: "图片",
                     value: "ImageNode"
                 },
-                {
-                    label: "日历",
-                    value: "CalendarNode"
-                },
+                // {
+                //     label: "日历",
+                //     value: "CalendarNode"
+                // },
                 {
                     label: "代码",
                     value: "CodeNode"
@@ -489,6 +495,14 @@ const BasicBord = () => {
                     link: "#"
                 }
                 // new_node.data.save_into_database = true;
+                break;
+            case "FullCalendarNode":
+                new_node.data.node_data={
+                    events:[],
+                    databaseEvents:[],
+                    mode:"dayGridMonth"
+                }
+                new_node.data.save_into_database = true;
                 break;
             default:
                 break;

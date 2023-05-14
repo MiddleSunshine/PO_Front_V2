@@ -1,65 +1,124 @@
 import React, {useState} from 'react'
-import FullCalendar from '@fullcalendar/react'
-import dayGridPlugin from '@fullcalendar/daygrid'
-import listPlugin from '@fullcalendar/list';
-import timeGridPlugin from '@fullcalendar/timegrid'
-import {GetNodeStyle} from "./BasicNode";
+import {CreateNodeAsync, GetNodeStyle} from "./BasicNode";
 import {NodeResizer} from "@reactflow/node-resizer";
 import {NodeToolbar} from "reactflow";
-import {Button} from "antd";
-
-const initialDate = '2023-04-10'
-const events = [
-    {
-        title: 'event 1',
-        start: '2023-04-10T01:00:00',
-        end: '2023-04-10T02:00:00'
-    }
-]
-
-const MODE_LIST='listWeek';
-const MODE_MONTH='dayGridMonth';
-const MODE_WEEK='timeGridWeek';
+import {Button, Form, Input, message, Radio} from "antd";
+import {CalendarOutlined,LinkOutlined} from '@ant-design/icons'
 
 const FullCalendarNode=(nodeProps)=>{
-    const [mode,setMode]=useState(MODE_WEEK);
+    const [data,setData]=useState(nodeProps?.data?.data);
+    const [nodeData,setNodeData]=useState(nodeProps?.data?.node_data);
+    const [saveData,setSaveData]=useState(false);
+
+    const SAVE_DATA=()=>{
+        if (data.hasOwnProperty('ID')) {
+            let newNode = { ...nodeProps };
+            newNode.data.data = data;
+            newNode.data.node_data=nodeData;
+            // UpdateNode(instance, newNode);
+            nodeProps.data.saveData(newNode);
+            setSaveData(false);
+        }
+    }
+
+    const createNode=()=>{
+        if (!data?.Name){
+            message.warning("请输入日历名称");
+            return false;
+        }
+        CreateNodeAsync('FullCalendarNode',data.Name,nodeProps.id,nodeData)
+            .then((res) => {
+                if (res.Data.data.ID) {
+                    setData(res.Data.data);
+                    SAVE_DATA();
+                } else {
+                    message.warning(res.Message);
+                }
+            });
+    }
 
     return (
         <div
             className={"FullCalendarNode"}
-            style={GetNodeStyle(nodeProps)}
+            style={GetNodeStyle(nodeProps,saveData)}
         >
             <NodeResizer
                 isVisible={nodeProps.selected}
             />
             <NodeToolbar>
-                <Button
-                    type={"primary"}
-                    size={"small"}
-                    onClick={()=>{
-                        setMode(MODE_LIST);
-                    }}
-                >List</Button>
-                <Button
-                    type={"primary"}
-                    size={"small"}
-                    onClick={()=>{
-                        setMode(MODE_MONTH);
-                    }}
-                >Month</Button>
+                <Form>
+                    <Form.Item
+                        label={"模式"}
+                    >
+                        <Radio.Group
+                            value={nodeData.mode}
+                            onChange={(e)=>{
+                                setNodeData({
+                                    ...nodeData,
+                                    mode:e.target.value
+                                });
+                                setSaveData(true);
+                            }}
+                            options={[
+                                {label:"日历模式",value:"dayGridMonth"},
+                                {label:"事件模式",value:"listWeek"},
+                                {label:"周模式",value:"timeGridWeek"}
+                            ]}
+                        />
+                    </Form.Item>
+                    <Form.Item>
+                        <Button
+                            type={"primary"}
+                            onClick={()=>{
+                                SAVE_DATA();
+                            }}
+                        >
+                            保存
+                        </Button>
+                    </Form.Item>
+                </Form>
             </NodeToolbar>
-            <FullCalendar
-                firstDay={1}
-                contentHeight="auto"
-                aspectRatio={1}
-                plugins={[
-                    dayGridPlugin,
-                    listPlugin,
-                    timeGridPlugin
-                ]}
-                initialView={mode}
-                events={events}
-            />
+            <div>
+                {
+                    data?.ID
+                        ?<Input
+                            addonBefore={
+                                <CalendarOutlined />
+                            }
+                            addonAfter={
+                                <Button
+                                    type={"link"}
+                                    href={`/calendar/${data.ID}/${nodeData.mode}`}
+                                    target={"_blank"}
+                                    icon={<LinkOutlined />}
+                                >
+                                </Button>
+                            }
+                            value={data?.Name}
+                            onChange={(e)=>{
+                                setData({
+                                    ...data,
+                                    Name:e.target.value
+                                });
+                                setSaveData(true);
+                            }}
+                            onPressEnter={()=>{
+                                SAVE_DATA();
+                            }}
+                        />
+                        :<Input
+                            onChange={(e)=>{
+                                setData({
+                                    ...data,
+                                    Name:e.target.value
+                                })
+                            }}
+                            onPressEnter={()=>{
+                                createNode();
+                            }}
+                        />
+                }
+            </div>
         </div>
     )
 }

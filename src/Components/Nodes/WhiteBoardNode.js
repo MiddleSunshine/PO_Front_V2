@@ -129,7 +129,7 @@ const NewWhiteBoardNode = (nodeProps) => {
 const WhiteBoardNode = (nodeProps) => {
 
     const [nodeData, setNodeData] = useState(nodeProps.data.node_data);
-    const [unsaveData,setUnsaveData]=useState(false);
+    const [unsaveData, setUnsaveData] = useState(false);
     // const instance = useReactFlow();
 
     const finishInput = () => {
@@ -142,7 +142,7 @@ const WhiteBoardNode = (nodeProps) => {
 
     return (
         <div
-            style={GetNodeStyle(nodeProps,unsaveData)}
+            style={GetNodeStyle(nodeProps, unsaveData)}
             className={"WhiteBoardNode"}
         >
             <Handle
@@ -157,7 +157,7 @@ const WhiteBoardNode = (nodeProps) => {
                 className={"Content"}
             >
                 <Input
-                    defaultValue={nodeData.data.Title}
+                    defaultValue={nodeData?.data?.Title}
                     onChange={(e) => {
                         let newNodeData = { ...nodeData }
                         newNodeData.data.Title = e.target.value
@@ -171,7 +171,7 @@ const WhiteBoardNode = (nodeProps) => {
                         <FileOutlined />
                     }
                     addonAfter={<a
-                        href={`/whiteboard/${nodeData?.data.ID}?path=${nodeData?.path}`}
+                        href={`/whiteboard/${nodeData?.data?.ID}?path=${nodeData?.path}`}
                         target={"_blank"} rel="noreferrer"
                     >
                         <ExportOutlined />
