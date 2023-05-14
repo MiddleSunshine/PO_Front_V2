@@ -42,6 +42,8 @@ const EVENT_TEMPLATE = {
     allDay: true
 }
 
+
+
 const CalendarComponent = () => {
     const calRef = useRef(null);
     const {id} = useParams();
@@ -187,7 +189,12 @@ const CalendarComponent = () => {
             <Button
                 type='link'
                 onClick={() => {
-                    // todo 这里进行新增效果
+                    console.log(dayjs(dayCell.date).format(DATE_FORMAT).toString())
+                    let editEventData={...EDIT_EVENT_TEMPLATE}
+                    editEventData.start_date=dayjs(dayCell.date).format(DATE_FORMAT).toString();
+                    editEventData.end_date=dayjs(dayCell.date).format(DATE_FORMAT).toString();
+                    setEditEvent(editEventData);
+                    setEditMode(true);
                 }}
             >
                 {dayCell.dayNumberText}
@@ -263,7 +270,7 @@ const CalendarComponent = () => {
                         <DatePicker.RangePicker
                             locale={locale}
                             format={DATE_FORMAT}
-                            defaultValue={
+                            value={
                                 [dayjs(editEvent.start_date, DATE_FORMAT), dayjs(editEvent.end_date, DATE_FORMAT)]
                             }
                             onChange={(dateArray) => {
@@ -287,7 +294,7 @@ const CalendarComponent = () => {
                         <TimePicker.RangePicker
                             locale={locale}
                             format={TIME_FORMAT}
-                            defaultValue={
+                            value={
                                 [dayjs(editEvent.start_time, TIME_FORMAT), dayjs(editEvent.end_time, TIME_FORMAT)]
                             }
                             onChange={(timeArray) => {
