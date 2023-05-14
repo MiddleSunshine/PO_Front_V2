@@ -45,7 +45,7 @@ const EVENT_TEMPLATE = {
 
 const CalendarComponent = () => {
     const calRef = useRef(null);
-    const {id} = useParams();
+    const {id,mode} = useParams();
     // 所有事件
     const [events, setEvents] = useState([]);
     //
@@ -237,7 +237,7 @@ const CalendarComponent = () => {
                     listPlugin,
                     timeGridPlugin
                 ]}
-                initialView={MODE_MONTH}
+                initialView={mode}
                 events={events}
                 eventContent={renderEvent}
                 dayCellContent={renderDayCellContent}

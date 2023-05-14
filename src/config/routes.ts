@@ -15,7 +15,7 @@ const routes: route[] = [
         component: Index
     },
     {
-        path:"/calendar/:id",
+        path:"/calendar/:id/:mode",
         component:CalendarPage
     },
     {
