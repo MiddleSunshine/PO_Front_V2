@@ -8,7 +8,7 @@ import {useEffect, useRef, useState} from 'react';
 import {Button, Checkbox, DatePicker, Divider, Form, Input, message, Modal, TimePicker} from "antd";
 import locale from 'antd/es/date-picker/locale/zh_CN';
 import dayjs from "dayjs";
-import {CirclePicker} from '@hello-pangea/color-picker'
+import {CirclePicker,CompactPicker} from '@hello-pangea/color-picker'
 import {getId} from "../config/WhiteBord";
 
 const MODE_LIST = 'listWeek';
@@ -107,6 +107,10 @@ const CalendarComponent = () => {
                 return false;
             }
         }
+        if (!editEvent.title){
+            message.warning("请输入标题");
+            return false;
+        }
         let newEvent = {
             ...EVENT_TEMPLATE
         }
@@ -143,6 +147,7 @@ const CalendarComponent = () => {
         event.backgroundColor = databaseEvent.background;
         event.textColor = databaseEvent.fontColor;
         event.allDay = databaseEvent.fullDay;
+        console.log(event);
         return event;
     }
 
@@ -163,18 +168,19 @@ const CalendarComponent = () => {
         let event = {...editEvent};
         switch (key) {
             case 'time':
-                event.start_time = dayjs(value[0], TIME_FORMAT);
-                event.end_time = dayjs(value[1], TIME_FORMAT);
+                event.start_time = dayjs(value[0]).format(TIME_FORMAT).toString();
+                event.end_time = dayjs(value[1]).format(TIME_FORMAT).toString();
                 event.fullDay = false;
                 break;
             case 'date':
-                event.start_date = dayjs(value[0], DATE_FORMAT);
-                event.end_date = dayjs(value[1], DATE_FORMAT);
+                event.start_date = dayjs(value[0]).format(DATE_FORMAT).toString();
+                event.end_date = dayjs(value[1]).format(DATE_FORMAT).toString();
                 break;
             default:
                 event[key] = value;
                 break;
         }
+        debugger
         setEditEvent(event);
     }
 
@@ -325,7 +331,7 @@ const CalendarComponent = () => {
                     <Form.Item
                         label={"字体色"}
                     >
-                        <CirclePicker
+                        <CompactPicker
                             defaultColor={editEvent.fontColor}
                             onChange={(color) => {
                                 updateEditEvent('fontColor', color.hex)
