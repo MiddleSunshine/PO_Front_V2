@@ -147,7 +147,6 @@ const CalendarComponent = () => {
         event.backgroundColor = databaseEvent.background;
         event.textColor = databaseEvent.fontColor;
         event.allDay = databaseEvent.fullDay;
-        console.log(event);
         return event;
     }
 
@@ -180,7 +179,6 @@ const CalendarComponent = () => {
                 event[key] = value;
                 break;
         }
-        debugger
         setEditEvent(event);
     }
 
